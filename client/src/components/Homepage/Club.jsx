@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./homepage.scoped.scss";
 import Select from "react-select";
 
@@ -12,7 +12,7 @@ const Club = ({ countries }) => {
   // const [center, setCenter] = useState(0);
 
   const onSubmitRegister = async (e) => {
-    console.log("country: ", country);
+    // console.log("country: ", country);
     e.preventDefault();
     try {
       const body = { name, email, password, country };
@@ -23,7 +23,7 @@ const Club = ({ countries }) => {
         },
         body: JSON.stringify(body),
       });
-      console.log(body);
+      // console.log(body);
     } catch (error) {
       console.error(error.message);
     }
