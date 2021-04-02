@@ -26,7 +26,7 @@ router.post("/centers/register", validInfo, async (req, res) => {
 
     const user = await pool.query("SELECT * FROM center WHERE email = $1", [email]);
 
-    if (user.rows.length > 0) {
+    if (user.rows.length !== 0) {
       return res.status(401).json("Center already exists");
     }
 
@@ -39,7 +39,7 @@ router.post("/centers/register", validInfo, async (req, res) => {
     );
 
     const token = jwtGenerator(newCenter.rows[0].id);
-
+    console.log(token);
     res.json({ token });
   } catch (error) {
     console.error(error.message);
