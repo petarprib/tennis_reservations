@@ -5,41 +5,50 @@ const jwtGenerator = require("../utils/jwtGenerator");
 const validInfo = require("../middleware/validInfo");
 const authorization = require("../middleware/authorization");
 
-// //create a user
-// app.post("/clients", async (req, res) => {
+// //create a club
+// app.post("/players", async (req, res) => {
 //   try {
-//     const { name, email, password, center } = req.body;
-//     const clients = await pool.query(
-//       "INSERT INTO client (name, email, password, center) VALUES ($1, $2, crypt($3, gen_salt('bf', 4)), $4) RETURNING *",
-//       [name, email, password, center]
+//     const { name, email, password, club } = req.body;
+//     const players = await pool.query(
+//       "INSERT INTO player (name, email, password, club) VALUES ($1, $2, crypt($3, gen_salt('bf', 4)), $4) RETURNING *",
+//       [name, email, password, club]
 //     );
-//     res.json(clients.rows[0]);
+//     res.json(players.rows[0]);
 //   } catch (error) {
 //     console.error(error.message);
 //   }
 // });
 
-//register center
-router.post("/centers/register", validInfo, async (req, res) => {
+//register club
+router.post("/register", validInfo, async (req, res) => {
   try {
-    const { country, name, email, password } = req.body;
+    const { country, name, email, password, type } = req.body;
 
-    const user = await pool.query("SELECT * FROM center WHERE email = $1", [email]);
+    if (type === 2) {
+      const club = await pool.query("SELECT * FROM account WHERE email = $1 AND type = $2", [email, type]);
 
-    if (user.rows.length !== 0) {
-      return res.status(401).json("Center already exists");
+      if (club.rows.length !== 0) {
+        return res.status(401).json("club already exists");
+      }
     }
 
     const salt = await bcrypt.genSalt(10);
     const bcryptPassword = await bcrypt.hash(password, salt);
 
-    const newCenter = await pool.query(
-      "INSERT INTO center (name, email, password, country) VALUES ($1, $2, $3, $4) RETURNING *",
-      [name, email, bcryptPassword, country]
+    const newAccount = await pool.query(
+      "INSERT INTO account (name, email, password, type) VALUES ($1, $2, $3, $4) RETURNING *",
+      [name, email, bcryptPassword, type]
     );
 
-    const token = jwtGenerator(newCenter.rows[0].id);
-    console.log(token);
+    if (type === 2) {
+      await pool.query("INSERT INTO club_details (club, country) VALUES ($1, $2) RETURNING *", [
+        newAccount.rows[0].id,
+        country,
+      ]);
+    }
+
+    const token = jwtGenerator(newAccount.rows[0].id);
+
     res.json({ token });
   } catch (error) {
     console.error(error.message);
@@ -47,24 +56,24 @@ router.post("/centers/register", validInfo, async (req, res) => {
   }
 });
 
-//login center
-router.post("/centers/login", validInfo, async (req, res) => {
+//login club
+router.post("/login", validInfo, async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const center = await pool.query("SELECT * FROM center WHERE email = $1", [email]);
+    const club = await pool.query("SELECT * FROM club WHERE email = $1", [email]);
 
-    if (center.rows.length === 0) {
+    if (club.rows.length === 0) {
       return res.status(401).json("Incorrect login details");
     }
 
-    const validPassword = await bcrypt.compare(password, center.rows[0].password);
+    const validPassword = await bcrypt.compare(password, club.rows[0].password);
 
     if (!validPassword) {
       return res.status(401).json("Incorrect login details");
     }
 
-    const token = jwtGenerator(center.rows[0].id);
+    const token = jwtGenerator(club.rows[0].id);
 
     res.json({ token });
   } catch (error) {
@@ -73,8 +82,7 @@ router.post("/centers/login", validInfo, async (req, res) => {
   }
 });
 
-router.get("/centers/is-verify", authorization, async (req, res) => {
-  //if it doesn't work with /centers, remove it
+router.post("/verify", authorization, async (req, res) => {
   try {
     res.json(true);
   } catch (error) {
@@ -93,22 +101,22 @@ router.get("/centers/is-verify", authorization, async (req, res) => {
 //   }
 // });
 
-// //get all centers
-// app.get("/centers", async (req, res) => {
+// //get all clubs
+// app.get("/clubs", async (req, res) => {
 //   try {
-//     const centers = await pool.query("SELECT * FROM center ORDER BY name asc");
-//     res.json(centers.rows);
+//     const clubs = await pool.query("SELECT * FROM club ORDER BY name asc");
+//     res.json(clubs.rows);
 //   } catch (error) {
 //     console.error(error.message);
 //   }
 // });
 
-// //get centers from a country
-// app.get("/centers/:country", async (req, res) => {
+// //get clubs from a country
+// app.get("/:country", async (req, res) => {
 //   try {
 //     const { country } = req.params;
-//     const centers = await pool.query("SELECT * FROM center WHERE country = $1 ORDER BY name asc", [country]);
-//     res.json(centers.rows);
+//     const clubs = await pool.query("SELECT * FROM club WHERE country = $1 ORDER BY name asc", [country]);
+//     res.json(clubs.rows);
 //   } catch (error) {
 //     console.error(error.message);
 //   }

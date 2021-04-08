@@ -1,8 +1,8 @@
 import { combineReducers } from "redux";
-import homepageReducer from "./homepageReducer";
+import clubAuthReducer from "./clubAuthReducer";
 
 const rootReducer = combineReducers({
-  clientsTab: homepageReducer,
+  clubAuth: clubAuthReducer,
 });
 
 export default rootReducer;

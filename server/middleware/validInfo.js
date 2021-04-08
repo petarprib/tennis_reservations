@@ -1,18 +1,17 @@
 module.exports = (req, res, next) => {
   const { name, email, password, country } = req.body;
 
-  function validEmail(centerEmail) {
-    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(centerEmail);
+  function validEmail(clubEmail) {
+    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(clubEmail);
   }
 
-  if (req.path === "/centers/register") {
+  if (req.path === "/register") {
     if (![name, email, password, country].every(Boolean)) {
-      console.log(name, email, password, country);
-      return res.status(401).json("Missing Credentials"); //ako ne ide probaj maknut sve ".status(401)"
+      return res.status(401).json("Missing Credentials");
     } else if (!validEmail(email)) {
       return res.status(401).json("Invalid Email");
     }
-  } else if (req.path === "/centers/login") {
+  } else if (req.path === "/login") {
     if (![email, password].every(Boolean)) {
       return res.status(401).json("Missing Credentials");
     } else if (!validEmail(email)) {

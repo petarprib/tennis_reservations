@@ -11,7 +11,7 @@ module.exports = async (req, res, next) => {
 
     const payload = jwt.verify(jwtToken, process.env.jwtSecret);
 
-    req.center = payload.center; // OR req.center = verify.center; // (need to change in jwtgenerator too then)
+    req.account = payload.account;
     next();
   } catch (error) {
     console.error(error.message);
