@@ -13,8 +13,8 @@ const App = () => {
   // const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   useEffect(() => {
-    console.log(clubAuth);
     isAuth();
+    console.log(clubAuth);
   });
 
   const isAuth = async () => {
@@ -30,8 +30,6 @@ const App = () => {
           clubAuth: parseRes === true ? true : false,
         },
       });
-
-      // parseRes === true ? setIsClubAuthenticated(true) : setIsClubAuthenticated(false);
     } catch (error) {
       console.error(error.message);
     }
@@ -73,14 +71,7 @@ const App = () => {
           />
           <Route
             path="/club-login"
-            render={
-              (props) => <Access />
-              // !isClubAuthenticated ? (
-              //   <ClubLogin {...props} setClubAuth={setClubAuth} />
-              // ) : (
-              //   <Redirect to="/club-dashboard" />
-              // )
-            }
+            render={(props) => (!clubAuth ? <Access {...props} /> : <Redirect to="/club-dashboard" />)}
           />
           <Route
             path="/club-register"

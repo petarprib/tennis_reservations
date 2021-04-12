@@ -1,9 +1,11 @@
 const express = require("express");
+const cookieParser = require("cookie-parser");
 const app = express();
 const cors = require("cors");
 const pool = require("./db");
 
 app.use(cors());
+app.use(cookieParser());
 app.use(express.json());
 
 // ROUTES
