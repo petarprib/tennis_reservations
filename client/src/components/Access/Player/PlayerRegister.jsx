@@ -13,7 +13,7 @@ const PlayerRegister = (props) => {
 
   const fetchClubs = async (e) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/${e.id}`);
+      const res = await fetch(`http://localhost:5000/api/clubs/${e.id}`);
       const data = await res.json();
       let clubs = [];
       data.forEach((club) =>

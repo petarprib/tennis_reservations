@@ -1,18 +1,30 @@
 const express = require("express");
-const cookieParser = require("cookie-parser");
 const app = express();
 const cors = require("cors");
 const pool = require("./db");
+const session = require("express-session");
+require("dotenv").config();
 
 app.use(cors());
-app.use(cookieParser());
 app.use(express.json());
+app.use(
+  session({
+    name: process.env.SESSION_NAME,
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      sameSite: true,
+      maxAge: parseInt(process.env.SESSION_MAX_AGE),
+    },
+  })
+);
 
-// ROUTES
+// ROUTES;
 
-app.use("/api/auth", require("./routes/jwtAuth"));
+app.use("/api/auth", require("./routes/auth"));
 
-app.use("/api/dashboard", require("./routes/dashboard"));
+// app.use("/api/dashboard", require("./routes/dashboard"));
 
 // //create a user
 // app.post("/api/players", async (req, res) => {
@@ -63,16 +75,18 @@ app.get("/api/countries", async (req, res) => {
 // });
 
 //get clubs from a country
-app.get("/api/:country", async (req, res) => {
-  try {
-    const { country } = req.params;
-    const clubs = await pool.query("SELECT * FROM club WHERE country = $1 ORDER BY name asc", [country]);
-    res.json(clubs.rows);
-  } catch (error) {
-    console.error(error.message);
-  }
-});
+// app.get("/api/clubs/:country", async (req, res) => {
+//   try {
+//     const { country } = req.params;
+//     const clubs = await pool.query("SELECT * FROM account WHERE country = $1 AND account_type = 2 ORDER BY name asc", [
+//       country,
+//     ]);
+//     res.json(clubs.rows);
+//   } catch (error) {
+//     console.error(error.message);
+//   }
+// });
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, console.error(`Server running on port ${PORT}`));
+app.listen(PORT, console.log(`Server running on port ${PORT}`));

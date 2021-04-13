@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import ".././access.scoped.scss";
 import { useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
@@ -7,6 +7,7 @@ import Select from "react-select";
 const ClubRegister = (props) => {
   const clubAuth = useSelector((state) => state.clubAuth);
   const dispatch = useDispatch();
+  const { push } = useHistory();
   const [countries, setCountries] = useState([]);
   const [country, setCountry] = useState(0);
   const [name, setName] = useState("");
@@ -29,13 +30,13 @@ const ClubRegister = (props) => {
         body: JSON.stringify(body),
       });
       const parseRes = await res.json();
-      localStorage.setItem("token", parseRes.token);
       dispatch({
         type: "CHANGE_CLUBAUTH",
         payload: {
           clubAuth: true,
         },
       });
+      push("/club-dashboard");
     } catch (error) {
       console.error(error.message);
     }

@@ -8,40 +8,28 @@ import ClubDashboard from "./components/Dashboard/Club/ClubDashboard.jsx";
 const App = () => {
   const clubAuth = useSelector((state) => state.clubAuth);
   const dispatch = useDispatch();
-  // const [isPlayerAuthenticated, setIsPlayerAuthenticated] = useState(false);
-  // const [isClubAuthenticated, setIsClubAuthenticated] = useState(false);
-  // const [isAuthenticated, setIsAuthenticated] = useState(false)
 
-  useEffect(() => {
-    isAuth();
-    console.log(clubAuth);
-  });
+  // useEffect(() => {
+  //   isAuth();
+  //   console.log(clubAuth);
+  // });
 
-  const isAuth = async () => {
-    try {
-      const res = await fetch("http://localhost:5000/api/auth/verify", {
-        method: "POST",
-        headers: { token: localStorage.token },
-      });
-      const parseRes = await res.json();
-      dispatch({
-        type: "CHANGE_CLUBAUTH",
-        payload: {
-          clubAuth: parseRes === true ? true : false,
-        },
-      });
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
-
-  // const setAuth = (boolean) => {
-  //   setIsPlayerAuthenticated(boolean);
-  // };
-
-  // const setClubAuth = (boolean) => {
-  //   console.log("function started");
-  //   setIsClubAuthenticated(boolean);
+  // const isAuth = async () => {
+  //   try {
+  //     const res = await fetch("http://localhost:5000/api/auth/verify", {
+  //       method: "POST",
+  //       headers: { token: localStorage.token },
+  //     });
+  //     const parseRes = await res.json();
+  //     dispatch({
+  //       type: "CHANGE_CLUBAUTH",
+  //       payload: {
+  //         clubAuth: parseRes === true ? true : false,
+  //       },
+  //     });
+  //   } catch (error) {
+  //     console.error(error.message);
+  //   }
   // };
 
   return (

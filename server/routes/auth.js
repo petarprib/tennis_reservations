@@ -1,9 +1,9 @@
 const router = require("express").Router();
 const pool = require("../db");
 const bcrypt = require("bcrypt");
-const jwtGenerator = require("../utils/jwtGenerator");
+// const jwtGenerator = require("../utils/jwtGenerator");
 const validInfo = require("../middleware/validInfo");
-const authorization = require("../middleware/authorization");
+// const authorization = require("../middleware/authorization");
 
 // //create a club
 // app.post("/players", async (req, res) => {
@@ -47,9 +47,13 @@ router.post("/register", validInfo, async (req, res) => {
       ]);
     }
 
-    const token = jwtGenerator(newAccount.rows[0].id);
+    // const token = jwtGenerator(newAccount.rows[0].id);
 
-    res.json({ token });
+    // res.json(newAccount.rows[0].id);
+
+    req.session.userId = newAccount.rows[0].id;
+    // console.log(req.sessionID);
+    res.json(req.sessionID);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");
@@ -57,39 +61,39 @@ router.post("/register", validInfo, async (req, res) => {
 });
 
 //login club
-router.post("/login", validInfo, async (req, res) => {
-  try {
-    const { email, password } = req.body;
+// router.post("/login", validInfo, async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
 
-    const club = await pool.query("SELECT * FROM club WHERE email = $1", [email]);
+//     const club = await pool.query("SELECT * FROM club WHERE email = $1", [email]);
 
-    if (club.rows.length === 0) {
-      return res.status(401).json("Incorrect login details");
-    }
+//     if (club.rows.length === 0) {
+//       return res.status(401).json("Incorrect login details");
+//     }
 
-    const validPassword = await bcrypt.compare(password, club.rows[0].password);
+//     const validPassword = await bcrypt.compare(password, club.rows[0].password);
 
-    if (!validPassword) {
-      return res.status(401).json("Incorrect login details");
-    }
+//     if (!validPassword) {
+//       return res.status(401).json("Incorrect login details");
+//     }
 
-    const token = jwtGenerator(club.rows[0].id);
+//     const token = jwtGenerator(club.rows[0].id);
 
-    res.json({ token });
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Server Error");
-  }
-});
+//     res.json({ token });
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).send("Server Error");
+//   }
+// });
 
-router.post("/verify", authorization, async (req, res) => {
-  try {
-    res.json(true);
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Server Error");
-  }
-});
+// router.post("/verify", authorization, async (req, res) => {
+//   try {
+//     res.json(true);
+//   } catch (error) {
+//     console.error(error.message);
+//     res.status(500).send("Server Error");
+//   }
+// });
 
 // //get all countries
 // app.get("/countries", async (req, res) => {
