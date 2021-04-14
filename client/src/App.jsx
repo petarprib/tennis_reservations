@@ -16,7 +16,7 @@ const App = () => {
 
   // const isAuth = async () => {
   //   try {
-  //     const res = await fetch("http://localhost:5000/api/auth/verify", {
+  //     const res = await fetch("/api/auth/verify", {
   //       method: "POST",
   //       headers: { token: localStorage.token },
   //     });

@@ -24,7 +24,7 @@ const ClubRegister = (props) => {
     try {
       const type = 2;
       const body = { country, name, email, password, type };
-      const res = await fetch("http://localhost:5000/api/auth/register", {
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),

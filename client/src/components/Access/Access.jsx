@@ -24,7 +24,7 @@ const Access = () => {
 
   const fetchCountries = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/countries");
+      const res = await fetch("/api/countries");
       const data = await res.json();
       let countries = [];
       data.forEach((country) =>
@@ -37,6 +37,7 @@ const Access = () => {
           id: country.id,
         })
       );
+      console.log(countries);
       setCountries(countries);
     } catch (error) {
       console.error("Error:", error.message);

@@ -12,7 +12,7 @@ const ClubDashboard = () => {
 
   const getName = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/dashboard/clubs", {
+      const res = await fetch("/api/dashboard/clubs", {
         method: "GET",
         headers: { token: localStorage.token },
       });

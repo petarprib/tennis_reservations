@@ -7,6 +7,7 @@ require("dotenv").config();
 
 app.use(cors());
 app.use(express.json());
+app.set("trust proxy", true);
 app.use(
   session({
     name: process.env.SESSION_NAME,
@@ -14,6 +15,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
+      secure: false, // development only
       sameSite: true,
       maxAge: parseInt(process.env.SESSION_MAX_AGE),
     },
