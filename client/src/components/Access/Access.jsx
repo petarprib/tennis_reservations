@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import "./access.scoped.scss";
 import ClubLogin from "./Club/ClubLogin.jsx";
@@ -37,7 +37,6 @@ const Access = () => {
           id: country.id,
         })
       );
-      console.log(countries);
       setCountries(countries);
     } catch (error) {
       console.error("Error:", error.message);

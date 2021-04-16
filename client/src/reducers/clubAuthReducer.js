@@ -1,4 +1,4 @@
-const initialState = false;
+const initialState = "loading";
 
 const clubAuthReducer = (state = initialState, action) => {
   const { type, payload } = action;

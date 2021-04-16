@@ -3,6 +3,7 @@ const pool = require("../db");
 const bcrypt = require("bcrypt");
 // const jwtGenerator = require("../utils/jwtGenerator");
 const validInfo = require("../middleware/validInfo");
+const authorization = require("../middleware/authorization");
 // const authorization = require("../middleware/authorization");
 
 // //create a club
@@ -22,13 +23,22 @@ const validInfo = require("../middleware/validInfo");
 //register club
 router.post("/register", validInfo, async (req, res) => {
   try {
-    const { country, name, email, password, type } = req.body;
+    const { country, club, name, email, password, type } = req.body;
 
     if (type === 2) {
-      const club = await pool.query("SELECT * FROM account WHERE email = $1 AND type = $2", [email, type]);
+      const clubs = await pool.query("SELECT * FROM account WHERE email = $1 AND type = $2", [email, type]);
 
-      if (club.rows.length !== 0) {
-        return res.status(401).json("club already exists");
+      if (clubs.rows.length !== 0) {
+        return res.status(401).json("Club already exists");
+      }
+    } else if (type === 3) {
+      const players = await pool.query(
+        "SELECT * FROM account INNER JOIN player_details ON account.id = player_details.player_id WHERE club = $1 AND email = $2 AND type = $3",
+        [club, email, type]
+      );
+
+      if (players.rows.length !== 0) {
+        return res.status(401).json("Player already exists");
       }
     }
 
@@ -41,59 +51,87 @@ router.post("/register", validInfo, async (req, res) => {
     );
 
     if (type === 2) {
-      await pool.query("INSERT INTO club_details (club, country) VALUES ($1, $2) RETURNING *", [
+      await pool.query("INSERT INTO club_details (club_id, country) VALUES ($1, $2) RETURNING *", [
         newAccount.rows[0].id,
         country,
       ]);
+    } else if (type === 3) {
+      await pool.query("INSERT INTO player_details (player_id, club) VALUES ($1, $2) RETURNING *", [
+        newAccount.rows[0].id,
+        club,
+      ]);
     }
 
-    // const token = jwtGenerator(newAccount.rows[0].id);
+    req.session.accountId = newAccount.rows[0].id;
+    req.session.accountType = newAccount.rows[0].type;
 
-    // res.json(newAccount.rows[0].id);
-
-    req.session.userId = newAccount.rows[0].id;
-    // console.log(req.sessionID);
-    res.json(req.sessionID);
+    res.json(req.session.accountId !== "" ? true : false);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");
   }
 });
 
-//login club
-// router.post("/login", validInfo, async (req, res) => {
-//   try {
-//     const { email, password } = req.body;
+// login club
+router.post("/login", validInfo, async (req, res) => {
+  try {
+    const { club, email, password, type } = req.body;
 
-//     const club = await pool.query("SELECT * FROM club WHERE email = $1", [email]);
+    // console.log(req.body);
 
-//     if (club.rows.length === 0) {
-//       return res.status(401).json("Incorrect login details");
-//     }
+    if (type === 3) {
+      const player = await pool.query(
+        "SELECT id, password, type FROM account INNER JOIN player_details ON account.id = player_details.player_id WHERE club = $1 AND email = $2 AND type = $3",
+        [club, email, type]
+      );
 
-//     const validPassword = await bcrypt.compare(password, club.rows[0].password);
+      // console.log(player);
 
-//     if (!validPassword) {
-//       return res.status(401).json("Incorrect login details");
-//     }
+      if (player.rows.length === 0) {
+        return res.status(401).json("Incorrect login details");
+      }
 
-//     const token = jwtGenerator(club.rows[0].id);
+      const validPassword = await bcrypt.compare(password, player.rows[0].password);
 
-//     res.json({ token });
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(500).send("Server Error");
-//   }
-// });
+      if (!validPassword) {
+        return res.status(401).json("Incorrect login details");
+      }
 
-// router.post("/verify", authorization, async (req, res) => {
-//   try {
-//     res.json(true);
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(500).send("Server Error");
-//   }
-// });
+      req.session.accountId = player.rows[0].id;
+      req.session.accountType = player.rows[0].type;
+
+      res.json(req.session.accountId !== "" ? true : false);
+    }
+
+    // res.json(true);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+router.get(
+  "/verify",
+  //  authorization,
+  async (req, res) => {
+    try {
+      res.json(req.session.accountId ? true : false);
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Server Error");
+    }
+  }
+);
+
+router.get("/logout", (req, res) => {
+  try {
+    req.session.destroy();
+    res.json(req.session ? true : false);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+});
 
 // //get all countries
 // app.get("/countries", async (req, res) => {

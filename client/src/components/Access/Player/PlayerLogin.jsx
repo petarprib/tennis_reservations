@@ -1,40 +1,50 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import ".././access.scoped.scss";
+import { useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
+import fetchClubList from "../../../utils/fetchClubList";
 
 const PlayerLogin = (props) => {
+  const dispatch = useDispatch();
+  const { push } = useHistory();
   const [countries, setCountries] = useState([]);
   const [clubs, setClubs] = useState([]);
+  const [club, setClub] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     setCountries(props.countries);
   }, [props.countries]);
 
   const fetchClubs = async (e) => {
-    try {
-      const res = await fetch(`http://localhost:5000/api/${e.id}`);
-      const data = await res.json();
-      let clubs = [];
-      data.forEach((club) =>
-        clubs.push({
-          value: club.name
-            .split(" ")
-            .join("_")
-            .toLowerCase(),
-          label: club.name,
-          id: club.id,
-        })
-      );
-      setClubs(clubs);
-    } catch (error) {
-      console.error("Error:", error.message);
-    }
+    const clubList = await fetchClubList(e.id);
+    setClubs(clubList);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(e);
+    try {
+      const type = 3;
+      const body = { club, email, password, type };
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const parseRes = await res.json();
+      console.log(parseRes);
+      dispatch({
+        type: "CHANGE_CLUBAUTH",
+        payload: {
+          clubAuth: parseRes === true ? true : false,
+        },
+      });
+      push("/dashboard");
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
   return (
@@ -55,23 +65,23 @@ const PlayerLogin = (props) => {
           classNamePrefix="form-dropdown"
           options={clubs}
           placeholder="...and now the club"
-          // onChange={(e) => setClub(e.id)}
+          onChange={(e) => setClub(e.id)}
           data-home
         />
         <input
           className="form-input"
           type="text"
           placeholder="Email"
-          // value={email}
-          // onChange={(e) => setEmail(e.target.value)}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           data-home
         />
         <input
           className="form-input"
           type="password"
           placeholder="Password"
-          // value={password}
-          // onChange={(e) => setPassword(e.target.value)}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           data-home
         />
         <button>Log in</button>

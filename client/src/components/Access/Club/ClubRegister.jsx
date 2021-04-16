@@ -33,10 +33,10 @@ const ClubRegister = (props) => {
       dispatch({
         type: "CHANGE_CLUBAUTH",
         payload: {
-          clubAuth: true,
+          clubAuth: parseRes === true ? true : false,
         },
       });
-      push("/club-dashboard");
+      push("/dashboard");
     } catch (error) {
       console.error(error.message);
     }
