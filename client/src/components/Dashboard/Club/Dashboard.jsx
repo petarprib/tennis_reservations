@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-const ClubDashboard = () => {
+const Dashboard = () => {
   const clubAuth = useSelector((state) => state.clubAuth);
   const dispatch = useDispatch();
   const [name, setName] = useState("");
@@ -51,4 +51,4 @@ const ClubDashboard = () => {
   );
 };
 
-export default ClubDashboard;
+export default Dashboard;

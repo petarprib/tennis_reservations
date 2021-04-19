@@ -77,15 +77,11 @@ router.post("/login", validInfo, async (req, res) => {
   try {
     const { club, email, password, type } = req.body;
 
-    // console.log(req.body);
-
     if (type === 3) {
       const player = await pool.query(
         "SELECT id, password, type FROM account INNER JOIN player_details ON account.id = player_details.player_id WHERE club = $1 AND email = $2 AND type = $3",
         [club, email, type]
       );
-
-      // console.log(player);
 
       if (player.rows.length === 0) {
         return res.status(401).json("Incorrect login details");
