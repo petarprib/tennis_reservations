@@ -36,7 +36,6 @@ const ClubRegister = (props) => {
           clubAuth: parseRes === true ? true : false,
         },
       });
-      push("/dashboard");
     } catch (error) {
       console.error(error.message);
     }

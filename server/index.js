@@ -9,14 +9,14 @@ require("dotenv").config();
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
-app.set("trust proxy", true);
+app.set("trust proxy", 1);
 app.use(
   session({
     name: process.env.SESSION_NAME,
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    // unset: "destroy",
+    unset: "destroy",
     cookie: {
       httpOnly: true,
       secure: false, // false in development only
@@ -55,44 +55,6 @@ app.get("/api/clubs/:country", async (req, res) => {
     console.error(error.message);
   }
 });
-
-// //create a user
-// app.post("/api/players", async (req, res) => {
-//   try {
-//     const { name, email, password, club } = req.body;
-//     const players = await pool.query(
-//       "INSERT INTO player (name, email, password, club) VALUES ($1, $2, crypt($3, gen_salt('bf', 4)), $4) RETURNING *",
-//       [name, email, password, club]
-//     );
-//     res.json(players.rows[0]);
-//   } catch (error) {
-//     console.error(error.message);
-//   }
-// });
-
-// //create a club
-// app.post("/api/clubs", async (req, res) => {
-//   try {
-//     const { country, name, email, password } = req.body;
-//     const clubs = await pool.query(
-//       "INSERT INTO club (name, email, password, country) VALUES ($1, $2, crypt($3, gen_salt('bf', 4)), $4) RETURNING *",
-//       [name, email, password, country]
-//     );
-//     res.json(clubs.rows[0]);
-//   } catch (error) {
-//     console.error(error.message);
-//   }
-// });
-
-// //get all clubs
-// app.get("/api/clubs", async (req, res) => {
-//   try {
-//     const clubs = await pool.query("SELECT * FROM club ORDER BY name asc");
-//     res.json(clubs.rows);
-//   } catch (error) {
-//     console.error(error.message);
-//   }
-// });
 
 const PORT = process.env.PORT || 5000;
 

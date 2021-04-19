@@ -15,7 +15,6 @@ const Dashboard = () => {
     try {
       const res = await fetch("/api/dashboard/clubs");
       const parseRes = await res.json();
-      console.log(parseRes);
       setType(parseRes.type);
       setName(parseRes.name);
     } catch (error) {

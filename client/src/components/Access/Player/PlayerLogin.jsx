@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import ".././access.scoped.scss";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import Select from "react-select";
 import fetchClubList from "../../../utils/fetchClubList";
 
@@ -13,6 +13,7 @@ const PlayerLogin = (props) => {
   const [club, setClub] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     setCountries(props.countries);
@@ -34,14 +35,16 @@ const PlayerLogin = (props) => {
         body: JSON.stringify(body),
       });
       const parseRes = await res.json();
-      console.log(parseRes);
-      dispatch({
-        type: "CHANGE_CLUBAUTH",
-        payload: {
-          clubAuth: parseRes === true ? true : false,
-        },
-      });
-      push("/dashboard");
+      if (parseRes === true) {
+        dispatch({
+          type: "CHANGE_CLUBAUTH",
+          payload: {
+            clubAuth: true,
+          },
+        });
+      } else {
+        setError(parseRes);
+      }
     } catch (error) {
       console.error(error.message);
     }
@@ -84,6 +87,7 @@ const PlayerLogin = (props) => {
           onChange={(e) => setPassword(e.target.value)}
           data-home
         />
+        <p>{error}</p>
         <button>Log in</button>
       </form>
       <div className="options" data-home>

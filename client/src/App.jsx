@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Switch, Route, Redirect, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Access from "./components/Access/Access.jsx";
@@ -12,13 +12,13 @@ const App = () => {
 
   useEffect(() => {
     isAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname, location.search]);
 
   const isAuth = async () => {
     try {
       const res = await fetch("/api/auth/verify");
       const parseRes = await res.json();
-      // console.log("parseRes: ", parseRes);
       dispatch({
         type: "CHANGE_CLUBAUTH",
         payload: {
@@ -40,7 +40,7 @@ const App = () => {
           <Route path="/register" render={() => (!clubAuth ? <Access /> : <Redirect to="/dashboard" />)} />
           <Route path="/club-login" render={() => (!clubAuth ? <Access /> : <Redirect to="/dashboard" />)} />
           <Route path="/club-register" render={() => (!clubAuth ? <Access /> : <Redirect to="/dashboard" />)} />
-          <Route path="/dashboard" render={() => (clubAuth ? <ClubDashboard /> : <Redirect to="/club-login" />)} />
+          <Route path="/dashboard" render={() => (clubAuth ? <ClubDashboard /> : <Redirect to="/" />)} />
         </Switch>
       </div>
     );

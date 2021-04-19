@@ -1,22 +1,35 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import ".././access.scoped.scss";
 
 const ClubLogin = () => {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const body = { email, password };
+      const type = 2;
+      const body = { email, password, type };
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
       const parseRes = await res.json();
-      localStorage.setItem("token", parseRes.token);
+      if (parseRes === true) {
+        dispatch({
+          type: "CHANGE_CLUBAUTH",
+          payload: {
+            clubAuth: true,
+          },
+        });
+      } else {
+        setError(parseRes);
+      }
     } catch (error) {
       console.error(error.message);
     }
@@ -45,6 +58,7 @@ const ClubLogin = () => {
           onChange={(e) => setPassword(e.target.value)}
           data-home
         />
+        <p>{error}</p>
         <button type="submit">Log in</button>
       </form>
       <div className="options" data-home>
