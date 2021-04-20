@@ -39,17 +39,16 @@ const Access = () => {
       );
       setCountries(countries);
     } catch (error) {
-      console.error("Error:", error.message);
+      console.error("Error: ", error.message);
     }
   };
 
   return (
-    <>
-      <div id="background" data-home />
-      <div id="main-container" data-home>
+    <div id="background" data-home>
+      <div id="form-container" data-home>
         {access}
       </div>
-    </>
+    </div>
   );
 };
 
