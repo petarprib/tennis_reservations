@@ -1,4 +1,6 @@
-# Client
+# /!\ UNDER CONSTRUCTION /!\
+
+## Client
 
 ```
 npm start
@@ -8,7 +10,7 @@ npm start
 sass --watch src/ --no-source-map
 ```
 
-# Server
+## Server
 
 ```
 nodemon index

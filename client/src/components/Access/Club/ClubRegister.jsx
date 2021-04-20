@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ".././access.scoped.scss";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import Select from "react-select";
 
 const ClubRegister = (props) => {
-  const clubAuth = useSelector((state) => state.clubAuth);
   const dispatch = useDispatch();
-  const { push } = useHistory();
   const [countries, setCountries] = useState([]);
   const [country, setCountry] = useState(0);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatedPassword, setRepeatedPassword] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     setCountries(props.countries);
@@ -30,12 +29,16 @@ const ClubRegister = (props) => {
         body: JSON.stringify(body),
       });
       const parseRes = await res.json();
-      dispatch({
-        type: "CHANGE_CLUBAUTH",
-        payload: {
-          clubAuth: parseRes === true ? true : false,
-        },
-      });
+      if (parseRes === true) {
+        dispatch({
+          type: "CHANGE_CLUBAUTH",
+          payload: {
+            clubAuth: true,
+          },
+        });
+      } else {
+        setError(parseRes);
+      }
     } catch (error) {
       console.error(error.message);
     }
@@ -87,6 +90,7 @@ const ClubRegister = (props) => {
           onChange={(e) => setRepeatedPassword(e.target.value)}
           data-home
         />
+        <p>{error}</p>
         <button>Register</button>
       </form>
       <div className="options" data-home>

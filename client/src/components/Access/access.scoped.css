@@ -4,14 +4,13 @@
   background-position: right;
   background-size: cover;
   background-repeat: no-repeat;
-  image-rendering: pixelated;
   filter: blur(3px);
+  background-attachment: fixed;
 }
 
 #main-container[data-home] {
+  margin: 50% 0 0 50%;
   position: absolute;
-  top: 50%;
-  left: 50%;
   transform: translate(-50%, -50%);
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 15px;

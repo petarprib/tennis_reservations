@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ".././access.scoped.scss";
 import { useDispatch } from "react-redux";
 import Select from "react-select";
@@ -7,7 +7,7 @@ import fetchClubList from "../../../utils/fetchClubList";
 
 const PlayerLogin = (props) => {
   const dispatch = useDispatch();
-  const { push } = useHistory();
+
   const [countries, setCountries] = useState([]);
   const [clubs, setClubs] = useState([]);
   const [club, setClub] = useState("");
@@ -60,14 +60,14 @@ const PlayerLogin = (props) => {
         <Select
           classNamePrefix="form-dropdown"
           options={countries}
-          placeholder="First select the country"
+          placeholder="Select country"
           onChange={(e) => fetchClubs(e)}
           data-home
         />
         <Select
           classNamePrefix="form-dropdown"
           options={clubs}
-          placeholder="...and now the club"
+          placeholder="Select club"
           onChange={(e) => setClub(e.id)}
           data-home
         />

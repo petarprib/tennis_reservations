@@ -3,7 +3,8 @@ import { Switch, Route, Redirect, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Access from "./components/Access/Access.jsx";
 import ClubDashboard from "./components/Dashboard/Club/Dashboard.jsx";
-// import PlayerDashboard from "./components/Dashboard/Player/PlayerDashboard.jsx";
+import { css } from "@emotion/core";
+import SyncLoader from "react-spinners/SyncLoader";
 
 const App = () => {
   const location = useLocation();
@@ -30,11 +31,18 @@ const App = () => {
     }
   };
 
+  const loader = css`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  `;
+
   if (clubAuth === "loading") {
-    return <h1>Loading...</h1>;
+    return <SyncLoader color={"#C6ED2C"} css={loader} size={20} />;
   } else {
     return (
-      <div id="app">
+      <>
         <Switch>
           <Route path="/" exact render={() => (!clubAuth ? <Access /> : <Redirect to="/dashboard" />)} />
           <Route path="/register" render={() => (!clubAuth ? <Access /> : <Redirect to="/dashboard" />)} />
@@ -42,7 +50,7 @@ const App = () => {
           <Route path="/club-register" render={() => (!clubAuth ? <Access /> : <Redirect to="/dashboard" />)} />
           <Route path="/dashboard" render={() => (clubAuth ? <ClubDashboard /> : <Redirect to="/" />)} />
         </Switch>
-      </div>
+      </>
     );
   }
 };

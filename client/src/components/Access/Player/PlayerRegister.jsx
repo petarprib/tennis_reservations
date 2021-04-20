@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ".././access.scoped.scss";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import Select from "react-select";
 import fetchClubList from "../../../utils/fetchClubList";
 
 const PlayerRegister = (props) => {
   const [countries, setCountries] = useState([]);
   const [clubs, setClubs] = useState([]);
-  const clubAuth = useSelector((state) => state.clubAuth);
   const dispatch = useDispatch();
   const [club, setClub] = useState("");
   const [name, setName] = useState("");

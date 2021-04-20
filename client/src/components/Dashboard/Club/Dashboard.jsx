@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const Dashboard = () => {
-  const clubAuth = useSelector((state) => state.clubAuth);
   const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [type, setType] = useState();
