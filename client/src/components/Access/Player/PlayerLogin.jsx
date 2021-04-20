@@ -7,7 +7,6 @@ import fetchClubList from "../../../utils/fetchClubList";
 
 const PlayerLogin = (props) => {
   const dispatch = useDispatch();
-
   const [countries, setCountries] = useState([]);
   const [clubs, setClubs] = useState([]);
   const [club, setClub] = useState("");

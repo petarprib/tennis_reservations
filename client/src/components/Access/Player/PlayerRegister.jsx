@@ -6,21 +6,28 @@ import Select from "react-select";
 import fetchClubList from "../../../utils/fetchClubList";
 
 const PlayerRegister = (props) => {
+  const dispatch = useDispatch();
   const [countries, setCountries] = useState([]);
   const [clubs, setClubs] = useState([]);
-  const dispatch = useDispatch();
+  const [country, setCountry] = useState(0);
+  const [countryError, setCountryError] = useState("");
   const [club, setClub] = useState("");
+  const [clubError, setClubError] = useState("");
   const [name, setName] = useState("");
+  const [nameError, setNameError] = useState("");
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [password, setPassword] = useState("");
-  const [repeatedPassword, setRepeatedPassword] = useState("");
-  const [error, setError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [repPassword, setRepPassword] = useState("");
+  const [repPasswordError, setRepPasswordError] = useState("");
 
   useEffect(() => {
     setCountries(props.countries);
   }, [props.countries]);
 
   const fetchClubs = async (e) => {
+    setCountry(e.id);
     const clubList = await fetchClubList(e.id);
     setClubs(clubList);
   };
@@ -29,7 +36,7 @@ const PlayerRegister = (props) => {
     e.preventDefault();
     try {
       const type = 3;
-      const body = { club, name, email, password, type };
+      const body = { club, name, email, password, repPassword, type };
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -44,7 +51,16 @@ const PlayerRegister = (props) => {
           },
         });
       } else {
-        setError(parseRes);
+        country === 0 ? setCountryError("This field is required") : setCountryError("");
+        parseRes.includes("club") ? setClubError("This field is required") : setClubError("");
+        parseRes.includes("name") ? setNameError("Name and surname are required") : setNameError("");
+        parseRes.includes("email") ? setEmailError("Invalid email") : setEmailError("");
+        parseRes.includes("password")
+          ? setPasswordError(
+              "Must have minimum 8 characters of which at least 1 letter, 1 number and 1 one special character"
+            )
+          : setPasswordError("");
+        parseRes.includes("repPassword") ? setRepPasswordError("Passwords do not match") : setRepPasswordError("");
       }
     } catch (error) {
       console.error(error.message);
@@ -60,11 +76,13 @@ const PlayerRegister = (props) => {
       <form id="form" onSubmit={(e) => handleSubmit(e)} data-home>
         <Select
           classNamePrefix="form-input"
+          selected
           options={countries}
           placeholder="Select country"
           onChange={(e) => fetchClubs(e)}
           data-home
         />
+        <small>{countryError}</small>
         <Select
           classNamePrefix="form-input"
           options={clubs}
@@ -72,6 +90,7 @@ const PlayerRegister = (props) => {
           onChange={(e) => setClub(e.id)}
           data-home
         />
+        <small>{clubError}</small>
         <input
           className="form-input"
           type="text"
@@ -80,6 +99,7 @@ const PlayerRegister = (props) => {
           onChange={(e) => setName(e.target.value)}
           data-home
         />
+        <small>{nameError}</small>
         <input
           className="form-input"
           type="text"
@@ -88,6 +108,7 @@ const PlayerRegister = (props) => {
           onChange={(e) => setEmail(e.target.value)}
           data-home
         />
+        <small>{emailError}</small>
         <input
           className="form-input"
           type="password"
@@ -96,15 +117,16 @@ const PlayerRegister = (props) => {
           onChange={(e) => setPassword(e.target.value)}
           data-home
         />
+        <small>{passwordError}</small>
         <input
           className="form-input"
           type="password"
           placeholder="Repeat password"
-          value={repeatedPassword}
-          onChange={(e) => setRepeatedPassword(e.target.value)}
+          value={repPassword}
+          onChange={(e) => setRepPassword(e.target.value)}
           data-home
         />
-        <p>{error}</p>
+        <small>{repPasswordError}</small>
         <button>Register</button>
       </form>
       <div className="options" data-home>

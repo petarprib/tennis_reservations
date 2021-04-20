@@ -31,11 +31,15 @@
   margin-bottom: 10px;
 }
 
+#form p {
+  color: red;
+  margin-bottom: 10px;
+}
+
 .form-input[data-home] {
   width: 100%;
   font-size: 1em;
   padding: 5px;
-  margin-bottom: 10px;
   height: 40px;
   border: solid 1px #a9a9a9;
   border-radius: 4px;

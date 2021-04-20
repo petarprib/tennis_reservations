@@ -29,10 +29,7 @@ const Access = () => {
       let countries = [];
       data.forEach((country) =>
         countries.push({
-          value: country.name
-            .split(" ")
-            .join("_")
-            .toLowerCase(),
+          value: country.name,
           label: country.name,
           id: country.id,
         })

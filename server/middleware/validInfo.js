@@ -1,29 +1,55 @@
 module.exports = (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { country, club, name, email, password, repPassword, type } = req.body;
+  let errors = [];
 
-  function validEmail(email) {
+  const validEmail = (email) => {
     return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email);
-  }
+  };
 
-  if (req.path === "/") {
+  const validPassword = (password) => {
+    return /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/.test(password);
+  };
+
+  if (req.path === "/login") {
+    if (type === 2) {
+      if (![email, password].every(Boolean)) {
+        return res.status(401).json("All fields are required");
+      } else if (!validEmail(email)) {
+        return res.status(401).json("email format");
+      }
+    } else if (type === 3) {
+      if (![club, email, password].every(Boolean)) {
+        return res.status(401).json("All fields are required");
+      } else if (!validEmail(email)) {
+        return res.status(401).json("email format");
+      }
+    }
   } else if (req.path === "/register") {
-  } else if (req.path === "/club-login") {
-  } else if (req.path === "/club-register") {
+    if (type === 2) {
+      if (!country) {
+        errors.push("country");
+      }
+      if (!name) {
+        errors.push("name");
+      }
+    } else if (type === 3) {
+      if (!club) {
+        errors.push("club");
+      }
+      if (!name || !name.includes(" ")) {
+        errors.push("name");
+      }
+    }
+    if (!email || !validEmail(email)) {
+      errors.push("email");
+    }
+    if (!password || !validPassword(password)) {
+      errors.push("password");
+    }
+    if (!repPassword || repPassword !== password) {
+      errors.push("repPassword");
+    }
   }
 
-  if (req.path === "/register" || req.path === "/club-register") {
-    if (![name, email, password].every(Boolean)) {
-      return res.status(401).json("Missing credentials");
-    } else if (!validEmail(email)) {
-      return res.status(401).json("Invalid email");
-    }
-  } else if (req.path === "/login" || req.path === "/club-login") {
-    if (![email, password].every(Boolean)) {
-      return res.status(401).json("Missing credentials");
-    } else if (!validEmail(email)) {
-      return res.status(401).json("Invalid email");
-    }
-  }
-
-  next();
+  errors.length > 0 ? res.status(401).json(errors) : next();
 };

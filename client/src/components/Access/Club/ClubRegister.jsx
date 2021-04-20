@@ -8,11 +8,15 @@ const ClubRegister = (props) => {
   const dispatch = useDispatch();
   const [countries, setCountries] = useState([]);
   const [country, setCountry] = useState(0);
+  const [countryError, setCountryError] = useState("");
   const [name, setName] = useState("");
+  const [nameError, setNameError] = useState("");
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [password, setPassword] = useState("");
-  const [repeatedPassword, setRepeatedPassword] = useState("");
-  const [error, setError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [repPassword, setRepPassword] = useState("");
+  const [repPasswordError, setRepPasswordError] = useState("");
 
   useEffect(() => {
     setCountries(props.countries);
@@ -22,7 +26,7 @@ const ClubRegister = (props) => {
     e.preventDefault();
     try {
       const type = 2;
-      const body = { country, name, email, password, type };
+      const body = { country, name, email, password, repPassword, type };
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -37,7 +41,15 @@ const ClubRegister = (props) => {
           },
         });
       } else {
-        setError(parseRes);
+        parseRes.includes("country") ? setCountryError("This field is required") : setCountryError("");
+        parseRes.includes("name") ? setNameError("This field is required") : setNameError("");
+        parseRes.includes("email") ? setEmailError("Invalid email") : setEmailError("");
+        parseRes.includes("password")
+          ? setPasswordError(
+              "Must have minimum 8 characters of which at least 1 letter, 1 number and 1 one special character"
+            )
+          : setPasswordError("");
+        parseRes.includes("repPassword") ? setRepPasswordError("Passwords do not match") : setRepPasswordError("");
       }
     } catch (error) {
       console.error(error.message);
@@ -58,6 +70,7 @@ const ClubRegister = (props) => {
           onChange={(e) => setCountry(e.id)}
           data-home
         />
+        <small>{countryError}</small>
         <input
           className="form-input"
           type="text"
@@ -66,6 +79,7 @@ const ClubRegister = (props) => {
           onChange={(e) => setName(e.target.value)}
           data-home
         />
+        <small>{nameError}</small>
         <input
           className="form-input"
           type="text"
@@ -74,6 +88,7 @@ const ClubRegister = (props) => {
           onChange={(e) => setEmail(e.target.value)}
           data-home
         />
+        <small>{emailError}</small>
         <input
           className="form-input"
           type="password"
@@ -82,15 +97,16 @@ const ClubRegister = (props) => {
           onChange={(e) => setPassword(e.target.value)}
           data-home
         />
+        <small>{passwordError}</small>
         <input
           className="form-input"
           type="password"
           placeholder="Repeat password"
-          value={repeatedPassword}
-          onChange={(e) => setRepeatedPassword(e.target.value)}
+          value={repPassword}
+          onChange={(e) => setRepPassword(e.target.value)}
           data-home
         />
-        <p>{error}</p>
+        <small>{repPasswordError}</small>
         <button>Register</button>
       </form>
       <div className="options" data-home>

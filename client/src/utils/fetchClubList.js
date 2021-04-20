@@ -5,17 +5,15 @@ const fetchClubList = async (id) => {
     let clubs = [];
     data.forEach((club) =>
       clubs.push({
-        value: club.name
-          .split(" ")
-          .join("_")
-          .toLowerCase(),
+        value: club.name,
         label: club.name,
         id: club.id,
+        country: club.country,
       })
     );
     return clubs;
   } catch (error) {
-    console.error("Error:", error.message);
+    console.error("Error: ", error.message);
   }
 };
 

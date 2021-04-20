@@ -13,7 +13,7 @@ const App = () => {
 
   useEffect(() => {
     isAuth();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [location.pathname, location.search]);
 
   const isAuth = async () => {
