@@ -1,9 +1,7 @@
 const router = require("express").Router();
 const pool = require("../db");
 const bcrypt = require("bcrypt");
-// const jwtGenerator = require("../utils/jwtGenerator");
 const validInfo = require("../middleware/validInfo");
-// const authorization = require("../middleware/authorization");
 
 //register club
 router.post("/register", validInfo, async (req, res) => {
@@ -14,7 +12,7 @@ router.post("/register", validInfo, async (req, res) => {
       const clubs = await pool.query("SELECT * FROM account WHERE email = $1 AND type = $2", [email, type]);
 
       if (clubs.rows.length !== 0) {
-        return res.status(401).json("Club already exists");
+        return res.status(401).json(["club exists"]);
       }
     } else if (type === 3) {
       const players = await pool.query(
@@ -23,7 +21,7 @@ router.post("/register", validInfo, async (req, res) => {
       );
 
       if (players.rows.length !== 0) {
-        return res.status(401).json("Player already exists");
+        return res.status(401).json(["player exists"]);
       }
     }
 
@@ -77,13 +75,13 @@ router.post("/login", validInfo, async (req, res) => {
     }
 
     if (account.rows.length === 0) {
-      return res.status(401).json("Incorrect login details");
+      return res.status(401).json(["login"]);
     }
 
     const validPassword = await bcrypt.compare(password, account.rows[0].password);
 
     if (!validPassword) {
-      return res.status(401).json("Incorrect login details");
+      return res.status(401).json(["login"]);
     }
 
     req.session.accountId = account.rows[0].id;

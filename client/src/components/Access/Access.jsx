@@ -36,7 +36,7 @@ const Access = () => {
       );
       setCountries(countries);
     } catch (error) {
-      console.error("Error: ", error.message);
+      console.error(error.message);
     }
   };
 

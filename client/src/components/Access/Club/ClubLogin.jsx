@@ -6,8 +6,10 @@ import ".././access.scoped.scss";
 const ClubLogin = () => {
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [loginError, setLoginError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,7 +30,9 @@ const ClubLogin = () => {
           },
         });
       } else {
-        setError(parseRes);
+        parseRes.includes("email") ? setEmailError("This field is required") : setEmailError("");
+        parseRes.includes("password") ? setPasswordError("This field is required") : setPasswordError("");
+        parseRes.includes("login") ? setLoginError("Invalid login details") : setLoginError("");
       }
     } catch (error) {
       console.error(error.message);
@@ -50,6 +54,7 @@ const ClubLogin = () => {
           onChange={(e) => setEmail(e.target.value)}
           data-home
         />
+        <small>{emailError}</small>
         <input
           className="form-input"
           type="password"
@@ -58,7 +63,8 @@ const ClubLogin = () => {
           onChange={(e) => setPassword(e.target.value)}
           data-home
         />
-        <p>{error}</p>
+        <small>{passwordError}</small>
+        <small>{loginError}</small>
         <button type="submit">Log in</button>
       </form>
       <div className="options" data-home>

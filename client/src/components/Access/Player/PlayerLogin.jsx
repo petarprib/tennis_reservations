@@ -9,16 +9,22 @@ const PlayerLogin = (props) => {
   const dispatch = useDispatch();
   const [countries, setCountries] = useState([]);
   const [clubs, setClubs] = useState([]);
+  const [country, setCountry] = useState(0);
+  const [countryError, setCountryError] = useState("");
   const [club, setClub] = useState("");
+  const [clubError, setClubError] = useState("");
   const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [loginError, setLoginError] = useState("");
 
   useEffect(() => {
     setCountries(props.countries);
   }, [props.countries]);
 
   const fetchClubs = async (e) => {
+    setCountry(e.id);
     const clubList = await fetchClubList(e.id);
     setClubs(clubList);
   };
@@ -42,7 +48,11 @@ const PlayerLogin = (props) => {
           },
         });
       } else {
-        setError(parseRes);
+        country === 0 ? setCountryError("This field is required") : setCountryError("");
+        parseRes.includes("club") ? setClubError("This field is required") : setClubError("");
+        parseRes.includes("email") ? setEmailError("This field is required") : setEmailError("");
+        parseRes.includes("password") ? setPasswordError("This field is required") : setPasswordError("");
+        parseRes.includes("login") ? setLoginError("Invalid login details") : setLoginError("");
       }
     } catch (error) {
       console.error(error.message);
@@ -63,6 +73,7 @@ const PlayerLogin = (props) => {
           onChange={(e) => fetchClubs(e)}
           data-home
         />
+        <small>{countryError}</small>
         <Select
           classNamePrefix="form-dropdown"
           options={clubs}
@@ -70,6 +81,7 @@ const PlayerLogin = (props) => {
           onChange={(e) => setClub(e.id)}
           data-home
         />
+        <small>{clubError}</small>
         <input
           className="form-input"
           type="text"
@@ -78,6 +90,7 @@ const PlayerLogin = (props) => {
           onChange={(e) => setEmail(e.target.value)}
           data-home
         />
+        <small>{emailError}</small>
         <input
           className="form-input"
           type="password"
@@ -86,7 +99,8 @@ const PlayerLogin = (props) => {
           onChange={(e) => setPassword(e.target.value)}
           data-home
         />
-        <p>{error}</p>
+        <small>{passwordError}</small>
+        <small>{loginError}</small>
         <button>Log in</button>
       </form>
       <div className="options" data-home>

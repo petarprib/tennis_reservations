@@ -13,7 +13,7 @@ const fetchClubList = async (id) => {
     );
     return clubs;
   } catch (error) {
-    console.error("Error: ", error.message);
+    console.error(error.message);
   }
 };
 

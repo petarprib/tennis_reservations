@@ -17,6 +17,7 @@ const ClubRegister = (props) => {
   const [passwordError, setPasswordError] = useState("");
   const [repPassword, setRepPassword] = useState("");
   const [repPasswordError, setRepPasswordError] = useState("");
+  const [existsError, setExistsError] = useState("");
 
   useEffect(() => {
     setCountries(props.countries);
@@ -46,10 +47,11 @@ const ClubRegister = (props) => {
         parseRes.includes("email") ? setEmailError("Invalid email") : setEmailError("");
         parseRes.includes("password")
           ? setPasswordError(
-              "Must have minimum 8 characters of which at least 1 letter, 1 number and 1 one special character"
+              "Must have minimum 8 characters of which at least 1 letter, 1 number and 1 special character"
             )
           : setPasswordError("");
         parseRes.includes("repPassword") ? setRepPasswordError("Passwords do not match") : setRepPasswordError("");
+        parseRes.includes("club exists") ? setExistsError("Club with email already exists") : setExistsError("");
       }
     } catch (error) {
       console.error(error.message);
@@ -107,6 +109,7 @@ const ClubRegister = (props) => {
           data-home
         />
         <small>{repPasswordError}</small>
+        <small>{existsError}</small>
         <button>Register</button>
       </form>
       <div className="options" data-home>

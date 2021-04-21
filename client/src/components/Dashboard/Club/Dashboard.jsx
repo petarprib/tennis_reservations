@@ -34,7 +34,7 @@ const Dashboard = () => {
       });
       return;
     } catch (error) {
-      console.error("Error:", error.message);
+      console.error(error.message);
     }
   };
 
