@@ -59,6 +59,97 @@ const PlayerLogin = (props) => {
     }
   };
 
+  const customStyles = {
+    clearIndicator: (provided, state) => ({
+      ...provided,
+    }),
+    container: (provided, state) => ({
+      ...provided,
+    }),
+    control: (provided, state) => ({
+      ...provided,
+      marginBottom: "10px",
+      minHeight: "40px",
+      boxShadow: "none",
+      border: "solid 5px #a9a9a9",
+      borderRadius: "4px",
+      // borderColor: state.isFocused ? "#6b8e23" : null,
+      // "&:hover": {
+      //   borderColor: "#6b8e23",
+      // },
+
+      // borderColor: state.isFocused ? "#6b8e23" : "#a9a9a9",
+      // "&:hover": {
+      //   borderColor: state.isFocused ? "#6b8e23" : "#a9a9a9",
+      // },
+    }),
+    dropdownIndicator: (provided, state) => ({
+      ...provided,
+    }),
+    group: (provided, state) => ({
+      ...provided,
+    }),
+    groupHeading: (provided, state) => ({
+      ...provided,
+    }),
+    indicatorContainer: (provided, state) => ({
+      ...provided,
+      color: "red",
+    }),
+    indicatorSeparator: (provided, state) => ({
+      ...provided,
+    }),
+    input: (provided, state) => ({
+      ...provided,
+    }),
+    loadingIndicator: (provided, state) => ({
+      ...provided,
+    }),
+    loadingMessage: (provided, state) => ({
+      ...provided,
+    }),
+    menu: (provided, state) => ({
+      ...provided,
+    }),
+    menuList: (provided, state) => ({
+      ...provided,
+    }),
+    menuPortal: (provided, state) => ({
+      ...provided,
+    }),
+    multiValue: (provided, state) => ({
+      ...provided,
+    }),
+    multiValueLabel: (provided, state) => ({
+      ...provided,
+    }),
+    multiValueRemove: (provided, state) => ({
+      ...provided,
+    }),
+    noOptionsMessage: (provided, state) => ({
+      ...provided,
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      color: state.isFocused ? "#fff" : "#696969",
+      backgroundColor: state.isFocused ? "#6b8e23" : null,
+    }),
+    placeholder: (provided, state) => ({
+      ...provided,
+      margin: 0,
+      color: "#696969",
+    }),
+    singleValue: (provided, state) => ({
+      ...provided,
+      margin: 0,
+      color: "#696969",
+    }),
+    valueContainer: (provided, state) => ({
+      ...provided,
+      padding: "2px 5px",
+    }),
+  };
+
   return (
     <>
       <h1>Player Login</h1>
@@ -67,6 +158,7 @@ const PlayerLogin = (props) => {
       </div>
       <form id="form" onSubmit={(e) => handleSubmit(e)} data-home>
         <Select
+          styles={customStyles}
           classNamePrefix="form-dropdown"
           options={countries}
           placeholder="Select country"
@@ -75,6 +167,7 @@ const PlayerLogin = (props) => {
         />
         <small>{countryError}</small>
         <Select
+          styles={customStyles}
           classNamePrefix="form-dropdown"
           options={clubs}
           placeholder="Select club"

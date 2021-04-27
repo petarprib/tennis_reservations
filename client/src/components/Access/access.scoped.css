@@ -31,7 +31,7 @@
   margin-bottom: 10px;
 }
 
-#form p {
+#form small {
   color: red;
   margin-bottom: 10px;
 }
@@ -40,6 +40,7 @@
   width: 100%;
   font-size: 1em;
   padding: 5px;
+  margin-bottom: 10px;
   height: 40px;
   border: solid 1px #a9a9a9;
   border-radius: 4px;
@@ -50,24 +51,6 @@
 }
 .form-input[data-home] ::placeholder {
   color: red;
-}
-
-.form-dropdown__control {
-  font-size: 1em;
-  margin-bottom: 10px;
-  height: 40px;
-  border: solid 1px #a9a9a9 !important;
-  padding: 0;
-}
-.form-dropdown__control .form-dropdown__value-container {
-  padding: 5px;
-}
-.form-dropdown__control .form-dropdown__placeholder {
-  margin: 0;
-}
-.form-dropdown__control .form-dropdown__indicator {
-  padding: 0 5px;
-  transition: red 150ms;
 }
 
 a {
