@@ -74,6 +74,7 @@ const PlayerLogin = (props) => {
       "&:hover": {
         borderColor: "#a9a9a9",
       },
+      caretColor: "#696969",
     }),
     dropdownIndicator: (provided, state) => ({
       ...provided,
@@ -123,8 +124,8 @@ const PlayerLogin = (props) => {
     }),
     option: (provided, state) => ({
       ...provided,
-      // color: state.isFocused ? "#fff" : "#696969",
-      // backgroundColor: state.isFocused ? "#6b8e23" : null,
+      color: state.isFocused ? "#fff" : "#696969",
+      backgroundColor: state.isFocused ? "#6b8e23" : null,
     }),
     placeholder: (provided, state) => ({
       ...provided,

@@ -49,6 +49,7 @@
   border: solid 1px #a9a9a9;
   border-radius: 4px;
   color: #696969;
+  caret-color: #696969;
 }
 .form-input[data-home]:focus {
   box-shadow: 0px 0px 0px 1px #6b8e23;
