@@ -68,9 +68,8 @@ const PlayerLogin = (props) => {
     }),
     control: (provided, state) => ({
       ...provided,
-      // marginBottom: "10px",
       minHeight: "40px",
-      boxShadow: "none",
+      boxShadow: state.isFocused ? "0px 0px 0px 1px #6b8e23" : "none",
       border: "solid 1px #a9a9a9",
       "&:hover": {
         borderColor: "#a9a9a9",
@@ -129,12 +128,10 @@ const PlayerLogin = (props) => {
     }),
     placeholder: (provided, state) => ({
       ...provided,
-      margin: 0,
       color: "#696969",
     }),
     singleValue: (provided, state) => ({
       ...provided,
-      margin: 0,
       color: "#696969",
     }),
     valueContainer: (provided, state) => ({

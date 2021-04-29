@@ -44,17 +44,14 @@
   outline: none;
   width: 100%;
   font-size: 1em;
-  padding: 5px;
+  padding: 7px;
   height: 40px;
   border: solid 1px #a9a9a9;
   border-radius: 4px;
   color: #696969;
 }
-.form-input[data-home] :focus {
-  border: dotted 1px red;
-}
-.form-input[data-home] ::placeholder {
-  color: red;
+.form-input[data-home]:focus {
+  box-shadow: 0px 0px 0px 1px #6b8e23;
 }
 
 a {
