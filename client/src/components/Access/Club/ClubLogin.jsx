@@ -46,24 +46,28 @@ const ClubLogin = () => {
         <Link to="/">Access as player</Link>
       </div>
       <form id="form" onSubmit={(e) => handleSubmit(e)} data-home>
-        <input
-          className="form-input"
-          type="text"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          data-home
-        />
-        <small>{emailError}</small>
-        <input
-          className="form-input"
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          data-home
-        />
-        <small>{passwordError}</small>
+        <div className="input-error-div" data-home>
+          <input
+            className="form-input"
+            type="text"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            data-home
+          />
+          <small>{emailError}</small>
+        </div>
+        <div className="input-error-div" data-home>
+          <input
+            className="form-input"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            data-home
+          />
+          <small>{passwordError}</small>
+        </div>
         <small>{loginError}</small>
         <button type="submit">Log in</button>
       </form>

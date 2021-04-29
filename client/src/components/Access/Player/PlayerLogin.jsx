@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import ".././access.scoped.scss";
 import { useDispatch } from "react-redux";
@@ -7,6 +7,7 @@ import fetchClubList from "../../../utils/fetchClubList";
 
 const PlayerLogin = (props) => {
   const dispatch = useDispatch();
+  const selectInputRef = useRef();
   const [countries, setCountries] = useState([]);
   const [clubs, setClubs] = useState([]);
   const [country, setCountry] = useState(0);
@@ -23,9 +24,9 @@ const PlayerLogin = (props) => {
     setCountries(props.countries);
   }, [props.countries]);
 
-  const fetchClubs = async (e) => {
-    setCountry(e.id);
-    const clubList = await fetchClubList(e.id);
+  const fetchClubs = async (id) => {
+    setCountry(id);
+    const clubList = await fetchClubList(id);
     setClubs(clubList);
   };
 
@@ -68,20 +69,13 @@ const PlayerLogin = (props) => {
     }),
     control: (provided, state) => ({
       ...provided,
-      marginBottom: "10px",
+      // marginBottom: "10px",
       minHeight: "40px",
       boxShadow: "none",
-      border: "solid 5px #a9a9a9",
-      borderRadius: "4px",
-      // borderColor: state.isFocused ? "#6b8e23" : null,
-      // "&:hover": {
-      //   borderColor: "#6b8e23",
-      // },
-
-      // borderColor: state.isFocused ? "#6b8e23" : "#a9a9a9",
-      // "&:hover": {
-      //   borderColor: state.isFocused ? "#6b8e23" : "#a9a9a9",
-      // },
+      border: "solid 1px #a9a9a9",
+      "&:hover": {
+        borderColor: "#a9a9a9",
+      },
     }),
     dropdownIndicator: (provided, state) => ({
       ...provided,
@@ -131,8 +125,8 @@ const PlayerLogin = (props) => {
     }),
     option: (provided, state) => ({
       ...provided,
-      color: state.isFocused ? "#fff" : "#696969",
-      backgroundColor: state.isFocused ? "#6b8e23" : null,
+      // color: state.isFocused ? "#fff" : "#696969",
+      // backgroundColor: state.isFocused ? "#6b8e23" : null,
     }),
     placeholder: (provided, state) => ({
       ...provided,
@@ -157,42 +151,48 @@ const PlayerLogin = (props) => {
         <Link to="/club-login">Access as club</Link>
       </div>
       <form id="form" onSubmit={(e) => handleSubmit(e)} data-home>
-        <Select
-          styles={customStyles}
-          classNamePrefix="form-dropdown"
-          options={countries}
-          placeholder="Select country"
-          onChange={(e) => fetchClubs(e)}
-          data-home
-        />
-        <small>{countryError}</small>
-        <Select
-          styles={customStyles}
-          classNamePrefix="form-dropdown"
-          options={clubs}
-          placeholder="Select club"
-          onChange={(e) => setClub(e.id)}
-          data-home
-        />
-        <small>{clubError}</small>
-        <input
-          className="form-input"
-          type="text"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          data-home
-        />
-        <small>{emailError}</small>
-        <input
-          className="form-input"
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          data-home
-        />
-        <small>{passwordError}</small>
+        <div className="input-error-div" data-home>
+          <Select
+            styles={customStyles}
+            options={countries}
+            placeholder="Select country"
+            onChange={(e) => fetchClubs(e.value)}
+            data-home
+          />
+          <small>{countryError}</small>
+        </div>
+        <div className="input-error-div" data-home>
+          <Select
+            styles={customStyles}
+            options={clubs}
+            placeholder="Select club"
+            onChange={(e) => setClub(e.value)}
+            data-home
+          />
+          <small>{clubError}</small>
+        </div>
+        <div className="input-error-div" data-home>
+          <input
+            className="form-input"
+            type="text"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            data-home
+          />
+          <small>{emailError}</small>
+        </div>
+        <div className="input-error-div" data-home>
+          <input
+            className="form-input"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            data-home
+          />
+          <small>{passwordError}</small>
+        </div>
         <small>{loginError}</small>
         <button>Log in</button>
       </form>

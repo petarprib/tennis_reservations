@@ -65,50 +65,60 @@ const ClubRegister = (props) => {
         <Link to="/">Access as player</Link>
       </div>
       <form id="form" onSubmit={(e) => handleSubmit(e)} data-home>
-        <Select
-          classNamePrefix="form-input"
-          options={countries}
-          placeholder="Select country"
-          onChange={(e) => setCountry(e.id)}
-          data-home
-        />
-        <small>{countryError}</small>
-        <input
-          className="form-input"
-          type="text"
-          placeholder="Club name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          data-home
-        />
-        <small>{nameError}</small>
-        <input
-          className="form-input"
-          type="text"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          data-home
-        />
-        <small>{emailError}</small>
-        <input
-          className="form-input"
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          data-home
-        />
-        <small>{passwordError}</small>
-        <input
-          className="form-input"
-          type="password"
-          placeholder="Repeat password"
-          value={repPassword}
-          onChange={(e) => setRepPassword(e.target.value)}
-          data-home
-        />
-        <small>{repPasswordError}</small>
+        <div className="input-error-div" data-home>
+          <Select
+            classNamePrefix="form-input"
+            options={countries}
+            placeholder="Select country"
+            onChange={(e) => setCountry(e.value)}
+            data-home
+          />
+          <small>{countryError}</small>
+        </div>
+        <div className="input-error-div" data-home>
+          <input
+            className="form-input"
+            type="text"
+            placeholder="Club name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            data-home
+          />
+          <small>{nameError}</small>
+        </div>
+        <div className="input-error-div" data-home>
+          <input
+            className="form-input"
+            type="text"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            data-home
+          />
+          <small>{emailError}</small>
+        </div>
+        <div className="input-error-div" data-home>
+          <input
+            className="form-input"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            data-home
+          />
+          <small>{passwordError}</small>
+        </div>
+        <div className="input-error-div" data-home>
+          <input
+            className="form-input"
+            type="password"
+            placeholder="Repeat password"
+            value={repPassword}
+            onChange={(e) => setRepPassword(e.target.value)}
+            data-home
+          />
+          <small>{repPasswordError}</small>
+        </div>
         <small>{existsError}</small>
         <button>Register</button>
       </form>

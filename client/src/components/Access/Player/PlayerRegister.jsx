@@ -28,8 +28,8 @@ const PlayerRegister = (props) => {
   }, [props.countries]);
 
   const fetchClubs = async (e) => {
-    setCountry(e.id);
-    const clubList = await fetchClubList(e.id);
+    setCountry(e.value);
+    const clubList = await fetchClubList(e.value);
     setClubs(clubList);
   };
 
@@ -76,59 +76,71 @@ const PlayerRegister = (props) => {
         <Link to="/club-login">Access as club</Link>
       </div>
       <form id="form" onSubmit={(e) => handleSubmit(e)} data-home>
-        <Select
-          classNamePrefix="form-input"
-          selected
-          options={countries}
-          placeholder="Select country"
-          onChange={(e) => fetchClubs(e)}
-          data-home
-        />
-        <small>{countryError}</small>
-        <Select
-          classNamePrefix="form-input"
-          options={clubs}
-          placeholder="Select club"
-          onChange={(e) => setClub(e.id)}
-          data-home
-        />
-        <small>{clubError}</small>
-        <input
-          className="form-input"
-          type="text"
-          placeholder="Full name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          data-home
-        />
-        <small>{nameError}</small>
-        <input
-          className="form-input"
-          type="text"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          data-home
-        />
-        <small>{emailError}</small>
-        <input
-          className="form-input"
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          data-home
-        />
-        <small>{passwordError}</small>
-        <input
-          className="form-input"
-          type="password"
-          placeholder="Repeat password"
-          value={repPassword}
-          onChange={(e) => setRepPassword(e.target.value)}
-          data-home
-        />
-        <small>{repPasswordError}</small>
+        <div className="input-error-div" data-home>
+          <Select
+            classNamePrefix="form-input"
+            selected
+            options={countries}
+            placeholder="Select country"
+            onChange={(e) => fetchClubs(e)}
+            data-home
+          />
+          <small>{countryError}</small>
+        </div>
+        <div className="input-error-div" data-home>
+          <Select
+            classNamePrefix="form-input"
+            options={clubs}
+            placeholder="Select club"
+            onChange={(e) => setClub(e.value)}
+            data-home
+          />
+          <small>{clubError}</small>
+        </div>
+        <div className="input-error-div" data-home>
+          <input
+            className="form-input"
+            type="text"
+            placeholder="Full name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            data-home
+          />
+          <small>{nameError}</small>
+        </div>
+        <div className="input-error-div" data-home>
+          <input
+            className="form-input"
+            type="text"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            data-home
+          />
+          <small>{emailError}</small>
+        </div>
+        <div className="input-error-div" data-home>
+          <input
+            className="form-input"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            data-home
+          />
+          <small>{passwordError}</small>
+        </div>
+        <div className="input-error-div" data-home>
+          <input
+            className="form-input"
+            type="password"
+            placeholder="Repeat password"
+            value={repPassword}
+            onChange={(e) => setRepPassword(e.target.value)}
+            data-home
+          />
+          <small>{repPasswordError}</small>
+        </div>
         <small>{existsError}</small>
         <button>Register</button>
       </form>
