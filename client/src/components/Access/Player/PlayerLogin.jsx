@@ -8,8 +8,12 @@ import fetchClubList from "../../../utils/fetchClubList";
 const PlayerLogin = (props) => {
   const dispatch = useDispatch();
   const [countries, setCountries] = useState([]);
+  const [updatedCountries, setUpdatedCountries] = useState([]);
   const [clubs, setClubs] = useState([]);
   const [country, setCountry] = useState(0);
+  const [countryInput, setCountryInput] = useState("");
+  const [openCountries, setOpenCountries] = useState(false);
+  const [focusedCountry, setFocusedCountry] = useState(-1);
   const [countryError, setCountryError] = useState("");
   const [club, setClub] = useState("");
   const [clubError, setClubError] = useState("");
@@ -21,6 +25,7 @@ const PlayerLogin = (props) => {
 
   useEffect(() => {
     setCountries(props.countries);
+    setUpdatedCountries(props.countries);
   }, [props.countries]);
 
   const fetchClubs = async (id) => {
@@ -59,86 +64,40 @@ const PlayerLogin = (props) => {
     }
   };
 
-  const customStyles = {
-    clearIndicator: (provided, state) => ({
-      ...provided,
-    }),
-    container: (provided, state) => ({
-      ...provided,
-    }),
-    control: (provided, state) => ({
-      ...provided,
-      minHeight: "40px",
-      boxShadow: state.isFocused ? "0px 0px 0px 1px #6b8e23" : "none",
-      border: "solid 1px #a9a9a9",
-      "&:hover": {
-        borderColor: "#a9a9a9",
-      },
-      caretColor: "#696969",
-    }),
-    dropdownIndicator: (provided, state) => ({
-      ...provided,
-    }),
-    group: (provided, state) => ({
-      ...provided,
-    }),
-    groupHeading: (provided, state) => ({
-      ...provided,
-    }),
-    indicatorContainer: (provided, state) => ({
-      ...provided,
-      color: "red",
-    }),
-    indicatorSeparator: (provided, state) => ({
-      ...provided,
-    }),
-    input: (provided, state) => ({
-      ...provided,
-    }),
-    loadingIndicator: (provided, state) => ({
-      ...provided,
-    }),
-    loadingMessage: (provided, state) => ({
-      ...provided,
-    }),
-    menu: (provided, state) => ({
-      ...provided,
-    }),
-    menuList: (provided, state) => ({
-      ...provided,
-    }),
-    menuPortal: (provided, state) => ({
-      ...provided,
-    }),
-    multiValue: (provided, state) => ({
-      ...provided,
-    }),
-    multiValueLabel: (provided, state) => ({
-      ...provided,
-    }),
-    multiValueRemove: (provided, state) => ({
-      ...provided,
-    }),
-    noOptionsMessage: (provided, state) => ({
-      ...provided,
-    }),
-    option: (provided, state) => ({
-      ...provided,
-      color: state.isFocused ? "#fff" : "#696969",
-      backgroundColor: state.isFocused ? "#6b8e23" : null,
-    }),
-    placeholder: (provided, state) => ({
-      ...provided,
-      color: "#696969",
-    }),
-    singleValue: (provided, state) => ({
-      ...provided,
-      color: "#696969",
-    }),
-    valueContainer: (provided, state) => ({
-      ...provided,
-      padding: "2px 5px",
-    }),
+  const handleCountryInput = (e) => {
+    setOpenCountries(true);
+    setCountryInput(e.target.value);
+    let newCountries = [];
+    countries.forEach((country) => {
+      if (country.name.toLowerCase().includes(e.target.value.toLowerCase())) {
+        newCountries.push({ name: country.name, id: country.id });
+      }
+    });
+
+    setUpdatedCountries(newCountries);
+  };
+
+  const handleCountrySelect = (country) => {
+    setOpenCountries(false);
+    fetchClubs(country.id);
+    setCountryInput(country.name);
+    setCountry(country.id);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.code === "ArrowDown") {
+      if (focusedCountry === updatedCountries.length - 1) {
+        return setFocusedCountry(0);
+      }
+      setOpenCountries(true);
+      setFocusedCountry((prevState) => prevState + 1);
+    }
+    if (e.code === "ArrowUp") {
+      if (focusedCountry === 0) {
+        return setFocusedCountry(236);
+      }
+      setFocusedCountry((prevState) => prevState - 1);
+    }
   };
 
   return (
@@ -149,23 +108,54 @@ const PlayerLogin = (props) => {
       </div>
       <form id="form" onSubmit={(e) => handleSubmit(e)} data-home>
         <div className="input-error-div" data-home>
-          <Select
+          <input
+            className="form-input"
+            type="text"
+            placeholder="Select country"
+            onChange={(e) => handleCountryInput(e)}
+            onClick={() => setOpenCountries(!openCountries)}
+            onKeyDown={(e) => handleKeyDown(e)}
+            value={countryInput}
+            data-home
+          />
+          {openCountries && (
+            <ul className="country-list" data-home>
+              {!updatedCountries.length ? (
+                <li className="no-options" data-home>
+                  No options
+                </li>
+              ) : (
+                updatedCountries.map((country, i) => (
+                  <li
+                    key={i}
+                    tabIndex="0"
+                    className={`option ${focusedCountry === i ? "country-item-focused" : null}`}
+                    onClick={() => handleCountrySelect(country)}
+                    data-home
+                  >
+                    {country.name}
+                  </li>
+                ))
+              )}
+            </ul>
+          )}
+          <small>{countryError}</small>
+        </div>
+        {/* <Select
             styles={customStyles}
             options={countries}
             placeholder="Select country"
             onChange={(e) => fetchClubs(e.value)}
             data-home
-          />
-          <small>{countryError}</small>
-        </div>
+          /> */}
         <div className="input-error-div" data-home>
-          <Select
-            styles={customStyles}
+          {/* <Select
+            // styles={customStyles}
             options={clubs}
             placeholder="Select club"
             onChange={(e) => setClub(e.value)}
             data-home
-          />
+          /> */}
           <small>{clubError}</small>
         </div>
         <div className="input-error-div" data-home>

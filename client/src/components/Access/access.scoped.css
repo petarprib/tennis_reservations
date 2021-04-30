@@ -21,7 +21,7 @@
 #form-container[data-home] h1 {
   text-transform: uppercase;
   font-size: 1.5em;
-  color: #696969;
+  color: gray;
   text-align: center;
   margin-bottom: 10px;
 }
@@ -38,26 +38,56 @@
 
 .input-error-div[data-home] {
   margin-bottom: 10px;
+  position: relative;
 }
 
 .form-input[data-home] {
   outline: none;
   width: 100%;
   font-size: 1em;
-  padding: 7px;
+  padding: 5px;
   height: 40px;
-  border: solid 1px #a9a9a9;
+  border: solid 1px lightgray;
   border-radius: 4px;
-  color: #696969;
-  caret-color: #696969;
+  color: gray;
 }
 .form-input[data-home]:focus {
-  box-shadow: 0px 0px 0px 1px #6b8e23;
+  box-shadow: 0px 0px 2px 2px olivedrab;
+}
+
+.country-list[data-home] {
+  z-index: 1000;
+  position: absolute;
+  top: 45px;
+  width: 100%;
+  max-height: 230px;
+  overflow: inherit;
+  overflow-x: hidden;
+  background-color: white;
+  border: solid 1px lightgray;
+}
+
+.no-options[data-home], .option[data-home] {
+  height: 38px;
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+  color: gray;
+}
+
+.country-item-focused[data-home] {
+  color: white;
+  background-color: olivedrab;
+}
+
+.option[data-home]:hover {
+  color: white;
+  background-color: olivedrab;
 }
 
 a {
   text-decoration: none;
-  color: #6b8e23;
+  color: olivedrab;
 }
 
 #box {
@@ -72,7 +102,7 @@ a {
 }
 
 .tab[data-home] p {
-  color: #696969;
+  color: gray;
   font-size: 1.3em;
   padding: 15px 0;
   text-transform: uppercase;
@@ -81,10 +111,10 @@ a {
 }
 
 .shown[data-home] {
-  border-bottom: solid 1px #6b8e23;
+  border-bottom: solid 1px olivedrab;
 }
 .shown[data-home] p {
-  color: #6b8e23;
+  color: olivedrab;
 }
 
 .hidden[data-home] {

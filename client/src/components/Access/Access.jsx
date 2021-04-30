@@ -29,8 +29,8 @@ const Access = () => {
       let countries = [];
       data.forEach((country) =>
         countries.push({
-          value: country.id,
-          label: country.name,
+          name: country.name,
+          id: country.id,
         })
       );
       setCountries(countries);

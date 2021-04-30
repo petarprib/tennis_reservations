@@ -45,44 +45,60 @@
 
 .input-error-div[data-home] {
   margin-bottom: 10px;
+  position: relative;
 }
 
 .form-input[data-home] {
   outline: none;
   width: 100%;
   font-size: 1em;
-  padding: 7px;
+  padding: 5px;
   height: 40px;
   border: solid 1px $light-grey;
   border-radius: $small-border-radius;
   color: $dark-grey;
-  caret-color: $dark-grey;
   &:focus {
-    box-shadow: 0px 0px 0px 1px $grass;
+    box-shadow: 0px 0px 2px 2px $grass;
   }
 }
 
-// .form-dropdown__control {
-//   font-size: 1em;
-//   margin-bottom: 10px;
-//   height: 40px;
-//   border: solid 1px $light-grey !important;
-//   padding: 0;
-//   .form-dropdown__value-container {
-//     padding: 5px;
-//   }
-//   .form-dropdown__placeholder {
-//     margin: 0;
-//   }
-//   .form-dropdown__indicator {
-//     padding: 0 5px;
-//     // color: $light-grey;
-//     transition: red 150ms;
-//     // :hover {
-//     //   color: red;
-//     // }
-//   }
-// }
+.country-list[data-home] {
+  z-index: 1000;
+  position: absolute;
+  top: 45px;
+  width: 100%;
+  max-height: 230px;
+  overflow: inherit;
+  overflow-x: hidden;
+  background-color: $white;
+  border: solid 1px $light-grey;
+}
+
+%country-item {
+  height: 38px;
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+  color: $dark-grey;
+}
+
+.country-item-focused[data-home] {
+  color: $white;
+  background-color: $grass;
+}
+
+.option[data-home] {
+  @extend %country-item;
+  &:hover {
+    // @extend %country-item-focused;
+    color: $white;
+    background-color: $grass;
+  }
+}
+
+.no-options[data-home] {
+  @extend %country-item;
+}
 
 a {
   text-decoration: none;
@@ -91,8 +107,6 @@ a {
 
 #box {
   width: 320px;
-  // border-radius: $big-border-radius;
-  // background-color: rgba(255, 255, 255, 0.7);
 }
 
 #tabs[data-home] {
@@ -103,9 +117,6 @@ a {
 }
 
 .tab[data-home] {
-  // display: flex;
-  // justify-content: center;
-  // border-bottom: solid 1px $dark-grey;
   p {
     color: $dark-grey;
     font-size: 1.3em;
@@ -126,19 +137,3 @@ a {
 .hidden[data-home] {
   border: none;
 }
-
-// #form[data-home] {
-// }
-
-// .form-input[data-home] {
-//   margin-bottom: 10px;
-// }
-
-// input[data-home] {
-//   width: 100%;
-//   font-size: 1em;
-//   padding: 5px;
-//   margin-bottom: 10px;
-//   // &:not(:last-child) {
-//   // }
-// }
