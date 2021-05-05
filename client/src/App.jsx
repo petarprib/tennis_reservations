@@ -3,8 +3,7 @@ import { Switch, Route, Redirect, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Access from "./components/Access/Access.jsx";
 import ClubDashboard from "./components/Dashboard/Club/Dashboard.jsx";
-import { css } from "@emotion/core";
-import SyncLoader from "react-spinners/SyncLoader";
+import LoadingScreen from "./components/LoadingScreen/LoadingScreen.jsx";
 
 const App = () => {
   const location = useLocation();
@@ -31,15 +30,8 @@ const App = () => {
     }
   };
 
-  const loader = css`
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  `;
-
   if (clubAuth === "loading") {
-    return <SyncLoader color={"#C6ED2C"} css={loader} size={20} />;
+    return <LoadingScreen />;
   } else {
     return (
       <>
