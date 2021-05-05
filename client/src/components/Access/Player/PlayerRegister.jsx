@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ".././access.scoped.scss";
 import { useDispatch } from "react-redux";
-import Select from "react-select";
 import fetchClubList from "../../../utils/fetchClubList";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import TextField from "@material-ui/core/TextField";
+import { makeStyles } from "@material-ui/core/styles";
 
 const PlayerRegister = (props) => {
   const dispatch = useDispatch();
@@ -27,9 +29,9 @@ const PlayerRegister = (props) => {
     setCountries(props.countries);
   }, [props.countries]);
 
-  const fetchClubs = async (event) => {
-    setCountry(event.target.value);
-    const clubList = await fetchClubList(event.target.value);
+  const fetchClubs = async (id) => {
+    setCountry(id);
+    const clubList = await fetchClubList(id);
     setClubs(clubList);
   };
 
@@ -77,67 +79,79 @@ const PlayerRegister = (props) => {
       </div>
       <form id="form" onSubmit={(event) => handleSubmit(event)} data-home>
         <div className="input-error-div" data-home>
-          <Select
-            classNamePrefix="form-input"
-            selected
+          <Autocomplete
+            id="select-country"
             options={countries}
-            placeholder="Select country"
-            onChange={(event) => fetchClubs(event)}
-            data-home
+            getOptionLabel={(country) => country.name}
+            size="small"
+            // className={classes.root}
+            onChange={(event, value) => {
+              if (!value) return;
+              fetchClubs(value.id);
+            }}
+            renderInput={(params) => <TextField {...params} label="Select country" variant="outlined" />}
           />
           <small>{countryError}</small>
         </div>
         <div className="input-error-div" data-home>
-          <Select
-            classNamePrefix="form-input"
+          <Autocomplete
+            id="select-club"
             options={clubs}
-            placeholder="Select club"
-            onChange={(event) => setClub(event.target.value)}
-            data-home
+            getOptionLabel={(club) => club.name}
+            onChange={(event, value) => {
+              if (!value) return;
+              setClub(value.id);
+            }}
+            size="small"
+            // className={classes.root}
+            renderInput={(params) => <TextField {...params} label="Select club" variant="outlined" />}
           />
           <small>{clubError}</small>
         </div>
         <div className="input-error-div" data-home>
-          <input
-            className="form-input"
-            type="text"
-            placeholder="Full name"
-            value={name}
+          <TextField
+            id="name"
+            label="Full name"
+            variant="outlined"
+            size="small"
+            fullWidth
             onChange={(event) => setName(event.target.value)}
-            data-home
           />
           <small>{nameError}</small>
         </div>
         <div className="input-error-div" data-home>
-          <input
-            className="form-input"
-            type="text"
-            placeholder="Email"
-            value={email}
+          <TextField
+            id="email"
+            label="Email"
+            variant="outlined"
+            size="small"
+            fullWidth
             onChange={(event) => setEmail(event.target.value)}
-            data-home
           />
+
           <small>{emailError}</small>
         </div>
         <div className="input-error-div" data-home>
-          <input
-            className="form-input"
+          <TextField
+            id="password"
+            label="Password"
+            variant="outlined"
+            size="small"
             type="password"
-            placeholder="Password"
-            value={password}
+            fullWidth
             onChange={(event) => setPassword(event.target.value)}
-            data-home
           />
           <small>{passwordError}</small>
         </div>
         <div className="input-error-div" data-home>
-          <input
-            className="form-input"
+          <TextField
+            id="repeat-password"
+            label="Repeat password"
+            variant="outlined"
+            size="small"
             type="password"
-            placeholder="Repeat password"
-            value={repPassword}
+            fullWidth
             onChange={(event) => setRepPassword(event.target.value)}
-            data-home
           />
           <small>{repPasswordError}</small>
         </div>

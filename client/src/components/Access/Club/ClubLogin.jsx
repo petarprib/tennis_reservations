@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import ".././access.scoped.scss";
+import TextField from "@material-ui/core/TextField";
+import { makeStyles } from "@material-ui/core/styles";
 
 const ClubLogin = () => {
   const dispatch = useDispatch();
@@ -47,24 +49,25 @@ const ClubLogin = () => {
       </div>
       <form id="form" onSubmit={(event) => handleSubmit(event)} data-home>
         <div className="input-error-div" data-home>
-          <input
-            className="form-input"
-            type="text"
-            placeholder="Email"
-            value={email}
+          <TextField
+            id="email"
+            label="Email"
+            variant="outlined"
+            size="small"
+            fullWidth
             onChange={(event) => setEmail(event.target.value)}
-            data-home
           />
           <small>{emailError}</small>
         </div>
         <div className="input-error-div" data-home>
-          <input
-            className="form-input"
+          <TextField
+            id="password"
+            label="Password"
+            variant="outlined"
+            size="small"
             type="password"
-            placeholder="Password"
-            value={password}
+            fullWidth
             onChange={(event) => setPassword(event.target.value)}
-            data-home
           />
           <small>{passwordError}</small>
         </div>
