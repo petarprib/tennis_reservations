@@ -5,8 +5,7 @@ const fetchClubList = async (id) => {
     let clubs = [];
     data.forEach((club) =>
       clubs.push({
-        value: club.name,
-        label: club.name,
+        name: club.name,
         id: club.id,
         country: club.country,
       })

@@ -2,18 +2,33 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ".././access.scoped.scss";
 import { useDispatch } from "react-redux";
-import Select from "react-select";
 import fetchClubList from "../../../utils/fetchClubList";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import TextField from "@material-ui/core/TextField";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles({
+  root: {
+    "&. MuiAutocomplete-listbox": {
+      backgroundColor: "red",
+    },
+    // background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+    // border: "solid 5px red",
+    // borderRadius: "15px",
+    // borderRadius: 3,
+    // boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+    // color: "white",
+    // height: 48,
+    // padding: "0 30px",
+  },
+});
 
 const PlayerLogin = (props) => {
+  const classes = useStyles();
   const dispatch = useDispatch();
   const [countries, setCountries] = useState([]);
-  const [updatedCountries, setUpdatedCountries] = useState([]);
   const [clubs, setClubs] = useState([]);
   const [country, setCountry] = useState(0);
-  const [countryInput, setCountryInput] = useState("");
-  const [openCountries, setOpenCountries] = useState(false);
-  const [focusedCountry, setFocusedCountry] = useState(-1);
   const [countryError, setCountryError] = useState("");
   const [club, setClub] = useState("");
   const [clubError, setClubError] = useState("");
@@ -25,7 +40,6 @@ const PlayerLogin = (props) => {
 
   useEffect(() => {
     setCountries(props.countries);
-    setUpdatedCountries(props.countries);
   }, [props.countries]);
 
   const fetchClubs = async (id) => {
@@ -34,8 +48,8 @@ const PlayerLogin = (props) => {
     setClubs(clubList);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
       const type = 3;
       const body = { club, email, password, type };
@@ -64,119 +78,63 @@ const PlayerLogin = (props) => {
     }
   };
 
-  const handleCountryInput = (e) => {
-    setOpenCountries(true);
-    setCountryInput(e.target.value);
-    let newCountries = [];
-    countries.forEach((country) => {
-      if (country.name.toLowerCase().includes(e.target.value.toLowerCase())) {
-        newCountries.push({ name: country.name, id: country.id });
-      }
-    });
-
-    setUpdatedCountries(newCountries);
-  };
-
-  const handleCountrySelect = (country) => {
-    setOpenCountries(false);
-    fetchClubs(country.id);
-    setCountryInput(country.name);
-    setCountry(country.id);
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.code === "ArrowDown") {
-      if (focusedCountry === updatedCountries.length - 1) {
-        return setFocusedCountry(0);
-      }
-      setOpenCountries(true);
-      setFocusedCountry((prevState) => prevState + 1);
-    }
-    if (e.code === "ArrowUp") {
-      if (focusedCountry === 0) {
-        return setFocusedCountry(236);
-      }
-      setFocusedCountry((prevState) => prevState - 1);
-    }
-  };
-
   return (
     <>
       <h1>Player Login</h1>
       <div className="options" data-home>
         <Link to="/club-login">Access as club</Link>
       </div>
-      <form id="form" onSubmit={(e) => handleSubmit(e)} data-home>
+      <form id="form" onSubmit={(event) => handleSubmit(event)} data-home>
         <div className="input-error-div" data-home>
-          <input
-            className="form-input"
-            type="text"
-            placeholder="Select country"
-            onChange={(e) => handleCountryInput(e)}
-            onClick={() => setOpenCountries(!openCountries)}
-            onKeyDown={(e) => handleKeyDown(e)}
-            value={countryInput}
-            data-home
+          <Autocomplete
+            id="select-country"
+            options={countries}
+            getOptionLabel={(country) => country.name}
+            size="small"
+            className={classes.root}
+            onChange={(event, value) => {
+              if (!value) return;
+              fetchClubs(value.id);
+            }}
+            renderInput={(params) => <TextField {...params} label="Select country" variant="outlined" />}
           />
-          {openCountries && (
-            <ul className="country-list" data-home>
-              {!updatedCountries.length ? (
-                <li className="no-options" data-home>
-                  No options
-                </li>
-              ) : (
-                updatedCountries.map((country, i) => (
-                  <li
-                    key={i}
-                    tabIndex="0"
-                    className={`option ${focusedCountry === i ? "country-item-focused" : null}`}
-                    onClick={() => handleCountrySelect(country)}
-                    data-home
-                  >
-                    {country.name}
-                  </li>
-                ))
-              )}
-            </ul>
-          )}
           <small>{countryError}</small>
         </div>
-        {/* <Select
-            styles={customStyles}
-            options={countries}
-            placeholder="Select country"
-            onChange={(e) => fetchClubs(e.value)}
-            data-home
-          /> */}
         <div className="input-error-div" data-home>
-          {/* <Select
-            // styles={customStyles}
+          <Autocomplete
+            id="select-club"
             options={clubs}
-            placeholder="Select club"
-            onChange={(e) => setClub(e.value)}
-            data-home
-          /> */}
+            getOptionLabel={(club) => club.name}
+            onChange={(event, value) => {
+              if (!value) return;
+              setClub(value.id);
+            }}
+            size="small"
+            className={classes.root}
+            renderInput={(params) => <TextField {...params} label="Select club" variant="outlined" />}
+          />
           <small>{clubError}</small>
         </div>
         <div className="input-error-div" data-home>
-          <input
-            className="form-input"
-            type="text"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            data-home
+          <TextField
+            id="email"
+            label="Email"
+            variant="outlined"
+            size="small"
+            fullWidth
+            onChange={(event) => setEmail(event.target.value)}
           />
           <small>{emailError}</small>
         </div>
         <div className="input-error-div" data-home>
-          <input
-            className="form-input"
+          <TextField
+            id="password"
+            label="Password"
+            variant="outlined"
+            size="small"
             type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            data-home
+            fullWidth
+            onChange={(event) => setPassword(event.target.value)}
           />
           <small>{passwordError}</small>
         </div>

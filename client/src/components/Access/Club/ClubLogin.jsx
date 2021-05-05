@@ -11,8 +11,8 @@ const ClubLogin = () => {
   const [passwordError, setPasswordError] = useState("");
   const [loginError, setLoginError] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
       const type = 2;
       const body = { email, password, type };
@@ -45,14 +45,14 @@ const ClubLogin = () => {
       <div className="options" data-home>
         <Link to="/">Access as player</Link>
       </div>
-      <form id="form" onSubmit={(e) => handleSubmit(e)} data-home>
+      <form id="form" onSubmit={(event) => handleSubmit(event)} data-home>
         <div className="input-error-div" data-home>
           <input
             className="form-input"
             type="text"
             placeholder="Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(event) => setEmail(event.target.value)}
             data-home
           />
           <small>{emailError}</small>
@@ -63,7 +63,7 @@ const ClubLogin = () => {
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(event) => setPassword(event.target.value)}
             data-home
           />
           <small>{passwordError}</small>

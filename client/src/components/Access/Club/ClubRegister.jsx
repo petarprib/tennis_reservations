@@ -23,8 +23,8 @@ const ClubRegister = (props) => {
     setCountries(props.countries);
   }, [props.countries]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
       const type = 2;
       const body = { country, name, email, password, repPassword, type };
@@ -64,13 +64,13 @@ const ClubRegister = (props) => {
       <div className="options" data-home>
         <Link to="/">Access as player</Link>
       </div>
-      <form id="form" onSubmit={(e) => handleSubmit(e)} data-home>
+      <form id="form" onSubmit={(event) => handleSubmit(event)} data-home>
         <div className="input-error-div" data-home>
           <Select
             classNamePrefix="form-input"
             options={countries}
             placeholder="Select country"
-            onChange={(e) => setCountry(e.value)}
+            onChange={(event) => setCountry(event.target.value)}
             data-home
           />
           <small>{countryError}</small>
@@ -81,7 +81,7 @@ const ClubRegister = (props) => {
             type="text"
             placeholder="Club name"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(event) => setName(event.target.value)}
             data-home
           />
           <small>{nameError}</small>
@@ -92,7 +92,7 @@ const ClubRegister = (props) => {
             type="text"
             placeholder="Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(event) => setEmail(event.target.value)}
             data-home
           />
           <small>{emailError}</small>
@@ -103,7 +103,7 @@ const ClubRegister = (props) => {
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(event) => setPassword(event.target.value)}
             data-home
           />
           <small>{passwordError}</small>
@@ -114,7 +114,7 @@ const ClubRegister = (props) => {
             type="password"
             placeholder="Repeat password"
             value={repPassword}
-            onChange={(e) => setRepPassword(e.target.value)}
+            onChange={(event) => setRepPassword(event.target.value)}
             data-home
           />
           <small>{repPasswordError}</small>

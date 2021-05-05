@@ -21,8 +21,8 @@ const Dashboard = () => {
     }
   };
 
-  const logOut = async (e) => {
-    e.preventDefault();
+  const logOut = async (event) => {
+    event.preventDefault();
     try {
       const res = await fetch("/api/auth/logout");
       const parseRes = await res.json();
@@ -44,7 +44,7 @@ const Dashboard = () => {
       <h1>
         Hello {type === 2 ? "club" : "player"} {name}
       </h1>
-      <button onClick={(e) => logOut(e)}>Logout</button>
+      <button onClick={(event) => logOut(event)}>Logout</button>
     </div>
   );
 };

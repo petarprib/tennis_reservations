@@ -27,14 +27,14 @@ const PlayerRegister = (props) => {
     setCountries(props.countries);
   }, [props.countries]);
 
-  const fetchClubs = async (e) => {
-    setCountry(e.value);
-    const clubList = await fetchClubList(e.value);
+  const fetchClubs = async (event) => {
+    setCountry(event.target.value);
+    const clubList = await fetchClubList(event.target.value);
     setClubs(clubList);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
     try {
       const type = 3;
       const body = { club, name, email, password, repPassword, type };
@@ -75,14 +75,14 @@ const PlayerRegister = (props) => {
       <div className="options" data-home>
         <Link to="/club-login">Access as club</Link>
       </div>
-      <form id="form" onSubmit={(e) => handleSubmit(e)} data-home>
+      <form id="form" onSubmit={(event) => handleSubmit(event)} data-home>
         <div className="input-error-div" data-home>
           <Select
             classNamePrefix="form-input"
             selected
             options={countries}
             placeholder="Select country"
-            onChange={(e) => fetchClubs(e)}
+            onChange={(event) => fetchClubs(event)}
             data-home
           />
           <small>{countryError}</small>
@@ -92,7 +92,7 @@ const PlayerRegister = (props) => {
             classNamePrefix="form-input"
             options={clubs}
             placeholder="Select club"
-            onChange={(e) => setClub(e.value)}
+            onChange={(event) => setClub(event.target.value)}
             data-home
           />
           <small>{clubError}</small>
@@ -103,7 +103,7 @@ const PlayerRegister = (props) => {
             type="text"
             placeholder="Full name"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(event) => setName(event.target.value)}
             data-home
           />
           <small>{nameError}</small>
@@ -114,7 +114,7 @@ const PlayerRegister = (props) => {
             type="text"
             placeholder="Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(event) => setEmail(event.target.value)}
             data-home
           />
           <small>{emailError}</small>
@@ -125,7 +125,7 @@ const PlayerRegister = (props) => {
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(event) => setPassword(event.target.value)}
             data-home
           />
           <small>{passwordError}</small>
@@ -136,7 +136,7 @@ const PlayerRegister = (props) => {
             type="password"
             placeholder="Repeat password"
             value={repPassword}
-            onChange={(e) => setRepPassword(e.target.value)}
+            onChange={(event) => setRepPassword(event.target.value)}
             data-home
           />
           <small>{repPasswordError}</small>
