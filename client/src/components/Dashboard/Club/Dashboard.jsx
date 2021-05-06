@@ -7,7 +7,6 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 // import { makeStyles } from "@material-ui/core/styles";
-// import NativeSelect from "@material-ui/core/NativeSelect";
 // import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 
@@ -23,21 +22,31 @@ import TextField from "@material-ui/core/TextField";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const [courtTypes, setCourtTypes] = useState([]);
-  const [courtType, setCourtType] = useState("");
-  const [courtName, setCourtName] = useState("");
-  const [allLoaded, setAllLoaded] = useState(0);
   const [name, setName] = useState("");
   const [type, setType] = useState();
+  const [courtTypes, setCourtTypes] = useState([]);
+  const [courtType, setCourtType] = useState("");
+  const [courtNumber, setCourtNumber] = useState(0);
+  const [courts, setCourts] = useState([]);
+  const [courtError, setCourtError] = useState("");
+  const [allLoaded, setAllLoaded] = useState(0);
   // const classes = useStyles();
-  // const [age, setAge] = useState("");
 
   useEffect(() => {
-    getNameAndType();
+    getCourts();
+    getClubInfo();
     getCourtTypes();
   }, []);
 
-  const getNameAndType = async () => {
+  useEffect(() => {}, [courts]);
+
+  const getCourts = async () => {
+    const res = await fetch("/api/dashboard/courts");
+    const parseRes = await res.json();
+    setCourts([...parseRes]);
+  };
+
+  const getClubInfo = async () => {
     try {
       const res = await fetch("/api/dashboard/clubs");
       const parseRes = await res.json();
@@ -54,6 +63,7 @@ const Dashboard = () => {
       const res = await fetch("/api/dashboard/court-types");
       const parseRes = await res.json();
       setCourtTypes([...parseRes]);
+      console.log(...parseRes);
       // setCourtTypes([{ id: 0, type: "All" }, ...parseRes]); WHEN DISPLAYING COURTS FOR USERS
     } catch (error) {
       console.error(error.message);
@@ -77,8 +87,25 @@ const Dashboard = () => {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    try {
+      const body = { courtType, courtNumber };
+      const res = await fetch("/api/dashboard/courts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const parseRes = await res.json();
+      if (typeof parseRes !== "string") {
+        setCourts([...courts, parseRes]);
+        setCourtError("");
+      } else {
+        setCourtError(parseRes);
+      }
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
   if (allLoaded !== 1) {
@@ -97,14 +124,13 @@ const Dashboard = () => {
             // className={classes.formControl}
             onSubmit={() => console.log("form submitted")}
           >
-            <InputLabel id="demo-simple-select-outlined-label">Court type</InputLabel>
+            <InputLabel id="court-type-input">Court type</InputLabel>
             <Select
-              labelId="demo-simple-select-outlined-label"
-              id="demo-simple-select-outlined"
+              labelId="court-type-select-label"
+              id="court-type-select"
               value={courtType}
               onChange={(event) => setCourtType(event.target.value)}
               label="Court type"
-              name="courtType"
             >
               {courtTypes.map((courtType) => (
                 <MenuItem key={courtType.id} value={courtType.id}>
@@ -113,18 +139,23 @@ const Dashboard = () => {
               ))}
             </Select>
             <TextField
-              name="name"
-              id="outlined-basic"
-              label="Outlined"
+              id="court-name"
+              label="Court number"
               variant="outlined"
               autoComplete="off"
-              onChange={(event) => setCourtName(event.target.value)}
+              onChange={(event) => setCourtNumber(event.target.value)}
             />
             <Button type="submit" variant="contained" color="primary">
               Add court
             </Button>
+            <p>{courtError}</p>
           </FormControl>
         </form>
+        <div>
+          {courts.map((court) => (
+            <p key={court.number}>{court.number}</p>
+          ))}
+        </div>
       </div>
     );
   }
