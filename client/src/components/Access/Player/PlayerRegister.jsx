@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import fetchClubList from "../../../utils/fetchClubList";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
-import { makeStyles } from "@material-ui/core/styles";
+// import { makeStyles } from "@material-ui/core/styles";
 
 const PlayerRegister = (props) => {
   const dispatch = useDispatch();
@@ -114,6 +114,7 @@ const PlayerRegister = (props) => {
             label="Full name"
             variant="outlined"
             size="small"
+            autoComplete="off"
             fullWidth
             onChange={(event) => setName(event.target.value)}
           />
@@ -125,6 +126,7 @@ const PlayerRegister = (props) => {
             label="Email"
             variant="outlined"
             size="small"
+            autoComplete="off"
             fullWidth
             onChange={(event) => setEmail(event.target.value)}
           />

@@ -121,6 +121,7 @@ const PlayerLogin = (props) => {
             label="Email"
             variant="outlined"
             size="small"
+            autoComplete="off"
             fullWidth
             onChange={(event) => setEmail(event.target.value)}
           />

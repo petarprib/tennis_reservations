@@ -4,7 +4,7 @@ import ".././access.scoped.scss";
 import { useDispatch } from "react-redux";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
-import { makeStyles } from "@material-ui/core/styles";
+// import { makeStyles } from "@material-ui/core/styles";
 
 const ClubRegister = (props) => {
   const dispatch = useDispatch();
@@ -88,6 +88,7 @@ const ClubRegister = (props) => {
             label="Club name"
             variant="outlined"
             size="small"
+            autoComplete="off"
             fullWidth
             onChange={(event) => setName(event.target.value)}
           />
@@ -99,6 +100,7 @@ const ClubRegister = (props) => {
             label="Email"
             variant="outlined"
             size="small"
+            autoComplete="off"
             fullWidth
             onChange={(event) => setEmail(event.target.value)}
           />

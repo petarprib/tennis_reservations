@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import ".././access.scoped.scss";
 import TextField from "@material-ui/core/TextField";
-import { makeStyles } from "@material-ui/core/styles";
+// import { makeStyles } from "@material-ui/core/styles";
 
 const ClubLogin = () => {
   const dispatch = useDispatch();
@@ -54,6 +54,7 @@ const ClubLogin = () => {
             label="Email"
             variant="outlined"
             size="small"
+            autoComplete="off"
             fullWidth
             onChange={(event) => setEmail(event.target.value)}
           />
