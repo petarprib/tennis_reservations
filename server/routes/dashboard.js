@@ -23,7 +23,10 @@ router.get("/court-types", async (req, res) => {
 });
 
 router.get("/courts", async (req, res) => {
-  const courts = await pool.query("SELECT id, type, number FROM court WHERE club = $1", [req.session.accountId]);
+  const courts = await pool.query(
+    "SELECT court.id, number, court_type.type FROM court INNER JOIN court_type ON court.type = court_type.id WHERE club = $1",
+    [req.session.accountId]
+  );
 
   res.json(courts.rows);
 });

@@ -29,12 +29,13 @@ const Dashboard = () => {
   const [courtNumber, setCourtNumber] = useState(0);
   const [courts, setCourts] = useState([]);
   const [courtError, setCourtError] = useState("");
+  const [typeList, setTypeList] = useState(0);
   const [allLoaded, setAllLoaded] = useState(0);
   // const classes = useStyles();
 
   useEffect(() => {
     getCourts();
-    getClubInfo();
+    getAccountInfo();
     getCourtTypes();
   }, []);
 
@@ -46,7 +47,7 @@ const Dashboard = () => {
     setCourts([...parseRes]);
   };
 
-  const getClubInfo = async () => {
+  const getAccountInfo = async () => {
     try {
       const res = await fetch("/api/dashboard/clubs");
       const parseRes = await res.json();
@@ -62,9 +63,8 @@ const Dashboard = () => {
     try {
       const res = await fetch("/api/dashboard/court-types");
       const parseRes = await res.json();
+      // setTypeList([{ id: 0, type: "All" }, ...parseRes]);
       setCourtTypes([...parseRes]);
-      console.log(...parseRes);
-      // setCourtTypes([{ id: 0, type: "All" }, ...parseRes]); WHEN DISPLAYING COURTS FOR USERS
     } catch (error) {
       console.error(error.message);
     }
@@ -153,7 +153,9 @@ const Dashboard = () => {
         </form>
         <div>
           {courts.map((court) => (
-            <p key={court.number}>{court.number}</p>
+            <p key={court.number}>
+              {court.number} | {court.type}
+            </p>
           ))}
         </div>
       </div>
