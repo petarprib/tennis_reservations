@@ -57,4 +57,20 @@ router.post("/courts", async (req, res) => {
   }
 });
 
+router.post("/reservations", async (req, res) => {
+  const { club, court, player, time } = req.body;
+
+  try {
+    const newReservation = await pool.query(
+      "INSERT INTO reservation (club, court, player, time) VALUES ($1, $2, $3, $4) RETURNING *"
+    );
+
+    console.log(newReservation);
+    // res.json(newReservation.rows[0]);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 module.exports = router;
