@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import "../../Dashboard/dashboard.access.scss";
+import fetchHourList from "../../../utils/fetchHourList";
+import addCourtFn from "../../../utils/addCourtFn";
+import fetchCourtTypeList from "../../../utils/fetchCourtTypeList";
+import logOutFn from "../../../utils/logOutFn";
+import fetchReservationList from "../../../utils/fetchReservationList";
 import LoadingScreen from "../../../components/LoadingScreen/LoadingScreen.jsx";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -10,6 +15,7 @@ import Button from "@material-ui/core/Button";
 // import { makeStyles } from "@material-ui/core/styles";
 // import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
+import Switch from "@material-ui/core/Switch";
 import moment from "moment";
 import "date-fns";
 import Grid from "@material-ui/core/Grid";
@@ -36,9 +42,9 @@ const Dashboard = () => {
   const [courtNumber, setCourtNumber] = useState(0);
   const [courts, setCourts] = useState([]);
   const [courtError, setCourtError] = useState("");
-  const [allLoaded, setAllLoaded] = useState(0);
+  const [allLoaded, setAllLoaded] = useState(false);
   // const classes = useStyles();
-  const [splitHour, setSplitHour] = useState(2);
+  const [minOneHour, setMinOneHour] = useState();
   const [openTime, setOpenTime] = useState(
     moment()
       .second(0)
@@ -53,50 +59,32 @@ const Dashboard = () => {
   );
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [hours, setHours] = useState([]);
-  const [reservations, setReservations] = useState([
-    {
-      id: "dab6be12-da9d-4e0f-89ed-6a31e0f3455f",
-      club: "f5d90000-88c3-414e-960e-d37b26fc96a8",
-      court: "f5d90000-88c3-414e-960e-d37b26fc96a8",
-      player: "f5d90000-88c3-414e-960e-d37b26fc96a8",
-      start_time: "2021-05-11 18:00:00",
-      end_time: "2021-05-11 19:30:00",
-    },
-    {
-      id: "ed90f906-ae29-44d3-b20d-020ef5497485",
-      club: "f5d90000-88c3-414e-960e-d37b26fc96a8",
-      court: "f5d90000-88c3-414e-960e-d37b26fc96a8",
-      player: "f5d90000-88c3-414e-960e-d37b26fc96a8",
-      start_time: "2021-05-11 20:30:00",
-      end_time: "2021-05-11 21:30:00",
-    },
-  ]);
+  const [reservations, setReservations] = useState([]);
 
   useEffect(() => {
     getAccountInfo();
     getCourts();
-    getCourtTypes();
+    fetchCourtTypes();
     getDate();
-    getHours();
+    fetchReservations();
   }, []);
 
-  const getHours = () => {
-    let allSessions = [];
-    let hour = openTime;
-    while (hour.isBefore(closeTime)) {
-      allSessions.push(hour.format("HH:mm"));
-      if (splitHour === 1) {
-        hour = moment(hour).add(1, "hours");
-      } else if (splitHour === 2) {
-        hour = moment(hour).add(30, "minutes");
-      }
-    }
-    setHours(allSessions);
+  useEffect(() => {
+    fetchHours();
+  }, [minOneHour]);
+
+  const fetchReservations = async () => {
+    const reservationList = await fetchReservationList();
+    setReservations(reservationList);
+  };
+
+  const fetchHours = async () => {
+    const hourList = await fetchHourList(openTime, closeTime);
+    setHours(hourList);
   };
 
   const getDate = async () => {
     setDay(new moment());
-    // console.log(new moment());
   };
 
   const handleDateChange = (date) => {
@@ -107,7 +95,7 @@ const Dashboard = () => {
   const getCourts = async () => {
     const res = await fetch("/api/dashboard/courts");
     const parseRes = await res.json();
-    setCourts([...parseRes]);
+    setCourts(parseRes);
   };
 
   const getAccountInfo = async () => {
@@ -116,62 +104,91 @@ const Dashboard = () => {
       const parseRes = await res.json();
       setType(parseRes.type);
       setName(parseRes.name);
-      setAllLoaded((prevState) => prevState + 1);
+      // setOpenTime(parseRes.open_time);
+      // setCloseTime(parseRes.close_time);
+      setMinOneHour(parseRes.min_one_hour);
+      setAllLoaded(true);
     } catch (error) {
       console.error(error.message);
     }
   };
 
-  const getCourtTypes = async () => {
-    try {
-      const res = await fetch("/api/dashboard/court-types");
-      const parseRes = await res.json();
-      // setCourtTypes([{ id: 0, type: "All" }, ...parseRes]);
-      setCourtTypes([...parseRes]);
-    } catch (error) {
-      console.error(error.message);
-    }
+  const fetchCourtTypes = async () => {
+    const courtTypeList = await fetchCourtTypeList();
+    setCourtTypes(courtTypeList);
   };
 
-  const logOut = async (event) => {
+  const logOut = async () => {
+    const loggedOut = logOutFn();
+    dispatch({
+      type: "CHANGE_CLUBAUTH",
+      payload: {
+        clubAuth: loggedOut === true ? true : false,
+      },
+    });
+    return;
+  };
+
+  const addCourt = async (event) => {
     event.preventDefault();
-    try {
-      const res = await fetch("/api/auth/logout");
-      const parseRes = await res.json();
-      dispatch({
-        type: "CHANGE_CLUBAUTH",
-        payload: {
-          clubAuth: parseRes === true ? true : false,
-        },
-      });
-      return;
-    } catch (error) {
-      console.error(error.message);
+    const parseRes = await addCourtFn(courtType, courtNumber);
+    if (typeof parseRes !== "string") {
+      getCourts();
+      setCourtError("");
+    } else {
+      setCourtError(parseRes);
     }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  // you create/"declare" a moment with moment(variable/string, "the format of the variable/string") - the format is in order for moment to recognize what you're giving it
+  // if you want to assign it a specific time or date (usually it's what you have NOT provided inside the "moment()"), you do for example:
+  // moment(hour, "HH:mm")
+  //   .days(day.days())
+  // the first ".days()" is in order to tell it what you're assigning, the "day" is a moment object which has an entire date string and is the variable of a date where you're getting the day from, the second ".days()" inside () is where you are getting the day from the date string
+  // you continue doing the same with month, year, hour, minute or second
+  // if you want to display it as a string you do variable.format("format") - the format can be anything, since it has everything assigned, whether automatically, or manually by specifying the dates/times
+
+  const reserveTime = async (time, club, court) => {
     try {
-      const body = { courtType, courtNumber };
-      const res = await fetch("/api/dashboard/courts", {
+      let chosenTime = moment(time, "HH:mm")
+        .days(day.days())
+        .month(day.month())
+        .year(day.year());
+      let startTime = chosenTime.format("YYYY-MM-DD HH:mm:ss");
+      let endTime = chosenTime.add(30, "minutes").format("YYYY-MM-DD HH:mm:ss");
+
+      const body = { club, court, startTime, endTime }; // player is the one in the session
+      const res = await fetch("/api/dashboard/reservations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      const parseRes = await res.json();
-      if (typeof parseRes !== "string") {
-        getCourts();
-        setCourtError("");
-      } else {
-        setCourtError(parseRes);
-      }
+
+      // const parseRes = await res.json();
+      // console.log(parseRes);
+      // setReservations([
+      //   ...reservations,
+      //   {
+      //     ...parseRes,
+      //     start_time: moment(parseRes.start_time).format("YYYY-MM-DD HH:mm:ss"),
+      //     end_time: moment(parseRes.end_time).format("YYYY-MM-DD HH:mm:ss"),
+      //   },
+      // ]);
+
+      fetchReservations();
+
+      // if (typeof parseRes !== "string") {
+      //   getCourts();
+      //   setCourtError("");
+      // } else {
+      //   setCourtError(parseRes);
+      // }
     } catch (error) {
       console.error(error.message);
     }
   };
 
-  if (allLoaded !== 1) {
+  if (!allLoaded) {
     return <LoadingScreen />;
   } else {
     return (
@@ -180,8 +197,8 @@ const Dashboard = () => {
         <h1>
           Hello {type === 2 ? "club" : "player"} {name}
         </h1>
-        <button onClick={(event) => logOut(event)}>Logout</button>
-        <form onSubmit={(event) => handleSubmit(event)}>
+        <button onClick={() => logOut()}>Logout</button>
+        <form onSubmit={(event) => addCourt(event)}>
           <FormControl
             variant="outlined"
             size="small"
@@ -215,6 +232,14 @@ const Dashboard = () => {
             <p>{courtError}</p>
           </FormControl>
         </form>
+        <Switch
+          checked={minOneHour}
+          onChange={() => setMinOneHour(!minOneHour)}
+          color="primary"
+          name="checkedB"
+          inputProps={{ "aria-label": "primary checkbox" }}
+        />
+        <p>Minimum one hour rental</p>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <Grid container justify="space-around">
             <KeyboardDatePicker
@@ -238,24 +263,30 @@ const Dashboard = () => {
               </p>
               <div className="hours" data-dashboard>
                 {hours.map((hour) => {
-                  let color;
-                  reservations.every((reservation) => {
+                  let color = "lightblue";
+                  reservations.map((reservation) => {
+                    if (court.id !== reservation.court) return false;
                     let now = moment(hour, "HH:mm")
                       .days(day.days())
                       .month(day.month())
                       .year(day.year());
                     let start = moment(reservation.start_time, "YYYY-MM-DD HH:mm:ss");
                     let end = moment(reservation.end_time, "YYYY-MM-DD HH:mm:ss");
-                    if (now.isBetween(start, end) || now.isSame(start)) {
-                      color = "lightblue";
+                    if (now.isSame(start) || now.isBetween(start, end)) {
+                      color = "orange";
                       return false;
                     }
-                    color = "yellow";
                     return true;
                   });
 
                   return (
-                    <div className="hour" style={{ backgroundColor: color }} key={hour} data-dashboard>
+                    <div
+                      className="hour"
+                      style={{ backgroundColor: color }}
+                      key={hour}
+                      onClick={() => reserveTime(hour, court.club, court.id)}
+                      data-dashboard
+                    >
                       {hour}
                     </div>
                   );
@@ -268,9 +299,5 @@ const Dashboard = () => {
     );
   }
 };
-
-// {hours.map(hour => {
-//   reservations.map(reservation => if(moment(hour, "HH:mm").isBetween(moment(reservation.startDate), moment(reservation.endDate))))
-// })}
 
 export default Dashboard;

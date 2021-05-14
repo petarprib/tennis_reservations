@@ -3,7 +3,11 @@ const pool = require("../db");
 
 router.get("/clubs", async (req, res) => {
   try {
-    const user = await pool.query("SELECT id, name, type FROM account WHERE id = $1", [req.session.accountId]);
+    const user = await pool.query(
+      "SELECT account.id, name, type, open_time, close_time, min_one_hour FROM account INNER JOIN club_details ON account.id = club_details.id WHERE account.id = $1",
+      [req.session.accountId]
+    );
+
     res.json(user.rows[0]);
   } catch (error) {
     console.error(error.message);
@@ -24,7 +28,7 @@ router.get("/court-types", async (req, res) => {
 
 router.get("/courts", async (req, res) => {
   const courts = await pool.query(
-    "SELECT court.id, number, court_type.type FROM court INNER JOIN court_type ON court.type = court_type.id WHERE club = $1",
+    "SELECT court.id, court_type.type, number, club FROM court INNER JOIN court_type ON court.type = court_type.id WHERE club = $1 ORDER BY number ASC",
     [req.session.accountId]
   );
 
@@ -57,16 +61,25 @@ router.post("/courts", async (req, res) => {
   }
 });
 
+router.get("/reservations", async (req, res) => {
+  try {
+    const reservations = await pool.query("SELECT * FROM reservation");
+    res.json(reservations.rows);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json("Server Error");
+  }
+});
+
 router.post("/reservations", async (req, res) => {
-  const { club, court, player, time } = req.body;
+  const { club, court, startTime, endTime } = req.body;
 
   try {
     const newReservation = await pool.query(
-      "INSERT INTO reservation (club, court, player, time) VALUES ($1, $2, $3, $4) RETURNING *"
+      "INSERT INTO reservation (club, court, player, start_time, end_time) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      [club, court, req.session.accountId, startTime, endTime]
     );
-
-    console.log(newReservation);
-    // res.json(newReservation.rows[0]);
+    res.json(newReservation.rows[0]);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");

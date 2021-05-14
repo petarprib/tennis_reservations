@@ -47,7 +47,7 @@ app.get("/api/clubs/:country", async (req, res) => {
   try {
     const { country } = req.params;
     const clubs = await pool.query(
-      "SELECT id, name, country FROM account INNER JOIN club_details ON account.id = club_details.club_id WHERE country = $1 AND type = $2 ORDER BY name asc",
+      "SELECT account.id, name, country FROM account INNER JOIN club_details ON account.id = club_details.id WHERE country = $1 AND type = $2 ORDER BY name asc",
       [country, 2]
     );
     res.json(clubs.rows);

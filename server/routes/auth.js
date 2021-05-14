@@ -16,7 +16,7 @@ router.post("/register", validInfo, async (req, res) => {
       }
     } else if (type === 3) {
       const players = await pool.query(
-        "SELECT * FROM account INNER JOIN player_details ON account.id = player_details.player_id WHERE club = $1 AND email = $2 AND type = $3",
+        "SELECT * FROM account INNER JOIN player_details ON account.id = player_details.id WHERE club = $1 AND email = $2 AND type = $3",
         [club, email, type]
       );
 
@@ -34,12 +34,12 @@ router.post("/register", validInfo, async (req, res) => {
     );
 
     if (type === 2) {
-      await pool.query("INSERT INTO club_details (club_id, country) VALUES ($1, $2) RETURNING *", [
-        newAccount.rows[0].id,
-        country,
-      ]);
+      await pool.query(
+        "INSERT INTO club_details (id, country, open_time, close_time, min_one_hour) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+        [newAccount.rows[0].id, country, "09:00", "21:00", false]
+      );
     } else if (type === 3) {
-      await pool.query("INSERT INTO player_details (player_id, club) VALUES ($1, $2) RETURNING *", [
+      await pool.query("INSERT INTO player_details (id, club) VALUES ($1, $2) RETURNING *", [
         newAccount.rows[0].id,
         club,
       ]);
@@ -69,7 +69,7 @@ router.post("/login", validInfo, async (req, res) => {
       ]);
     } else if (type === 3) {
       account = await pool.query(
-        "SELECT id, password, type FROM account INNER JOIN player_details ON account.id = player_details.player_id WHERE club = $1 AND email = $2 AND type = $3",
+        "SELECT account.id, password, type FROM account INNER JOIN player_details ON account.id = player_details.id WHERE club = $1 AND email = $2 AND type = $3",
         [club, email, type]
       );
     }
