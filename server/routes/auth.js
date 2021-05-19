@@ -11,7 +11,7 @@ router.post("/register", validInfo, async (req, res) => {
     if (type === 2) {
       const clubs = await pool.query("SELECT * FROM account WHERE email = $1 AND type = $2", [email, type]);
 
-      if (clubs.rows.length !== 0) {
+      if (clubs.rows.length) {
         return res.status(401).json(["club exists"]);
       }
     } else if (type === 3) {
@@ -20,7 +20,7 @@ router.post("/register", validInfo, async (req, res) => {
         [club, email, type]
       );
 
-      if (players.rows.length !== 0) {
+      if (players.rows.length) {
         return res.status(401).json(["player exists"]);
       }
     }
@@ -45,8 +45,9 @@ router.post("/register", validInfo, async (req, res) => {
       ]);
     }
 
-    req.session.accountId = newAccount.rows[0].id;
-    req.session.accountType = newAccount.rows[0].type;
+    req.session.accountId = account.rows[0].id;
+    req.session.accountType = account.rows[0].type;
+    req.session.club = req.session.accountType === 2 ? req.session.accountId : club;
 
     res.json(true);
   } catch (error) {
@@ -74,7 +75,7 @@ router.post("/login", validInfo, async (req, res) => {
       );
     }
 
-    if (account.rows.length === 0) {
+    if (!account.rows.length) {
       return res.status(401).json(["login"]);
     }
 
@@ -86,6 +87,7 @@ router.post("/login", validInfo, async (req, res) => {
 
     req.session.accountId = account.rows[0].id;
     req.session.accountType = account.rows[0].type;
+    req.session.club = req.session.accountType === 2 ? req.session.accountId : club;
 
     res.json(true);
   } catch (error) {

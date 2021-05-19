@@ -1,9 +1,54 @@
 @import "../../styles/variables";
 
+#logout[data-dashboard] {
+  color: $grass;
+  cursor: pointer;
+}
+
+#color-guide[data-dashboard] > * {
+  display: flex;
+  justify-content: flex-end;
+  margin: 0 20px 5px 0;
+}
+
+#color-guide[data-dashboard] > * > p {
+  margin-right: 5px;
+}
+
+.yellowgreen[data-dashboard] {
+  color: rgb(154, 205, 50);
+}
+
+.red[data-dashboard] {
+  color: red;
+}
+
+.skyblue[data-dashboard] {
+  color: skyblue;
+}
+
+#schedule[data-dashboard] {
+  width: 100%;
+  // max-width: 1280px;
+  overflow: auto;
+}
+
+.court-info[data-dashboard] {
+  cursor: default;
+}
+
 .hours[data-dashboard] {
   display: flex;
+  margin-bottom: 20px;
+  cursor: pointer;
 }
 
 .hour[data-dashboard] {
-  margin-right: 5px;
+  border-right: solid 1px $dark-grey;
+  min-width: 60px;
+  height: 40px;
+}
+
+.hour:last-of-type {
+  border-right: none;
 }

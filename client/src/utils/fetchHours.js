@@ -1,6 +1,6 @@
 import moment from "moment";
 
-const fetchHourList = async (openTime, closeTime) => {
+const fetchHours = async (openTime, closeTime) => {
   let sessions = [];
   let hour = openTime;
   while (hour.isBefore(closeTime)) {
@@ -17,4 +17,4 @@ const fetchHourList = async (openTime, closeTime) => {
   return sessions;
 };
 
-export default fetchHourList;
+export default fetchHours;

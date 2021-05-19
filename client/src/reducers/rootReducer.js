@@ -1,8 +1,22 @@
 import { combineReducers } from "redux";
-import clubAuthReducer from "./clubAuthReducer";
+import authReducer from "./authReducer";
+import clubReducer from "./clubReducer";
+import courtsReducer from "./courtsReducer";
+import dateReducer from "./dateReducer";
+import hoursReducer from "./hoursReducer";
+import reservationsReducer from "./reservationsReducer";
+import userReducer from "./userReducer";
+import userTypeReducer from "./userTypeReducer";
 
 const rootReducer = combineReducers({
-  clubAuth: clubAuthReducer,
+  auth: authReducer,
+  club: clubReducer,
+  courts: courtsReducer,
+  date: dateReducer,
+  hours: hoursReducer,
+  reservations: reservationsReducer,
+  user: userReducer,
+  userType: userTypeReducer,
 });
 
 export default rootReducer;

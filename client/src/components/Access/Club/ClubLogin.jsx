@@ -28,9 +28,9 @@ const ClubLogin = () => {
       const parseRes = await res.json();
       if (parseRes === true) {
         dispatch({
-          type: "CHANGE_CLUBAUTH",
+          type: "SET_AUTH",
           payload: {
-            clubAuth: true,
+            auth: true,
           },
         });
       } else {
@@ -51,8 +51,7 @@ const ClubLogin = () => {
       </div>
       <form id="form" onSubmit={(event) => handleSubmit(event)} data-home>
         <FormControl
-          variant="outlined"
-          size="small"
+          fullWidth
           // className={classes.formControl}
         >
           <div className="input-error-div" data-home>
@@ -80,7 +79,6 @@ const ClubLogin = () => {
             <small>{passwordError}</small>
           </div>
           <small>{loginError}</small>
-          {/* <button type="submit">Log in</button> */}
           <Button type="submit" variant="contained" color="primary">
             Log in
           </Button>
