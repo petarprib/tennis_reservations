@@ -12,17 +12,18 @@ app.use(cookieParser());
 app.set("trust proxy", 1);
 app.use(
   session({
-    name: process.env.SESSION_NAME,
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    unset: "destroy",
     cookie: {
       httpOnly: true,
       secure: false, // false in development only
       sameSite: true,
       maxAge: parseInt(process.env.SESSION_MAX_AGE),
     },
+    name: process.env.SESSION_NAME,
+    resave: false,
+    rolling: true,
+    saveUninitialized: false,
+    secret: process.env.SESSION_SECRET,
+    unset: "destroy",
   })
 );
 
