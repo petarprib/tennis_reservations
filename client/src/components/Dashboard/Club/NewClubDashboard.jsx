@@ -1,7 +1,9 @@
 import React from "react";
-import "../../Dashboard/dashboard.access.scss";
+
 import { useDispatch } from "react-redux";
 import logOutFn from "../../../utils/logOutFn";
+import AddCourt from "./AddCourt.jsx";
+import ManageHours from "./ManageHours.jsx";
 import Schedule from "../Schedule.jsx";
 
 const NewClubDashboard = () => {
@@ -34,7 +36,7 @@ const NewClubDashboard = () => {
   //       },
   //     });
   //     dispatch({
-  //       type: "SET_USERTYPE",
+  //       type: "SET_USER_TYPE",
   //       payload: {
   //         userType: parseRes.type,
   //       },
@@ -45,13 +47,17 @@ const NewClubDashboard = () => {
   // };
 
   return (
-    <div>
+    <>
       <p id="logout" onClick={() => logOut()} data-dashboard>
         Log out
       </p>
       <h1>NewClubDashboard</h1>
+      <div id="club-dashboard-options-wrapper" data-dashboard>
+        <AddCourt />
+        <ManageHours />
+      </div>
       <Schedule />
-    </div>
+    </>
   );
 };
 

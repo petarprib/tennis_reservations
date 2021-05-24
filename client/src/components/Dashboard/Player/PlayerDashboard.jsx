@@ -1,5 +1,4 @@
 import React from "react";
-import "../../Dashboard/dashboard.access.scss";
 import { useDispatch } from "react-redux";
 import logOutFn from "../../../utils/logOutFn";
 import Schedule from "../Schedule.jsx";

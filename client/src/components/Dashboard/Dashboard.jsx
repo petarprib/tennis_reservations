@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
+import "../Dashboard/dashboard.scoped.scss";
 import { useSelector, useDispatch } from "react-redux";
 import NewClubDashboard from "./Club/NewClubDashboard.jsx";
 import PlayerDashboard from "./Player/PlayerDashboard.jsx";
 import LoadingScreen from "../LoadingScreen/LoadingScreen.jsx";
-
-// RECONSTRUCT EVERYTHING STARTING FROM THE LAST RETURN (SCHEDULE) AND BACKWARDS
+import fetchCourtTypes from "../../utils/fetchCourtTypes";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -13,6 +13,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     getClubInfo();
+    getCourtTypes();
     // eslint-disable-next-line
   }, []);
 
@@ -32,7 +33,7 @@ const Dashboard = () => {
         },
       });
       dispatch({
-        type: "SET_USERTYPE",
+        type: "SET_USER_TYPE",
         payload: {
           userType: parseRes.accountType,
         },
@@ -47,6 +48,14 @@ const Dashboard = () => {
     } catch (error) {
       console.error(error.message);
     }
+  };
+
+  const getCourtTypes = async () => {
+    const courtTypes = await fetchCourtTypes();
+    dispatch({
+      type: "SET_COURT_TYPES",
+      payload: { courtTypes: courtTypes },
+    });
   };
 
   // if (userType === 2) {
@@ -80,7 +89,9 @@ const Dashboard = () => {
     return <LoadingScreen />;
   } else {
     return (
-      <div>{userType === 2 ? <NewClubDashboard userType={userType} /> : <PlayerDashboard userType={userType} />}</div>
+      <div id="dashboard" data-dashboard>
+        {userType === 2 ? <NewClubDashboard userType={userType} /> : <PlayerDashboard userType={userType} />}
+      </div>
     );
   }
 };

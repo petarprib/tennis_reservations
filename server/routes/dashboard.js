@@ -18,8 +18,6 @@ const pool = require("../db");
 
 router.get("/session", async (req, res) => {
   try {
-    // const user = await pool.query("SELECT * FROM account WHERE account.id = $1", [req.session.accountId]);
-
     res.json(req.session);
   } catch (error) {
     console.error(error.message);
@@ -40,7 +38,7 @@ router.get("/court-types", async (req, res) => {
 
 router.get("/courts", async (req, res) => {
   const courts = await pool.query(
-    "SELECT court.id, court_type.type, number, club FROM court INNER JOIN court_type ON court.type = court_type.id WHERE club = $1 ORDER BY number ASC",
+    "SELECT court.id, number, club, court_type.id AS type_id, court_type.type FROM court INNER JOIN court_type ON court.type = court_type.id WHERE club = $1 ORDER BY number ASC",
     [req.session.club]
   );
 

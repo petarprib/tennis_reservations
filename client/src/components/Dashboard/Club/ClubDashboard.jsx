@@ -1,6 +1,5 @@
 // import React, { useState, useEffect, useRef } from "react";
 // import { useSelector, useDispatch } from "react-redux";
-// import "../../Dashboard/dashboard.access.scss";
 // import fetchHourList from "../../../utils/fetchHourList";
 // import addCourtFn from "../../../utils/addCourtFn";
 // import fetchCourtTypeList from "../../../utils/fetchCourtTypeList";
@@ -133,7 +132,7 @@
 //       });
 //       // setUserType(parseRes.type);
 //       dispatch({
-//         type: "SET_USERTYPE",
+//         type: "SET_USER_TYPE",
 //         payload: {
 //           userType: parseRes.type,
 //         },

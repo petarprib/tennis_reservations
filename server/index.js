@@ -27,8 +27,6 @@ app.use(
   })
 );
 
-// ROUTES;
-
 app.use("/api/auth", require("./routes/auth"));
 
 app.use("/api/dashboard", require("./routes/dashboard"));

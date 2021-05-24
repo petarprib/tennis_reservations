@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import ".././access.scoped.scss";
 import { useDispatch } from "react-redux";
 import fetchClubList from "../../../utils/fetchClubList";
 import Autocomplete from "@material-ui/lab/Autocomplete";

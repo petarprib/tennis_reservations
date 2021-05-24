@@ -8,37 +8,54 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/picker
 import Grid from "@material-ui/core/Grid";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
+import InputLabel from "@material-ui/core/InputLabel";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
 
 const Schedule = () => {
-  const schedule = useRef(null);
   const dispatch = useDispatch();
-  const courts = useSelector((state) => state.courts);
-  const hours = useSelector((state) => state.hours);
-  const reservations = useSelector((state) => state.reservations);
-  const user = useSelector((state) => state.user);
-  const date = useSelector((state) => state.date);
-  const [openTime, setOpenTime] = useState(
-    moment()
-      .second(0)
-      .minute(0)
-      .hour(8)
-  );
+  const schedule = useRef(null);
   const [closeTime, setCloseTime] = useState(
     moment()
       .second(0)
       .minute(0)
       .hour(22)
   );
-  // const [day, setDay] = useState("");
+  const [openTime, setOpenTime] = useState(
+    moment()
+      .second(0)
+      .minute(0)
+      .hour(8)
+  );
+  const courts = useSelector((state) => state.courts);
+  const [courtType, setCourtType] = useState(0);
+  const courtTypes = useSelector((state) => state.courtTypes);
+  const date = useSelector((state) => state.date);
+  const [filteredCourts, setfilteredCourts] = useState([]);
+  const [filteredCourtTypes, setFilteredCourtTypes] = useState([{ id: 0, type: "All" }]);
+  const hours = useSelector((state) => state.hours);
+  const reservations = useSelector((state) => state.reservations);
   const [selectedDate, setSelectedDate] = React.useState(new Date());
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     getCourts();
+    getCurrentDate();
     getHours();
     getReservations();
-    getDate();
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    filterCourts();
+    // eslint-disable-next-line
+  }, [courtType]);
+
+  useEffect(() => {
+    filterCourtTypes();
+    // eslint-disable-next-line
+  }, [courts, courtTypes]);
 
   const getCourts = async () => {
     const res = await fetch("/api/dashboard/courts");
@@ -47,8 +64,17 @@ const Schedule = () => {
       type: "SET_COURTS",
       payload: { courts: parseRes },
     });
+    setfilteredCourts(parseRes);
   };
 
+  const getCurrentDate = async () => {
+    dispatch({
+      type: "SET_DATE",
+      payload: { date: moment() },
+    });
+  };
+
+  // Fetches opening and closing hours
   const getHours = async () => {
     const hourList = await fetchHours(openTime, closeTime);
     dispatch({
@@ -65,11 +91,27 @@ const Schedule = () => {
     });
   };
 
-  const getDate = async () => {
-    dispatch({
-      type: "SET_DATE",
-      payload: { date: moment() },
-    });
+  // Filters courts based on selected surface type
+  const filterCourts = () => {
+    if (courtType === 0) return setfilteredCourts(courts);
+    let courtsFilter = courts.filter((court) => court.type_id === courtType);
+    setfilteredCourts(courtsFilter);
+  };
+
+  // Filters court types based on surface types available at the club
+  const filterCourtTypes = () => {
+    let courtTypesFilter = [];
+
+    for (let i = 0; i < courtTypes.length; i++) {
+      for (let j = 0; j < courts.length; j++) {
+        if (courtTypes[i].id === courts[j].type_id) {
+          courtTypesFilter.push(courtTypes[i]);
+          break;
+        }
+      }
+    }
+
+    setFilteredCourtTypes([...filteredCourtTypes, ...courtTypesFilter]);
   };
 
   const reserveTime = async (time, club, court) => {
@@ -96,7 +138,6 @@ const Schedule = () => {
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
-    // setDay(moment(date));
     dispatch({
       type: "SET_DATE",
       payload: { date: moment(date) },
@@ -105,21 +146,48 @@ const Schedule = () => {
 
   return (
     <div>
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <Grid container justify="space-around">
-          <KeyboardDatePicker
-            margin="normal"
-            id="date-picker-dialog"
-            label="Date picker dialog"
-            format="dd/MM/yyyy"
-            value={selectedDate}
-            onChange={(date) => handleDateChange(date)}
-            KeyboardButtonProps={{
-              "aria-label": "change date",
-            }}
-          />
-        </Grid>
-      </MuiPickersUtilsProvider>
+      <div id="schedule-filter" data-dashboard>
+        <div>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <KeyboardDatePicker
+              inputVariant="outlined"
+              size="small"
+              margin="normal"
+              id="date-picker-dialog"
+              label="Date picker dialog"
+              format="dd/MM/yyyy"
+              value={selectedDate}
+              onChange={(date) => handleDateChange(date)}
+              KeyboardButtonProps={{
+                "aria-label": "change date",
+              }}
+            />
+          </MuiPickersUtilsProvider>
+        </div>
+        <div>
+          <FormControl
+            variant="outlined"
+            size="small"
+            // className={classes.formControl}
+          >
+            <InputLabel id="court-type-input">Court type</InputLabel>
+            <Select
+              labelId="court-type-select-label"
+              id="court-type-select"
+              value={courtType}
+              onChange={(event) => setCourtType(event.target.value)}
+              label="Court type"
+            >
+              {filteredCourtTypes.map((courtType) => (
+                <MenuItem key={courtType.id} value={courtType.id}>
+                  {courtType.type}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
+      </div>
+
       <div id="color-guide" data-dashboard>
         <div>
           <p>Available</p>
@@ -135,7 +203,7 @@ const Schedule = () => {
         </div>
       </div>
       <ScrollContainer id="schedule" innerRef={schedule} hideScrollbars={false} data-dashboard>
-        {courts.map((court) => (
+        {filteredCourts.map((court) => (
           <div key={court.number}>
             <p className="court-info" data-dashboard>
               Court {court.number} | {court.type}
