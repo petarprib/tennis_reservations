@@ -68,6 +68,17 @@
 
 .court-info[data-dashboard] {
   cursor: default;
+  margin: 0 0 5px 5px;
+  display: flex;
+}
+.court-info[data-dashboard] p {
+  margin-right: 7px;
+}
+.court-info[data-dashboard] .delete-court {
+  color: red;
+}
+.court-info[data-dashboard] .delete-court:hover {
+  cursor: pointer;
 }
 
 .hours[data-dashboard] {

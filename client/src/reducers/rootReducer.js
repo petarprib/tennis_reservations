@@ -7,6 +7,7 @@ import dateReducer from "./dateReducer";
 import hoursReducer from "./hoursReducer";
 import reservationsReducer from "./reservationsReducer";
 import userReducer from "./userReducer";
+import userNameReducer from "./userNameReducer";
 import userTypeReducer from "./userTypeReducer";
 
 const rootReducer = combineReducers({
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   hours: hoursReducer,
   reservations: reservationsReducer,
   user: userReducer,
+  userName: userNameReducer,
   userType: userTypeReducer,
 });
 

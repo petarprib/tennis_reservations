@@ -63,14 +63,22 @@
 
 #schedule[data-dashboard] {
   width: 100%;
-  // display: flex;
-  // justify-content: center;
-  // max-width: 1280px;
   overflow: auto;
 }
 
 .court-info[data-dashboard] {
   cursor: default;
+  margin: 0 0 5px 5px;
+  display: flex;
+  p {
+    margin-right: 7px;
+  }
+  .delete-court {
+    color: rgb(255, 0, 0);
+  }
+  .delete-court:hover {
+    cursor: pointer;
+  }
 }
 
 .hours[data-dashboard] {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import addCourtFn from "../../../utils/addCourtFn";
 import FormControl from "@material-ui/core/FormControl";
@@ -10,41 +10,32 @@ import TextField from "@material-ui/core/TextField";
 
 const AddCourt = () => {
   const dispatch = useDispatch();
-  const userType = useSelector((state) => state.userType);
-  const courtTypes = useSelector((state) => state.courtTypes);
-  const [courtType, setCourtType] = useState("");
-  const [courtNumber, setCourtNumber] = useState(0);
   const [courtError, setCourtError] = useState("");
-
-  useEffect(() => {
-    // getClubInfo();
-    // getDate();
-    // getCourtTypes();
-    // getCourts();
-    // fetchHours();
-    // fetchReservations();
-    // if (schedule.current) return schedule.current.scrollTo(0, Math.random() * 5000);
-    // eslint-disable-next-line
-  }, []);
-
-  const getCourts = async () => {
-    const res = await fetch("/api/dashboard/courts");
-    const parseRes = await res.json();
-    dispatch({
-      type: "SET_COURTS",
-      payload: { courts: parseRes },
-    });
-  };
+  const [courtNumber, setCourtNumber] = useState(0);
+  const [courtType, setCourtType] = useState("");
+  const courtTypes = useSelector((state) => state.courtTypes);
+  const userType = useSelector((state) => state.userType);
 
   const addCourt = async (event) => {
     event.preventDefault();
     const parseRes = await addCourtFn(courtType, courtNumber);
+
     if (typeof parseRes !== "string") {
       getCourts();
       setCourtError("");
     } else {
       setCourtError(parseRes);
     }
+  };
+
+  const getCourts = async () => {
+    const res = await fetch("/api/dashboard/courts");
+    const parseRes = await res.json();
+
+    dispatch({
+      type: "SET_COURTS",
+      payload: { courts: parseRes },
+    });
   };
 
   return (

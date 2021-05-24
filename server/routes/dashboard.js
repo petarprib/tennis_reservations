@@ -18,7 +18,11 @@ const pool = require("../db");
 
 router.get("/session", async (req, res) => {
   try {
-    res.json(req.session);
+    const basicInfo = await pool.query("SELECT name FROM account WHERE id = $1", [req.session.accountId]);
+
+    const { accountId, accountType, club } = req.session;
+
+    res.json({ accountId, accountType, club, ...basicInfo.rows[0] });
   } catch (error) {
     console.error(error.message);
     res.status(500).json("Server Error");
@@ -65,6 +69,22 @@ router.post("/courts", async (req, res) => {
     ]);
 
     res.json(newCourt.rows[0]);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+router.delete("/courts", async (req, res) => {
+  try {
+    const { court } = req.body;
+
+    const deletedCourt = await pool.query("DELETE FROM court WHERE id = $1 AND club = $2", [
+      court,
+      req.session.accountId,
+    ]);
+
+    res.json(true);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");

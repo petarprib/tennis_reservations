@@ -4,6 +4,8 @@ import moment from "moment";
 import ScrollContainer from "react-indiana-drag-scroll";
 import fetchHours from "../../utils/fetchHours";
 import fetchReservations from "../../utils/fetchReservations";
+import reserveTimeFn from "../../utils/reserveTimeFn";
+import deleteCourtFn from "../../utils/deleteCourtFn";
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
 import Grid from "@material-ui/core/Grid";
 import "date-fns";
@@ -38,6 +40,7 @@ const Schedule = () => {
   const reservations = useSelector((state) => state.reservations);
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const user = useSelector((state) => state.user);
+  const userType = useSelector((state) => state.userType);
 
   useEffect(() => {
     getCourts();
@@ -46,6 +49,11 @@ const Schedule = () => {
     getReservations();
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    getUpdatedCourts();
+    // eslint-disable-next-line
+  }, [courts]);
 
   useEffect(() => {
     filterCourts();
@@ -91,6 +99,14 @@ const Schedule = () => {
     });
   };
 
+  // Live update of court list after adding or deleting a court
+  const getUpdatedCourts = async () => {
+    const res = await fetch("/api/dashboard/courts");
+    const parseRes = await res.json();
+    setfilteredCourts(parseRes);
+    setCourtType(0);
+  };
+
   // Filters courts based on selected surface type
   const filterCourts = () => {
     if (courtType === 0) return setfilteredCourts(courts);
@@ -115,25 +131,9 @@ const Schedule = () => {
   };
 
   const reserveTime = async (time, club, court) => {
-    try {
-      let chosenTime = moment(time, "HH:mm")
-        .date(date.date())
-        .month(date.month())
-        .year(date.year());
-      let startTime = chosenTime.format("YYYY-MM-DD HH:mm:ss");
-      let endTime = chosenTime.add(30, "minutes").format("YYYY-MM-DD HH:mm:ss");
-
-      const body = { club, court, startTime, endTime };
-      // eslint-disable-next-line
-      const res = await fetch("/api/dashboard/reservations", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      getReservations();
-    } catch (error) {
-      console.error(error.message);
-    }
+    // eslint-disable-next-line
+    const res = await reserveTimeFn(time, club, court, date);
+    getReservations();
   };
 
   const handleDateChange = (date) => {
@@ -143,6 +143,20 @@ const Schedule = () => {
       payload: { date: moment(date) },
     });
   };
+
+  const deleteCourt = async (court) => {
+    // eslint-disable-next-line
+    const res = await deleteCourtFn(court);
+    return getUpdatedCourts();
+  };
+
+  //   // you create/"declare" a moment with moment(variable/string, "the format of the variable/string") - the format is in order for moment to recognize what you're giving it
+  //   // if you want to assign it a specific time or date (usually it's what you have NOT provided inside the "moment()"), you do for example:
+  //   // moment(hour, "HH:mm")
+  //   //   .date(day.date())
+  //   // the first ".date()" is in order to tell it what you're assigning, the "day" is a moment object which has an entire date string and is the variable of a date where you're getting the day from, the second ".date()" inside () is where you are getting the day from the date string
+  //   // you continue doing the same with month, year, hour, minute or second
+  //   // if you want to display it as a string you do variable.format("format") - the format can be anything, since it has everything assigned, whether automatically, or manually by specifying the dates/times
 
   return (
     <div>
@@ -205,9 +219,18 @@ const Schedule = () => {
       <ScrollContainer id="schedule" innerRef={schedule} hideScrollbars={false} data-dashboard>
         {filteredCourts.map((court) => (
           <div key={court.number}>
-            <p className="court-info" data-dashboard>
-              Court {court.number} | {court.type}
-            </p>
+            <div className="court-info" data-dashboard>
+              <p>Court {court.number}</p>
+              <p>|</p>
+              <p>{court.type}</p>
+              {userType === 2 && <p>|</p>}
+              {userType === 2 && (
+                <p className="delete-court" onClick={() => deleteCourt(court.id)}>
+                  Delete
+                </p>
+              )}
+              {/* Court {court.number} | {court.type} | <span>Delete</span> */}
+            </div>
             <div className="hours" data-dashboard>
               {hours.map((hour) => {
                 let color = "rgb(154, 205, 50)";

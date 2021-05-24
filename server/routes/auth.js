@@ -45,8 +45,8 @@ router.post("/register", validInfo, async (req, res) => {
       ]);
     }
 
-    req.session.accountId = account.rows[0].id;
-    req.session.accountType = account.rows[0].type;
+    req.session.accountId = newAccount.rows[0].id;
+    req.session.accountType = newAccount.rows[0].type;
     req.session.club = req.session.accountType === 2 ? req.session.accountId : club;
 
     res.json(true);
