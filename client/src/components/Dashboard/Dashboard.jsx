@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "../Dashboard/dashboard.scoped.scss";
 import { useSelector, useDispatch } from "react-redux";
-import NewClubDashboard from "./Club/NewClubDashboard.jsx";
+import ClubDashboard from "./Club/ClubDashboard.jsx";
 import PlayerDashboard from "./Player/PlayerDashboard.jsx";
 import Header from "./Header.jsx";
 import LoadingScreen from "../LoadingScreen/LoadingScreen.jsx";
@@ -67,7 +67,7 @@ const Dashboard = () => {
         <Header />
         {(() => {
           if (userType === 2) {
-            return <NewClubDashboard />;
+            return <ClubDashboard />;
           } else if (userType === 3) {
             return <PlayerDashboard />;
           }

@@ -233,7 +233,6 @@ const Schedule = () => {
                   Delete
                 </p>
               )}
-              {/* Court {court.number} | {court.type} | <span>Delete</span> */}
             </div>
             <div className="hours" data-dashboard>
               {hours.map((hour) => {

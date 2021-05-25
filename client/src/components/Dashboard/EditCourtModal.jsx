@@ -11,7 +11,7 @@ import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    width: "400px",
+    // width: "400px",
     border: "none",
     boxShadow: "none",
     outline: "none",
@@ -30,7 +30,6 @@ const EditCourtModal = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [courtNumber, setCourtNumber] = useState("");
-  const courts = useSelector((state) => state.courts);
   const [courtError, setCourtError] = useState("");
   const [courtType, setCourtType] = useState("");
   const courtTypes = useSelector((state) => state.courtTypes);
@@ -63,20 +62,6 @@ const EditCourtModal = (props) => {
       console.error(error.message);
     }
   };
-
-  // const addCourt = async (event) => {
-  //   event.preventDefault();
-  //   const parseRes = await addCourtFn(courtType, courtNumber);
-
-  //   if (typeof parseRes !== "string") {
-  //     getCourts();
-  //     setCourtNumber("");
-  //     setCourtType("");
-  //     setCourtError("");
-  //   } else {
-  //     setCourtError(parseRes);
-  //   }
-  // };
 
   const getCourts = async () => {
     const res = await fetch("/api/dashboard/courts");

@@ -35,7 +35,7 @@ router.post("/register", validInfo, async (req, res) => {
 
     if (type === 2) {
       await pool.query(
-        "INSERT INTO club_details (id, country, open_time, close_time, min_one_hour) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+        "INSERT INTO club_details (id, country, open_time, close_time, config_working_hours) VALUES ($1, $2, $3, $4, $5) RETURNING *",
         [newAccount.rows[0].id, country, "09:00", "21:00", false]
       );
     } else if (type === 3) {
