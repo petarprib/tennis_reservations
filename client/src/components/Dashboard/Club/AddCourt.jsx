@@ -40,6 +40,13 @@ const AddCourt = () => {
     });
   };
 
+  const handleCourtNumInput = (value) => {
+    const onlyInt = /^[0-9\b]+$/;
+    if (value === "" || onlyInt.test(value)) {
+      setCourtNumber(value);
+    }
+  };
+
   return (
     // <div className="club-dashboard-options" data-dashboard>
     <>
@@ -81,7 +88,7 @@ const AddCourt = () => {
               variant="outlined"
               autoComplete="off"
               value={courtNumber}
-              onChange={(event) => setCourtNumber(event.target.value)}
+              onChange={(event) => handleCourtNumInput(event.target.value)}
               size="small"
             />
             <Button type="submit" variant="contained" color="primary">

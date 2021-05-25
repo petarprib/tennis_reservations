@@ -98,9 +98,18 @@ router.put("/courts", async (req, res) => {
   try {
     const { courtId, courtNumber, courtType } = req.body;
 
+    const court = await pool.query("SELECT number FROM court WHERE number = $1 AND club = $2", [
+      courtNumber,
+      req.session.accountId,
+    ]);
+
+    if (court.rows.length) {
+      return res.json("You already have a court with that number");
+    }
+
     await pool.query("UPDATE court SET number = $1, type = $2 WHERE id = $3", [courtNumber, courtType, courtId]);
 
-    res.end();
+    res.json(true);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");

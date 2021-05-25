@@ -31,6 +31,7 @@ const EditCourtModal = (props) => {
   const dispatch = useDispatch();
   const [courtNumber, setCourtNumber] = useState("");
   const courts = useSelector((state) => state.courts);
+  const [courtError, setCourtError] = useState("");
   const [courtType, setCourtType] = useState("");
   const courtTypes = useSelector((state) => state.courtTypes);
   const [open, setOpen] = useState(false);
@@ -45,17 +46,37 @@ const EditCourtModal = (props) => {
     event.preventDefault();
     try {
       const body = { courtId, courtNumber, courtType };
-      await fetch("/api/dashboard/courts", {
+      const res = await fetch("/api/dashboard/courts", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-      getCourts();
-      setOpen(false);
+      const parseRes = await res.json();
+      if (typeof parseRes !== "string") {
+        setOpen(false);
+        getCourts();
+        setCourtError("");
+      } else {
+        setCourtError(parseRes);
+      }
     } catch (error) {
       console.error(error.message);
     }
   };
+
+  // const addCourt = async (event) => {
+  //   event.preventDefault();
+  //   const parseRes = await addCourtFn(courtType, courtNumber);
+
+  //   if (typeof parseRes !== "string") {
+  //     getCourts();
+  //     setCourtNumber("");
+  //     setCourtType("");
+  //     setCourtError("");
+  //   } else {
+  //     setCourtError(parseRes);
+  //   }
+  // };
 
   const getCourts = async () => {
     const res = await fetch("/api/dashboard/courts");
@@ -64,6 +85,13 @@ const EditCourtModal = (props) => {
       type: "SET_COURTS",
       payload: { courts: parseRes },
     });
+  };
+
+  const handleCourtNumInput = (value) => {
+    const onlyInt = /^[0-9\b]+$/;
+    if (value === "" || onlyInt.test(value)) {
+      setCourtNumber(value);
+    }
   };
 
   return (
@@ -88,7 +116,7 @@ const EditCourtModal = (props) => {
                 size="small"
                 autoComplete="off"
                 fullWidth
-                onChange={(event) => setCourtNumber(event.target.value)}
+                onChange={(event) => handleCourtNumInput(event.target.value)}
               />
               <InputLabel id="court-type-input">Court type</InputLabel>
               <Select
@@ -104,6 +132,7 @@ const EditCourtModal = (props) => {
                   </MenuItem>
                 ))}
               </Select>
+              <small>{courtError}</small>
               <Button type="submit" variant="contained" color="primary">
                 Save
               </Button>
