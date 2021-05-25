@@ -11,7 +11,7 @@ import TextField from "@material-ui/core/TextField";
 const AddCourt = () => {
   const dispatch = useDispatch();
   const [courtError, setCourtError] = useState("");
-  const [courtNumber, setCourtNumber] = useState(0);
+  const [courtNumber, setCourtNumber] = useState("");
   const [courtType, setCourtType] = useState("");
   const courtTypes = useSelector((state) => state.courtTypes);
   const userType = useSelector((state) => state.userType);
@@ -22,6 +22,8 @@ const AddCourt = () => {
 
     if (typeof parseRes !== "string") {
       getCourts();
+      setCourtNumber("");
+      setCourtType("");
       setCourtError("");
     } else {
       setCourtError(parseRes);
@@ -78,6 +80,7 @@ const AddCourt = () => {
               label="Court number"
               variant="outlined"
               autoComplete="off"
+              value={courtNumber}
               onChange={(event) => setCourtNumber(event.target.value)}
               size="small"
             />

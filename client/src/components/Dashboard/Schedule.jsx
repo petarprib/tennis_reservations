@@ -14,6 +14,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
+import EditCourtModal from "./EditCourtModal.jsx";
 
 const Schedule = () => {
   const dispatch = useDispatch();
@@ -35,7 +36,7 @@ const Schedule = () => {
   const courtTypes = useSelector((state) => state.courtTypes);
   const date = useSelector((state) => state.date);
   const [filteredCourts, setfilteredCourts] = useState([]);
-  const [filteredCourtTypes, setFilteredCourtTypes] = useState([{ id: 0, type: "All" }]);
+  const [filteredCourtTypes, setFilteredCourtTypes] = useState([]);
   const hours = useSelector((state) => state.hours);
   const reservations = useSelector((state) => state.reservations);
   const [selectedDate, setSelectedDate] = React.useState(new Date());
@@ -84,26 +85,27 @@ const Schedule = () => {
 
   // Fetches opening and closing hours
   const getHours = async () => {
-    const hourList = await fetchHours(openTime, closeTime);
+    const hours = await fetchHours(openTime, closeTime);
     dispatch({
       type: "SET_HOURS",
-      payload: { hours: hourList },
+      payload: { hours },
     });
   };
 
   const getReservations = async () => {
-    const reservationList = await fetchReservations();
+    const reservations = await fetchReservations();
     dispatch({
       type: "SET_RESERVATIONS",
-      payload: { reservations: reservationList },
+      payload: { reservations },
     });
   };
 
-  // Live update of court list after adding or deleting a court
+  //DA LI MIJENJAT UPORNO STATE AKO IMAM USEEFFECT KOJI FETCHA COURTS SVAKI PUT? JE LI TOLIKO BITNO DA SE DB CALLS IZBJEGAVAJU?
+  // FOR EVERY ADDED COURT (AND OTHER THINGS) IT ADDS A DUPLICATE OF THE ORIGINAL COURT TYPE LIST
+
+  // Live update of court list after adding, deleting or editing a court
   const getUpdatedCourts = async () => {
-    const res = await fetch("/api/dashboard/courts");
-    const parseRes = await res.json();
-    setfilteredCourts(parseRes);
+    setfilteredCourts(courts);
     setCourtType(0);
   };
 
@@ -127,12 +129,11 @@ const Schedule = () => {
       }
     }
 
-    setFilteredCourtTypes([...filteredCourtTypes, ...courtTypesFilter]);
+    setFilteredCourtTypes([{ id: 0, type: "All" }, ...courtTypesFilter]);
   };
 
   const reserveTime = async (time, club, court) => {
-    // eslint-disable-next-line
-    const res = await reserveTimeFn(time, club, court, date);
+    await reserveTimeFn(time, club, court, date);
     getReservations();
   };
 
@@ -145,9 +146,8 @@ const Schedule = () => {
   };
 
   const deleteCourt = async (court) => {
-    // eslint-disable-next-line
-    const res = await deleteCourtFn(court);
-    return getUpdatedCourts();
+    await deleteCourtFn(court);
+    getCourts();
   };
 
   //   // you create/"declare" a moment with moment(variable/string, "the format of the variable/string") - the format is in order for moment to recognize what you're giving it
@@ -225,7 +225,11 @@ const Schedule = () => {
               <p>{court.type}</p>
               {userType === 2 && <p>|</p>}
               {userType === 2 && (
-                <p className="delete-court" onClick={() => deleteCourt(court.id)}>
+                <EditCourtModal courtId={court.id} courtNumber={court.number} courtType={court.type_id} />
+              )}
+              {userType === 2 && <p>|</p>}
+              {userType === 2 && (
+                <p className="court-edit-option delete-court" onClick={() => deleteCourt(court.id)}>
                   Delete
                 </p>
               )}

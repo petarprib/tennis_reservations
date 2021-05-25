@@ -10,12 +10,12 @@ const reserveTimeFn = async (time, club, court, date) => {
     let endTime = chosenTime.add(30, "minutes").format("YYYY-MM-DD HH:mm:ss");
 
     const body = { club, court, startTime, endTime };
-    const res = await fetch("/api/dashboard/reservations", {
+    await fetch("/api/dashboard/reservations", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body),
     });
-    return res;
+    return;
   } catch (error) {
     console.error(error.message);
   }

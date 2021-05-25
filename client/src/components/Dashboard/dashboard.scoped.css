@@ -74,11 +74,11 @@
 .court-info[data-dashboard] p {
   margin-right: 7px;
 }
+.court-info[data-dashboard] .court-edit-option:hover {
+  cursor: pointer;
+}
 .court-info[data-dashboard] .delete-court {
   color: red;
-}
-.court-info[data-dashboard] .delete-court:hover {
-  cursor: pointer;
 }
 
 .hours[data-dashboard] {

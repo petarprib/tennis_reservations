@@ -25,9 +25,9 @@ const Access = () => {
   const fetchCountries = async () => {
     try {
       const res = await fetch("/api/countries");
-      const data = await res.json();
+      const parseRes = await res.json();
       let countries = [];
-      data.forEach((country) =>
+      parseRes.forEach((country) =>
         countries.push({
           name: country.name,
           id: country.id,

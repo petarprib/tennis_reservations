@@ -73,11 +73,14 @@
   p {
     margin-right: 7px;
   }
+  .court-edit-option:hover {
+    cursor: pointer;
+  }
+  // .edit-court {
+  //   color: green;
+  // }
   .delete-court {
     color: rgb(255, 0, 0);
-  }
-  .delete-court:hover {
-    cursor: pointer;
   }
 }
 

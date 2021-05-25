@@ -1,20 +1,5 @@
 const router = require("express").Router();
-const { json } = require("express");
 const pool = require("../db");
-
-// router.get("/clubs", async (req, res) => {
-//   try {
-//     const user = await pool.query(
-//       "SELECT account.id, name, type, open_time, close_time, min_one_hour FROM account INNER JOIN club_details ON account.id = club_details.id WHERE account.id = $1",
-//       [req.session.accountId]
-//     );
-
-//     res.json(user.rows[0]);
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(500).json("Server Error");
-//   }
-// });
 
 router.get("/session", async (req, res) => {
   try {
@@ -41,12 +26,17 @@ router.get("/court-types", async (req, res) => {
 });
 
 router.get("/courts", async (req, res) => {
-  const courts = await pool.query(
-    "SELECT court.id, number, club, court_type.id AS type_id, court_type.type FROM court INNER JOIN court_type ON court.type = court_type.id WHERE club = $1 ORDER BY number ASC",
-    [req.session.club]
-  );
+  try {
+    const courts = await pool.query(
+      "SELECT court.id, number, club, court_type.id AS type_id, court_type.type FROM court INNER JOIN court_type ON court.type = court_type.id WHERE club = $1 ORDER BY number ASC",
+      [req.session.club]
+    );
 
-  res.json(courts.rows);
+    res.json(courts.rows);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json("Server Error");
+  }
 });
 
 router.post("/courts", async (req, res) => {
@@ -79,12 +69,38 @@ router.delete("/courts", async (req, res) => {
   try {
     const { court } = req.body;
 
-    const deletedCourt = await pool.query("DELETE FROM court WHERE id = $1 AND club = $2", [
-      court,
-      req.session.accountId,
-    ]);
+    await pool.query("DELETE FROM court WHERE id = $1 AND club = $2", [court, req.session.accountId]);
 
-    res.json(true);
+    await pool.query("DELETE FROM reservation WHERE court = $1", [court]);
+
+    res.end();
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+router.get("/courts", async (req, res) => {
+  try {
+    const courts = await pool.query(
+      "SELECT court.id, number, club, court_type.id AS type_id, court_type.type FROM court INNER JOIN court_type ON court.type = court_type.id WHERE club = $1 ORDER BY number ASC",
+      [req.session.club]
+    );
+
+    res.json(courts.rows);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+router.put("/courts", async (req, res) => {
+  try {
+    const { courtId, courtNumber, courtType } = req.body;
+
+    await pool.query("UPDATE court SET number = $1, type = $2 WHERE id = $3", [courtNumber, courtType, courtId]);
+
+    res.end();
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Server Error");
@@ -94,6 +110,7 @@ router.delete("/courts", async (req, res) => {
 router.get("/reservations", async (req, res) => {
   try {
     const reservations = await pool.query("SELECT * FROM reservation ORDER BY start_time ASC");
+
     res.json(reservations.rows);
   } catch (error) {
     console.error(error.message);
@@ -111,26 +128,31 @@ router.post("/reservations", async (req, res) => {
     ]);
 
     if (!reservation.rows.length) {
-      const newReservation = await pool.query(
+      await pool.query(
         "INSERT INTO reservation (club, court, player, start_time, end_time) VALUES ($1, $2, $3, $4, $5) RETURNING *",
         [club, court, req.session.accountId, startTime, endTime]
       );
-      return res.json(newReservation.rows[0]);
+
+      res.end();
     } else {
       if (req.session.accountType === 2) {
-        const removedReservation = await pool.query(
-          "DELETE FROM reservation WHERE club = $1 AND court = $2 AND start_time = $3",
-          [req.session.accountId, court, startTime]
-        );
-        return res.json(removedReservation);
+        await pool.query("DELETE FROM reservation WHERE club = $1 AND court = $2 AND start_time = $3", [
+          req.session.accountId,
+          court,
+          startTime,
+        ]);
+
+        res.end();
       } else if (reservation.rows[0].player === req.session.accountId) {
-        const removedReservation = await pool.query(
-          "DELETE FROM reservation WHERE court = $1 AND player = $2 AND start_time = $3",
-          [court, req.session.accountId, startTime]
-        );
-        return res.json(removedReservation);
+        await pool.query("DELETE FROM reservation WHERE court = $1 AND player = $2 AND start_time = $3", [
+          court,
+          req.session.accountId,
+          startTime,
+        ]);
+
+        res.end();
       } else {
-        return;
+        res.end();
       }
     }
   } catch (error) {

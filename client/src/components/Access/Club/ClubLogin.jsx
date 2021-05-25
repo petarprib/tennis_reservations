@@ -29,7 +29,7 @@ const ClubLogin = () => {
         dispatch({
           type: "SET_AUTH",
           payload: {
-            auth: true,
+            auth: parseRes,
           },
         });
       } else {

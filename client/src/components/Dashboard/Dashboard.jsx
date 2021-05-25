@@ -55,7 +55,7 @@ const Dashboard = () => {
     const courtTypes = await fetchCourtTypes();
     dispatch({
       type: "SET_COURT_TYPES",
-      payload: { courtTypes: courtTypes },
+      payload: { courtTypes },
     });
   };
 
