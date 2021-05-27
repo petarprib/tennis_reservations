@@ -39,12 +39,6 @@ const ClubRegister = (props) => {
       const parseRes = await res.json();
       if (parseRes === true) {
         dispatch({
-          type: "SET_CONFIG_OPEN_HOURS",
-          payload: {
-            configOpenHours: false,
-          },
-        });
-        dispatch({
           type: "SET_AUTH",
           payload: {
             auth: parseRes,

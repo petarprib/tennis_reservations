@@ -7,7 +7,6 @@ import fetchReservations from "../../utils/fetchReservations";
 import reserveTimeFn from "../../utils/reserveTimeFn";
 import deleteCourtFn from "../../utils/deleteCourtFn";
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
-import Grid from "@material-ui/core/Grid";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -19,34 +18,24 @@ import EditCourtModal from "./EditCourtModal.jsx";
 const Schedule = () => {
   const dispatch = useDispatch();
   const schedule = useRef(null);
-  const [closeTime, setCloseTime] = useState(
-    moment()
-      .second(0)
-      .minute(0)
-      .hour(22)
-  );
-  const [openTime, setOpenTime] = useState(
-    moment()
-      .second(0)
-      .minute(0)
-      .hour(8)
-  );
+  const closeTime = useSelector((state) => state.closeTime);
+  const openTime = useSelector((state) => state.openTime);
   const courts = useSelector((state) => state.courts);
-  const [courtType, setCourtType] = useState(0);
+  const [courtType, setCourtType] = useState("");
   const courtTypes = useSelector((state) => state.courtTypes);
-  const date = useSelector((state) => state.date);
+  const [date, setDate] = useState(moment());
   const [filteredCourts, setfilteredCourts] = useState([]);
   const [filteredCourtTypes, setFilteredCourtTypes] = useState([]);
-  const hours = useSelector((state) => state.hours);
-  const reservations = useSelector((state) => state.reservations);
-  const [selectedDate, setSelectedDate] = React.useState(new Date());
+  const [hours, setHours] = useState([]);
+  const [reservations, setReservations] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const user = useSelector((state) => state.user);
   const userType = useSelector((state) => state.userType);
 
   useEffect(() => {
     getCourts();
     getCurrentDate();
-    getHours();
+    getOpenCloseTimes();
     getReservations();
     // eslint-disable-next-line
   }, []);
@@ -66,6 +55,11 @@ const Schedule = () => {
     // eslint-disable-next-line
   }, [courts, courtTypes]);
 
+  useEffect(() => {
+    getHours();
+    // eslint-disable-next-line
+  }, [openTime, closeTime]);
+
   const getCourts = async () => {
     const res = await fetch("/api/dashboard/courts");
     const parseRes = await res.json();
@@ -77,31 +71,36 @@ const Schedule = () => {
   };
 
   const getCurrentDate = async () => {
-    dispatch({
-      type: "SET_DATE",
-      payload: { date: moment() },
-    });
+    setDate(moment(date));
+  };
+
+  const getOpenCloseTimes = async () => {
+    try {
+      const res = await fetch("/api/dashboard/open-hours");
+      const parseRes = await res.json();
+      dispatch({
+        type: "SET_OPEN_TIME",
+        payload: { openTime: moment(parseRes.open_time, "HH:mm:ss") },
+      });
+      dispatch({
+        type: "SET_CLOSE_TIME",
+        payload: { closeTime: moment(parseRes.close_time, "HH:mm:ss") },
+      });
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
   // Fetches opening and closing hours
   const getHours = async () => {
     const hours = await fetchHours(openTime, closeTime);
-    dispatch({
-      type: "SET_HOURS",
-      payload: { hours },
-    });
+    setHours(hours);
   };
 
   const getReservations = async () => {
     const reservations = await fetchReservations();
-    dispatch({
-      type: "SET_RESERVATIONS",
-      payload: { reservations },
-    });
+    setReservations(reservations);
   };
-
-  //DA LI MIJENJAT UPORNO STATE AKO IMAM USEEFFECT KOJI FETCHA COURTS SVAKI PUT? JE LI TOLIKO BITNO DA SE DB CALLS IZBJEGAVAJU?
-  // FOR EVERY ADDED COURT (AND OTHER THINGS) IT ADDS A DUPLICATE OF THE ORIGINAL COURT TYPE LIST
 
   // Live update of court list after adding, deleting or editing a court
   const getUpdatedCourts = async () => {
@@ -139,24 +138,13 @@ const Schedule = () => {
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
-    dispatch({
-      type: "SET_DATE",
-      payload: { date: moment(date) },
-    });
+    setDate(moment(date));
   };
 
   const deleteCourt = async (court) => {
     await deleteCourtFn(court);
     getCourts();
   };
-
-  //   // you create/"declare" a moment with moment(variable/string, "the format of the variable/string") - the format is in order for moment to recognize what you're giving it
-  //   // if you want to assign it a specific time or date (usually it's what you have NOT provided inside the "moment()"), you do for example:
-  //   // moment(hour, "HH:mm")
-  //   //   .date(day.date())
-  //   // the first ".date()" is in order to tell it what you're assigning, the "day" is a moment object which has an entire date string and is the variable of a date where you're getting the day from, the second ".date()" inside () is where you are getting the day from the date string
-  //   // you continue doing the same with month, year, hour, minute or second
-  //   // if you want to display it as a string you do variable.format("format") - the format can be anything, since it has everything assigned, whether automatically, or manually by specifying the dates/times
 
   return (
     <div>

@@ -41,7 +41,7 @@ const EditCourtModal = (props) => {
     // eslint-disable-next-line
   }, [open]);
 
-  const editCourt = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const body = { courtId, courtNumber, courtType };
@@ -87,7 +87,7 @@ const EditCourtModal = (props) => {
       <Modal open={open} onClose={() => setOpen(false)}>
         <div className={classes.paper}>
           <h2>Edit court info</h2>
-          <form id="form" onSubmit={(event) => editCourt(event)} data-home>
+          <form id="form" onSubmit={(event) => handleSubmit(event)} data-home>
             <FormControl
               variant="outlined"
               size="small"

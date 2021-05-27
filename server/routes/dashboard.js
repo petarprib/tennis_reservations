@@ -1,6 +1,51 @@
 const router = require("express").Router();
 const pool = require("../db");
 
+router.get("/initial-club-config", async (req, res) => {
+  try {
+    const openHoursConfiguration = await pool.query(
+      "SELECT open_time, close_time, config_open_hours FROM club_details WHERE club = $1",
+      [req.session.club]
+    );
+
+    const { open_time, close_time, config_open_hours } = openHoursConfiguration.rows[0];
+
+    res.json({ open_time, close_time, config_open_hours });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json("Server Error");
+  }
+});
+
+router.put("/initial-club-config", async (req, res) => {
+  try {
+    const { formatOpenTime, formatCloseTime } = req.body;
+
+    await pool.query(
+      "UPDATE club_details SET open_time = $1, close_time = $2, config_open_hours = $3 WHERE club = $4",
+      [formatOpenTime, formatCloseTime, true, req.session.club]
+    );
+
+    res.end();
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json("Server Error");
+  }
+});
+
+router.get("/open-hours", async (req, res) => {
+  try {
+    const openHours = await pool.query("SELECT open_time, close_time FROM club_details WHERE club = $1", [
+      req.session.club,
+    ]);
+
+    res.json(openHours.rows[0]);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).json("Server Error");
+  }
+});
+
 router.get("/session", async (req, res) => {
   try {
     const basicInfo = await pool.query("SELECT name FROM account WHERE id = $1", [req.session.accountId]);
@@ -45,7 +90,7 @@ router.post("/courts", async (req, res) => {
 
     const courts = await pool.query("SELECT number FROM court WHERE number = $1 AND club = $2", [
       courtNumber,
-      req.session.accountId,
+      req.session.club,
     ]);
 
     if (courts.rows.length) {
@@ -55,7 +100,7 @@ router.post("/courts", async (req, res) => {
     const newCourt = await pool.query("INSERT INTO court (type, number, club) VALUES ($1, $2, $3) RETURNING *", [
       courtType,
       courtNumber,
-      req.session.accountId,
+      req.session.club,
     ]);
 
     res.json(newCourt.rows[0]);
@@ -69,7 +114,7 @@ router.delete("/courts", async (req, res) => {
   try {
     const { court } = req.body;
 
-    await pool.query("DELETE FROM court WHERE id = $1 AND club = $2", [court, req.session.accountId]);
+    await pool.query("DELETE FROM court WHERE id = $1 AND club = $2", [court, req.session.club]);
 
     await pool.query("DELETE FROM reservation WHERE court = $1", [court]);
 
@@ -100,7 +145,7 @@ router.put("/courts", async (req, res) => {
 
     const court = await pool.query("SELECT number FROM court WHERE number = $1 AND club = $2", [
       courtNumber,
-      req.session.accountId,
+      req.session.club,
     ]);
 
     if (court.rows.length) {

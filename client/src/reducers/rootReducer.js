@@ -1,25 +1,21 @@
 import { combineReducers } from "redux";
 import authReducer from "./authReducer";
+import closeTimeReducer from "./closeTimeReducer";
 import clubReducer from "./clubReducer";
-import configOpenHoursReducer from "./configOpenHoursReducer";
 import courtsReducer from "./courtsReducer";
 import courtTypesReducer from "./courtTypesReducer";
-import dateReducer from "./dateReducer";
-import hoursReducer from "./hoursReducer";
-import reservationsReducer from "./reservationsReducer";
+import openTimeReducer from "./openTimeReducer";
 import userReducer from "./userReducer";
 import userNameReducer from "./userNameReducer";
 import userTypeReducer from "./userTypeReducer";
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  closeTime: closeTimeReducer,
   club: clubReducer,
-  configOpenHours: configOpenHoursReducer,
   courts: courtsReducer,
   courtTypes: courtTypesReducer,
-  date: dateReducer,
-  hours: hoursReducer,
-  reservations: reservationsReducer,
+  openTime: openTimeReducer,
   user: userReducer,
   userName: userNameReducer,
   userType: userTypeReducer,
