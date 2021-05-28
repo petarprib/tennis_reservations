@@ -163,7 +163,9 @@ router.put("/courts", async (req, res) => {
 
 router.get("/reservations", async (req, res) => {
   try {
-    const reservations = await pool.query("SELECT * FROM reservation ORDER BY start_time ASC");
+    const reservations = await pool.query(
+      "SELECT reservation.*, account.email, account.name FROM reservation INNER JOIN account ON reservation.player = account.id ORDER BY start_time ASC"
+    );
 
     res.json(reservations.rows);
   } catch (error) {

@@ -13,7 +13,20 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
+import Tooltip from "@material-ui/core/Tooltip";
+import { withStyles } from "@material-ui/core/styles";
 import EditCourtModal from "./EditCourtModal.jsx";
+
+const HtmlTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: "#fff",
+    color: "#000",
+    // maxWidth: 220,
+    // fontSize: theme.typography.pxToRem(12),
+    fontSize: "14px",
+    border: "1px solid #000",
+  },
+}))(Tooltip);
 
 const Schedule = () => {
   const dispatch = useDispatch();
@@ -111,7 +124,7 @@ const Schedule = () => {
   // Filters courts based on selected surface type
   const filterCourts = () => {
     if (courtType === 0) return setfilteredCourts(courts);
-    let courtsFilter = courts.filter((court) => court.type_id === courtType);
+    const courtsFilter = courts.filter((court) => court.type_id === courtType);
     setfilteredCourts(courtsFilter);
   };
 
@@ -204,6 +217,7 @@ const Schedule = () => {
           <i className="fas fa-square-full skyblue" data-dashboard />
         </div>
       </div>
+
       <ScrollContainer id="schedule" innerRef={schedule} hideScrollbars={false} data-dashboard>
         {filteredCourts.map((court) => (
           <div key={court.number}>
@@ -224,8 +238,13 @@ const Schedule = () => {
             </div>
             <div className="hours" data-dashboard>
               {hours.map((hour) => {
+                let reserved = false;
                 let color = "rgb(154, 205, 50)";
+                let nameAcronym;
+                let name;
+                let email;
                 reservations.map((reservation) => {
+                  // console.log(reservation);
                   if (court.id !== reservation.court) return false;
                   let now = moment(hour, "HH:mm")
                     .date(date.date())
@@ -237,24 +256,45 @@ const Schedule = () => {
                     if (reservation.player === user) {
                       color = "rgb(135, 206, 235)";
                     } else {
+                      reserved = true;
                       color = "rgb(255, 0, 0)";
+                      nameAcronym = reservation.name.match(/\b(\w)/g).join("");
+                      name = reservation.name;
+                      email = reservation.email;
                     }
                     return false;
                   }
                   return true;
                 });
 
-                return (
+                let basicView = (
                   <div
+                    key={hour}
                     className="hour"
                     style={{ backgroundColor: color }}
-                    key={hour}
                     onClick={() => reserveTime(hour, court.club, court.id)}
                     data-dashboard
                   >
                     <p>{hour}</p>
+                    <p>{userType === 2 && nameAcronym}</p>
                   </div>
                 );
+
+                let clubView = (
+                  <HtmlTooltip
+                    key={hour}
+                    title={
+                      <>
+                        <p>{name}</p>
+                        <p>{email}</p>
+                      </>
+                    }
+                  >
+                    {basicView}
+                  </HtmlTooltip>
+                );
+
+                return reserved ? clubView : basicView;
               })}
             </div>
           </div>
