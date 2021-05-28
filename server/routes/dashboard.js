@@ -143,7 +143,8 @@ router.put("/courts", async (req, res) => {
   try {
     const { courtId, courtNumber, courtType } = req.body;
 
-    const court = await pool.query("SELECT number FROM court WHERE number = $1 AND club = $2", [
+    const court = await pool.query("SELECT number FROM court WHERE id != $1 AND number = $2 AND club = $3", [
+      courtId,
       courtNumber,
       req.session.club,
     ]);
