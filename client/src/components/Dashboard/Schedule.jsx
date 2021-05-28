@@ -238,7 +238,7 @@ const Schedule = () => {
             </div>
             <div className="hours" data-dashboard>
               {hours.map((hour) => {
-                let reserved = false;
+                let playerReservation = false;
                 let color = "rgb(154, 205, 50)";
                 let nameAcronym;
                 let name;
@@ -256,7 +256,7 @@ const Schedule = () => {
                     if (reservation.player === user) {
                       color = "rgb(135, 206, 235)";
                     } else {
-                      reserved = true;
+                      playerReservation = true;
                       color = "rgb(255, 0, 0)";
                       nameAcronym = reservation.name.match(/\b(\w)/g).join("");
                       name = reservation.name;
@@ -294,7 +294,7 @@ const Schedule = () => {
                   </HtmlTooltip>
                 );
 
-                return reserved ? clubView : basicView;
+                return playerReservation && userType === 2 ? clubView : basicView;
               })}
             </div>
           </div>
