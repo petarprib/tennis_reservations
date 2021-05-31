@@ -1,10 +1,20 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import logOutFn from "../../utils/logOutFn";
+import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& > *": {
+      margin: theme.spacing(1),
+    },
+  },
+}));
 
 const Header = () => {
+  const classes = useStyles();
   const dispatch = useDispatch();
-  const userName = useSelector((state) => state.userName);
 
   const logOut = async () => {
     const loggedOut = logOutFn();
@@ -17,11 +27,17 @@ const Header = () => {
   };
 
   return (
-    <div>
-      <h1>Hello {userName}</h1>
-      <p id="logout" onClick={() => logOut()} data-dashboard>
-        Log out
-      </p>
+    <div id="header" data-dashboard>
+      <div id="header-content" data-dashboard>
+        <div id="greeting" data-dashboard>
+          <h1>Tennis Reservations</h1>
+        </div>
+        <div id="logout" className={classes.root} onClick={() => logOut()} data-dashboard>
+          <Button size="small" variant="contained" color="primary">
+            Log out
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };

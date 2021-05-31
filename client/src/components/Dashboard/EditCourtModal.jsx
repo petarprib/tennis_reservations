@@ -81,9 +81,8 @@ const EditCourtModal = (props) => {
 
   return (
     <div>
-      <p className="court-edit-option edit-court" onClick={() => setOpen(true)}>
-        Edit
-      </p>
+      {/* <p className="court-edit-option edit-court">Edit</p> */}
+      <i class="fas fa-edit" onClick={() => setOpen(true)} />
       <Modal open={open} onClose={() => setOpen(false)}>
         <div className={classes.paper}>
           <h2>Edit court info</h2>

@@ -1,6 +1,5 @@
 import React from "react";
-import AddCourt from "./AddCourt.jsx";
-import ManageHours from "./ManageHours.jsx";
+import Options from "../Options.jsx";
 import Schedule from "../Schedule.jsx";
 import ConfigOpenHoursModal from "./ConfigOpenHoursModal.jsx";
 
@@ -8,10 +7,7 @@ const ClubDashboard = () => {
   return (
     <div id="dashboard" data-dashboard>
       <ConfigOpenHoursModal />
-      <div id="club-dashboard-options-wrapper" data-dashboard>
-        <AddCourt />
-        <ManageHours />
-      </div>
+      <Options />
       <Schedule />
     </div>
   );

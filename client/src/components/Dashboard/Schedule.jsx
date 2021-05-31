@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, createRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import ScrollContainer from "react-indiana-drag-scroll";
@@ -25,12 +25,15 @@ const HtmlTooltip = withStyles((theme) => ({
     // fontSize: theme.typography.pxToRem(12),
     fontSize: "14px",
     border: "1px solid #000",
+    margin: "0 0 5px 0",
   },
 }))(Tooltip);
 
 const Schedule = () => {
   const dispatch = useDispatch();
   const schedule = useRef(null);
+  const hoursIndex = useRef();
+  // let myRef = createRef();
   const closeTime = useSelector((state) => state.closeTime);
   const openTime = useSelector((state) => state.openTime);
   const courts = useSelector((state) => state.courts);
@@ -159,6 +162,16 @@ const Schedule = () => {
     getCourts();
   };
 
+  let refList = [];
+
+  const handleScroll = (e) => {
+    let currentPosition = e.target.scrollLeft;
+    hoursIndex.current.scrollLeft = currentPosition;
+    for (let ref of refList) {
+      ref.current.scrollLeft = currentPosition;
+    }
+  };
+
   return (
     <div>
       <div id="schedule-filter" data-dashboard>
@@ -173,9 +186,9 @@ const Schedule = () => {
               format="dd/MM/yyyy"
               value={selectedDate}
               onChange={(date) => handleDateChange(date)}
-              KeyboardButtonProps={{
-                "aria-label": "change date",
-              }}
+              // KeyboardButtonProps={{
+              //   "aria-label": "change date",
+              // }}
             />
           </MuiPickersUtilsProvider>
         </div>
@@ -206,100 +219,119 @@ const Schedule = () => {
       <div id="color-guide" data-dashboard>
         <div>
           <p>Available</p>
-          <i className="fas fa-square-full yellowgreen" data-dashboard />
+          <i className="fas fa-square-full available" data-dashboard />
         </div>
         <div>
           <p>Unavailable</p>
-          <i className="fas fa-square-full red" data-dashboard />
+          <i className="fas fa-square-full unavailable" data-dashboard />
         </div>
         <div>
           <p>You</p>
-          <i className="fas fa-square-full skyblue" data-dashboard />
+          <i className="fas fa-square-full you" data-dashboard />
         </div>
       </div>
 
-      <ScrollContainer id="schedule" innerRef={schedule} hideScrollbars={false} data-dashboard>
-        {filteredCourts.map((court) => (
-          <div key={court.number}>
-            <div className="court-info" data-dashboard>
-              <p>Court {court.number}</p>
-              <p>|</p>
-              <p>{court.type}</p>
-              {userType === 2 && <p>|</p>}
-              {userType === 2 && (
-                <EditCourtModal courtId={court.id} courtNumber={court.number} courtType={court.type_id} />
-              )}
-              {userType === 2 && <p>|</p>}
-              {userType === 2 && (
-                <p className="court-edit-option delete-court" onClick={() => deleteCourt(court.id)}>
-                  Delete
+      <div
+        id="schedule"
+        // innerRef={schedule}
+        // hideScrollbars={false}
+        data-dashboard
+      >
+        <div id="hours-index" onScroll={(e) => handleScroll(e)} ref={hoursIndex} data-dashboard>
+          {filteredCourts &&
+            hours.map((hour) => {
+              return (
+                <div className="hour-index" key={hour} data-dashboard>
+                  <p>{hour}</p>
+                </div>
+              );
+            })}
+        </div>
+        <div id="court-info-index" data-dashboard>
+          <p>Court #</p>
+          <p>Surface type</p>
+        </div>
+        {filteredCourts.map((court) => {
+          const newRef = createRef();
+          refList.push(newRef);
+          return (
+            <div className="court" key={court.number} data-dashboard>
+              <div className="court-info" data-dashboard>
+                <p className="court-number" data-dashboard>
+                  {court.number}
                 </p>
-              )}
-            </div>
-            <div className="hours" data-dashboard>
-              {hours.map((hour) => {
-                let playerReservation = false;
-                let color = "rgb(154, 205, 50)";
-                let nameAcronym;
-                let name;
-                let email;
-                reservations.map((reservation) => {
-                  // console.log(reservation);
-                  if (court.id !== reservation.court) return false;
-                  let now = moment(hour, "HH:mm")
-                    .date(date.date())
-                    .month(date.month())
-                    .year(date.year());
-                  let startTime = moment(reservation.start_time, "YYYY-MM-DD HH:mm:ss");
-                  let endTime = moment(reservation.end_time, "YYYY-MM-DD HH:mm:ss");
-                  if (now.isSame(startTime) || now.isBetween(startTime, endTime)) {
-                    if (reservation.player === user) {
-                      color = "rgb(135, 206, 235)";
-                    } else {
-                      playerReservation = true;
-                      color = "rgb(255, 0, 0)";
-                      nameAcronym = reservation.name.match(/\b(\w)/g).join("");
-                      name = reservation.name;
-                      email = reservation.email;
+                <p className="court-type" data-dashboard>
+                  {court.type}
+                </p>
+                {userType === 2 && (
+                  <EditCourtModal courtId={court.id} courtNumber={court.number} courtType={court.type_id} />
+                )}
+                {userType === 2 && <i class="fas fa-trash" onClick={() => deleteCourt(court.id)} />}
+              </div>
+              <div className="hours" onScroll={(e) => handleScroll(e)} ref={newRef} data-dashboard>
+                {hours.map((hour) => {
+                  let playerReservation = false;
+                  let color = "rgb(154, 205, 50)";
+                  let nameAcronym;
+                  let name;
+                  let email;
+                  reservations.map((reservation) => {
+                    if (court.id !== reservation.court) return false;
+                    let now = moment(hour, "HH:mm")
+                      .date(date.date())
+                      .month(date.month())
+                      .year(date.year());
+                    let startTime = moment(reservation.start_time, "YYYY-MM-DD HH:mm:ss");
+                    let endTime = moment(reservation.end_time, "YYYY-MM-DD HH:mm:ss");
+                    if (now.isSame(startTime) || now.isBetween(startTime, endTime)) {
+                      if (reservation.player === user) {
+                        color = "rgb(135, 206, 235)";
+                      } else {
+                        playerReservation = true;
+                        color = "rgb(255, 0, 0)";
+                        nameAcronym = reservation.name.match(/\b(\w)/g).join("");
+                        name = reservation.name;
+                        email = reservation.email;
+                      }
+                      return false;
                     }
-                    return false;
-                  }
-                  return true;
-                });
+                    return true;
+                  });
 
-                let basicView = (
-                  <div
-                    key={hour}
-                    className="hour"
-                    style={{ backgroundColor: color }}
-                    onClick={() => reserveTime(hour, court.club, court.id)}
-                    data-dashboard
-                  >
-                    <p>{hour}</p>
-                    <p>{userType === 2 && nameAcronym}</p>
-                  </div>
-                );
+                  let noTooltip = (
+                    <div
+                      key={hour}
+                      className="hour"
+                      style={{ backgroundColor: color }}
+                      onClick={() => reserveTime(hour, court.club, court.id)}
+                      data-dashboard
+                    >
+                      {userType === 2 && <p>{nameAcronym}</p>}
+                    </div>
+                  );
 
-                let clubView = (
-                  <HtmlTooltip
-                    key={hour}
-                    title={
-                      <>
-                        <p>{name}</p>
-                        <p>{email}</p>
-                      </>
-                    }
-                  >
-                    {basicView}
-                  </HtmlTooltip>
-                );
+                  let wTooltipInfo = (
+                    <HtmlTooltip
+                      key={hour}
+                      placement="top"
+                      title={
+                        <>
+                          <p>{name}</p>
+                          <p>{email}</p>
+                        </>
+                      }
+                    >
+                      {noTooltip}
+                    </HtmlTooltip>
+                  );
 
-                return playerReservation && userType === 2 ? clubView : basicView;
-              })}
+                  return playerReservation && userType === 2 ? wTooltipInfo : noTooltip;
+                })}
+              </div>
             </div>
-          </div>
-        ))}
-      </ScrollContainer>
+          );
+        })}
+      </div>
     </div>
   );
 };

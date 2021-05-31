@@ -5,3 +5,30 @@
   font-family: "Roboto Condensed", sans-serif;
   text-decoration: none;
 }
+
+::-webkit-scrollbar {
+  height: 10px;
+  width: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: lightgray;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: darkgray;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background-color: gray;
+}
+
+::-webkit-scrollbar-track:horizontal {
+  border-top: solid 1px lightgray;
+  border-bottom: solid 1px lightgray;
+}
+
+::-webkit-scrollbar-track:vertical {
+  border-left: solid 1px lightgray;
+  border-right: solid 1px lightgray;
+}

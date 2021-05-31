@@ -1,33 +1,56 @@
+#header[data-dashboard] {
+  width: 100%;
+  height: 60px;
+  background-color: olivedrab;
+  margin-bottom: 40px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 10px 3px;
+  display: flex;
+  justify-content: center;
+}
+
+#header-content[data-dashboard] {
+  width: 100%;
+  max-width: 1920px;
+  display: flex;
+}
+
+#greeting[data-dashboard],
+#logout[data-dashboard] {
+  display: flex;
+  align-items: center;
+}
+
+#greeting[data-dashboard] {
+  margin: 0 auto 0 5px;
+}
+#greeting[data-dashboard] h1 {
+  font-size: 1.5rem;
+  color: white;
+}
+
+#logout[data-dashboard] p {
+  background-color: tomato;
+  margin-right: 20px;
+  padding: 5px;
+  color: white;
+  cursor: pointer;
+}
+
 #dashboard[data-dashboard] {
   width: 100%;
   max-width: 1920px;
   margin: 0 auto;
 }
 
-#logout[data-dashboard] {
-  color: olivedrab;
-  cursor: pointer;
+#club-dashboard-options-wrapper[data-dashboard] {
+  width: 100%;
+  max-width: 1920px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
-
 @media (min-width: 576px) {
   #club-dashboard-options-wrapper[data-dashboard] {
     display: flex;
     justify-content: space-around;
-  }
-}
-
-.club-dashboard-option[data-dashboard] {
-  width: 100%;
-  height: 300px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
-}
-@media (min-width: 576px) {
-  .club-dashboard-option[data-dashboard] {
-    max-width: 350px;
   }
 }
 
@@ -49,49 +72,111 @@
   margin-right: 5px;
 }
 
-.yellowgreen[data-dashboard] {
+.available[data-dashboard] {
   color: yellowgreen;
 }
 
-.red[data-dashboard] {
+.unavailable[data-dashboard] {
   color: red;
 }
 
-.skyblue[data-dashboard] {
+.you[data-dashboard] {
   color: skyblue;
 }
 
 #schedule[data-dashboard] {
   width: 100%;
+}
+
+#hours-index[data-dashboard] {
+  display: flex;
+  position: sticky;
+  top: 0;
+  overflow: auto;
+  border-top: solid 1px gray;
+  border-bottom: solid 1px gray;
+  margin-bottom: 10px;
+  background-color: lightgray;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+#hours-index[data-dashboard]::-webkit-scrollbar {
+  display: none;
+}
+
+.hour-index[data-dashboard] {
+  min-width: 60px;
+  height: 40px;
+  width: 100%;
+  border-right: solid 1px gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.hour-index[data-dashboard] p {
+  font-weight: bold;
+}
+
+.hour-index:last-of-type {
+  border-right: none;
+}
+
+#court-info-index[data-dashboard] {
+  display: flex;
+  margin-left: 5px;
+  margin-bottom: 10px;
+}
+#court-info-index[data-dashboard] p {
+  font-weight: bold;
+}
+#court-info-index[data-dashboard] p:first-of-type {
+  margin-right: 20px;
+}
+
+.court[data-dashboard] {
+  margin-bottom: 10px;
+}
+
+.court:last-of-type {
+  margin-bottom: 0;
+}
+
+.hours[data-dashboard] {
+  display: flex;
   overflow: auto;
 }
 
 .court-info[data-dashboard] {
   cursor: default;
-  margin: 0 0 5px 5px;
+  margin: 0 20px 0 5px;
   display: flex;
 }
-.court-info[data-dashboard] p {
-  margin-right: 7px;
+.court-info[data-dashboard] .court-number {
+  width: 56px;
+  margin-right: 20px;
+  display: flex;
+  justify-content: center;
 }
-.court-info[data-dashboard] .court-edit-option:hover {
+.court-info[data-dashboard] .court-type {
+  margin-right: auto;
+}
+.court-info[data-dashboard] .fas:hover {
   cursor: pointer;
 }
-.court-info[data-dashboard] .delete-court {
+.court-info[data-dashboard] .fa-trash {
   color: red;
-}
-
-.hours[data-dashboard] {
-  display: flex;
-  margin-bottom: 20px;
-  cursor: pointer;
+  margin-left: 10px;
 }
 
 .hour[data-dashboard] {
   border-right: solid 1px gray;
   min-width: 60px;
   width: 100%;
-  height: 40px;
+  height: 18px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
 }
 
 .hour:last-of-type {
