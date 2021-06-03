@@ -1,4 +1,4 @@
-const fetchCourtTypes = async () => {
+const fetchCourtTypesUtil = async () => {
   try {
     const res = await fetch("/api/dashboard/court-types");
     const parseRes = await res.json();
@@ -8,4 +8,4 @@ const fetchCourtTypes = async () => {
   }
 };
 
-export default fetchCourtTypes;
+export default fetchCourtTypesUtil;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import addCourtFn from "../../../utils/addCourtFn";
+import addCourtUtil from "../../../utils/addCourtUtil";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
@@ -18,10 +18,10 @@ const AddCourt = () => {
 
   const addCourt = async (event) => {
     event.preventDefault();
-    const parseRes = await addCourtFn(courtType, courtNumber);
+    const parseRes = await addCourtUtil(courtType, courtNumber);
 
     if (typeof parseRes !== "string") {
-      getCourts();
+      fetchCourts();
       setCourtNumber("");
       setCourtType("");
       setCourtError("");
@@ -30,7 +30,7 @@ const AddCourt = () => {
     }
   };
 
-  const getCourts = async () => {
+  const fetchCourts = async () => {
     const res = await fetch("/api/dashboard/courts");
     const parseRes = await res.json();
 
@@ -49,9 +49,9 @@ const AddCourt = () => {
 
   return (
     // <div className="club-dashboard-options" data-dashboard>
-    <>
+    <div>
       {userType === 2 && (
-        <form className="club-dashboard-option" onSubmit={(event) => addCourt(event)} data-dashboard>
+        <form onSubmit={(event) => addCourt(event)}>
           <FormControl
             variant="outlined"
             size="small"
@@ -98,7 +98,7 @@ const AddCourt = () => {
           </FormControl>
         </form>
       )}
-    </>
+    </div>
     // </div>
   );
 };

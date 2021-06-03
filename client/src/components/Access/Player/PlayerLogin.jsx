@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import fetchClubList from "../../../utils/fetchClubList";
+import fetchClubListUtil from "../../../utils/fetchClubListUtil";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
@@ -45,7 +45,7 @@ const PlayerLogin = (props) => {
 
   const fetchClubs = async (id) => {
     setCountry(id);
-    const clubList = await fetchClubList(id);
+    const clubList = await fetchClubListUtil(id);
     setClubs(clubList);
   };
 
@@ -68,11 +68,11 @@ const PlayerLogin = (props) => {
           },
         });
       } else {
-        country === 0 ? setCountryError("This field is required") : setCountryError("");
-        parseRes.includes("club") ? setClubError("This field is required") : setClubError("");
-        parseRes.includes("email") ? setEmailError("This field is required") : setEmailError("");
-        parseRes.includes("password") ? setPasswordError("This field is required") : setPasswordError("");
-        parseRes.includes("login") ? setLoginError("Invalid login details") : setLoginError("");
+        setCountryError(country === 0 ? "This field is required" : "");
+        setClubError(parseRes.includes("club") ? "This field is required" : "");
+        setEmailError(parseRes.includes("email") ? "This field is required" : "");
+        setPasswordError(parseRes.includes("password") ? "This field is required" : "");
+        setLoginError(parseRes.includes("login") ? "Invalid login details" : "");
       }
     } catch (error) {
       console.error(error.message);
@@ -82,15 +82,15 @@ const PlayerLogin = (props) => {
   return (
     <>
       <h1>Player Login</h1>
-      <div className="options" data-home>
+      <div className="options" data-access>
         <Link to="/club-login">Access as club</Link>
       </div>
-      <form id="form" onSubmit={(event) => handleSubmit(event)} data-home>
+      <form id="form" onSubmit={(event) => handleSubmit(event)} data-access>
         <FormControl
           fullWidth
           // className={classes.formControl}
         >
-          <div className="input-error-div" data-home>
+          <div className="input-error-div" data-access>
             <Autocomplete
               id="select-country"
               options={countries}
@@ -105,7 +105,7 @@ const PlayerLogin = (props) => {
             />
             <small>{countryError}</small>
           </div>
-          <div className="input-error-div" data-home>
+          <div className="input-error-div" data-access>
             <Autocomplete
               id="select-club"
               options={clubs}
@@ -120,7 +120,7 @@ const PlayerLogin = (props) => {
             />
             <small>{clubError}</small>
           </div>
-          <div className="input-error-div" data-home>
+          <div className="input-error-div" data-access>
             <TextField
               id="email"
               label="Email"
@@ -132,7 +132,7 @@ const PlayerLogin = (props) => {
             />
             <small>{emailError}</small>
           </div>
-          <div className="input-error-div" data-home>
+          <div className="input-error-div" data-access>
             <TextField
               id="password"
               label="Password"
@@ -150,7 +150,7 @@ const PlayerLogin = (props) => {
           </Button>
         </FormControl>
       </form>
-      <div className="options" data-home>
+      <div className="options" data-access>
         <Link to="/register">New here? Register</Link>
       </div>
     </>

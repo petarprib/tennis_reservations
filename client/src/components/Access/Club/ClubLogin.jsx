@@ -33,9 +33,9 @@ const ClubLogin = () => {
           },
         });
       } else {
-        parseRes.includes("email") ? setEmailError("This field is required") : setEmailError("");
-        parseRes.includes("password") ? setPasswordError("This field is required") : setPasswordError("");
-        parseRes.includes("login") ? setLoginError("Invalid login details") : setLoginError("");
+        setEmailError(parseRes.includes("email") ? "This field is required" : "");
+        setPasswordError(parseRes.includes("password") ? "This field is required" : "");
+        setLoginError(parseRes.includes("login") ? "Invalid login details" : "");
       }
     } catch (error) {
       console.error(error.message);
@@ -45,15 +45,15 @@ const ClubLogin = () => {
   return (
     <>
       <h1>Club Login</h1>
-      <div className="options" data-home>
+      <div className="options" data-access>
         <Link to="/">Access as player</Link>
       </div>
-      <form id="form" onSubmit={(event) => handleSubmit(event)} data-home>
+      <form id="form" onSubmit={(event) => handleSubmit(event)} data-access>
         <FormControl
           fullWidth
           // className={classes.formControl}
         >
-          <div className="input-error-div" data-home>
+          <div className="input-error-div" data-access>
             <TextField
               id="email"
               label="Email"
@@ -65,7 +65,7 @@ const ClubLogin = () => {
             />
             <small>{emailError}</small>
           </div>
-          <div className="input-error-div" data-home>
+          <div className="input-error-div" data-access>
             <TextField
               id="password"
               label="Password"
@@ -83,7 +83,7 @@ const ClubLogin = () => {
           </Button>
         </FormControl>
       </form>
-      <div className="options" data-home>
+      <div className="options" data-access>
         <Link to="/club-register">New here? Register</Link>
       </div>
     </>

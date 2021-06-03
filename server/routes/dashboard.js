@@ -1,6 +1,9 @@
 const router = require("express").Router();
 const pool = require("../db");
+const bcrypt = require("bcrypt");
+const validPasswords = require("../middleware/validPasswords");
 
+// get whether opening and closing times have been determined
 router.get("/initial-club-config", async (req, res) => {
   try {
     const openHoursConfiguration = await pool.query(
@@ -10,13 +13,14 @@ router.get("/initial-club-config", async (req, res) => {
 
     const { open_time, close_time, config_open_hours } = openHoursConfiguration.rows[0];
 
-    res.json({ open_time, close_time, config_open_hours });
+    return res.json({ open_time, close_time, config_open_hours });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 
+// set opening and closing times
 router.put("/initial-club-config", async (req, res) => {
   try {
     const { formatOpenTime, formatCloseTime } = req.body;
@@ -29,47 +33,128 @@ router.put("/initial-club-config", async (req, res) => {
     res.end();
   } catch (error) {
     console.error(error.message);
-    res.status(500).json("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 
+// get opening and closing times
 router.get("/open-hours", async (req, res) => {
   try {
     const openHours = await pool.query("SELECT open_time, close_time FROM club_details WHERE club = $1", [
       req.session.club,
     ]);
 
-    res.json(openHours.rows[0]);
+    return res.json(openHours.rows[0]);
   } catch (error) {
     console.error(error.message);
-    res.status(500).json("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 
+// get basic user info
 router.get("/session", async (req, res) => {
   try {
     const basicInfo = await pool.query("SELECT name FROM account WHERE id = $1", [req.session.accountId]);
 
     const { accountId, accountType, club } = req.session;
 
-    res.json({ accountId, accountType, club, ...basicInfo.rows[0] });
+    return res.json({ accountId, accountType, club, ...basicInfo.rows[0] });
   } catch (error) {
     console.error(error.message);
-    res.status(500).json("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 
+// change user name
+router.put("/accounts/name", async (req, res) => {
+  try {
+    const { newName } = req.body;
+
+    if (!newName) {
+      return res.json("The name can't be empty");
+    }
+    if (req.session.accountType === 3 && !newName.includes(" ")) {
+      return res.json("Name must include both name and surname");
+    }
+
+    await pool.query("UPDATE account SET name = $1 WHERE id = $2", [newName, req.session.accountId]);
+
+    return res.json(true);
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).send("Server Error");
+  }
+});
+
+// change user email
+router.put("/accounts/email", async (req, res) => {
+  try {
+    const { newEmail } = req.body;
+
+    if (req.session.accountType === 2) {
+      const clubs = await pool.query("SELECT id FROM account WHERE email = $1 AND type = $2 AND id != $3", [
+        newEmail,
+        req.session.accountType,
+        req.session.accountId,
+      ]);
+
+      if (clubs.rows.length) {
+        return res.json("Email is already taken");
+      }
+    } else if (req.session.accountType === 3) {
+      const players = await pool.query(
+        "SELECT id FROM account INNER JOIN player_details ON account.id = player_details.player WHERE club = $1 AND email = $2 AND type = $3 AND id != $4",
+        [club, newEmail, req.session.accountType, req.session.accountId]
+      );
+
+      if (players.rows.length) {
+        return res.json("Email is already taken");
+      }
+    }
+
+    const validEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(newEmail);
+
+    if (!validEmail) return res.json("Invalid email");
+
+    await pool.query("UPDATE account SET email = $1 WHERE id = $2", [newEmail, req.session.accountId]);
+
+    return res.json(true);
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).send("Server Error");
+  }
+});
+
+// change user password
+router.put("/accounts/password", validPasswords, async (req, res) => {
+  try {
+    const { newPassword } = req.body;
+
+    const salt = await bcrypt.genSalt(10);
+    const bcryptPassword = await bcrypt.hash(newPassword, salt);
+
+    await pool.query("UPDATE account SET password = $1 WHERE id = $2", [bcryptPassword, req.session.accountId]);
+
+    return res.json(true);
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).send("Server Error");
+  }
+});
+
+// get court types
 router.get("/court-types", async (req, res) => {
   try {
     const courtTypes = await pool.query("SELECT id, type FROM court_type");
 
-    res.json(courtTypes.rows);
+    return res.json(courtTypes.rows);
   } catch (error) {
     console.error(error.message);
-    res.status(500).json("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 
+// get courts
 router.get("/courts", async (req, res) => {
   try {
     const courts = await pool.query(
@@ -77,13 +162,14 @@ router.get("/courts", async (req, res) => {
       [req.session.club]
     );
 
-    res.json(courts.rows);
+    return res.json(courts.rows);
   } catch (error) {
     console.error(error.message);
-    res.status(500).json("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 
+// add court
 router.post("/courts", async (req, res) => {
   try {
     const { courtType, courtNumber } = req.body;
@@ -103,13 +189,14 @@ router.post("/courts", async (req, res) => {
       req.session.club,
     ]);
 
-    res.json(newCourt.rows[0]);
+    return res.json(newCourt.rows[0]);
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 
+// delete court
 router.delete("/courts", async (req, res) => {
   try {
     const { court } = req.body;
@@ -121,24 +208,11 @@ router.delete("/courts", async (req, res) => {
     res.end();
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 
-router.get("/courts", async (req, res) => {
-  try {
-    const courts = await pool.query(
-      "SELECT court.id, number, club, court_type.id AS type_id, court_type.type FROM court INNER JOIN court_type ON court.type = court_type.id WHERE club = $1 ORDER BY number ASC",
-      [req.session.club]
-    );
-
-    res.json(courts.rows);
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Server Error");
-  }
-});
-
+// edit court
 router.put("/courts", async (req, res) => {
   try {
     const { courtId, courtNumber, courtType } = req.body;
@@ -155,26 +229,28 @@ router.put("/courts", async (req, res) => {
 
     await pool.query("UPDATE court SET number = $1, type = $2 WHERE id = $3", [courtNumber, courtType, courtId]);
 
-    res.json(true);
+    return res.json(true);
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 
+// get reservations
 router.get("/reservations", async (req, res) => {
   try {
     const reservations = await pool.query(
       "SELECT reservation.*, account.email, account.name FROM reservation INNER JOIN account ON reservation.player = account.id ORDER BY start_time ASC"
     );
 
-    res.json(reservations.rows);
+    return res.json(reservations.rows);
   } catch (error) {
     console.error(error.message);
-    res.status(500).json("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 
+// add reservation
 router.post("/reservations", async (req, res) => {
   try {
     const { club, court, startTime, endTime } = req.body;
@@ -214,7 +290,7 @@ router.post("/reservations", async (req, res) => {
     }
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 

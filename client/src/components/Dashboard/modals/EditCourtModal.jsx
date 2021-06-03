@@ -53,7 +53,7 @@ const EditCourtModal = (props) => {
       const parseRes = await res.json();
       if (typeof parseRes !== "string") {
         setOpen(false);
-        getCourts();
+        fetchCourts();
         setCourtError("");
       } else {
         setCourtError(parseRes);
@@ -63,7 +63,7 @@ const EditCourtModal = (props) => {
     }
   };
 
-  const getCourts = async () => {
+  const fetchCourts = async () => {
     const res = await fetch("/api/dashboard/courts");
     const parseRes = await res.json();
     dispatch({
@@ -81,12 +81,11 @@ const EditCourtModal = (props) => {
 
   return (
     <div>
-      {/* <p className="court-edit-option edit-court">Edit</p> */}
-      <i class="fas fa-edit" onClick={() => setOpen(true)} />
+      <i className="fas fa-edit" onClick={() => setOpen(true)} />
       <Modal open={open} onClose={() => setOpen(false)}>
         <div className={classes.paper}>
           <h2>Edit court info</h2>
-          <form id="form" onSubmit={(event) => handleSubmit(event)} data-home>
+          <form id="form" onSubmit={(event) => handleSubmit(event)} data-access>
             <FormControl
               variant="outlined"
               size="small"

@@ -1,4 +1,4 @@
-const logOutFn = async () => {
+const logOutUtil = async () => {
   try {
     const res = await fetch("/api/auth/logout");
     const parseRes = await res.json();
@@ -8,4 +8,4 @@ const logOutFn = async () => {
   }
 };
 
-export default logOutFn;
+export default logOutUtil;

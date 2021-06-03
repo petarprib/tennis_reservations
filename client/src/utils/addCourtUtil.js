@@ -1,4 +1,4 @@
-const addCourtFn = async (courtType, courtNumber) => {
+const addCourtUtil = async (courtType, courtNumber) => {
   try {
     const body = { courtType, courtNumber };
     const res = await fetch("/api/dashboard/courts", {
@@ -13,4 +13,4 @@ const addCourtFn = async (courtType, courtNumber) => {
   }
 };
 
-export default addCourtFn;
+export default addCourtUtil;

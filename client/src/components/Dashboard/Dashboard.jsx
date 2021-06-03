@@ -1,23 +1,24 @@
 import React, { useEffect } from "react";
-import "../Dashboard/dashboard.scoped.scss";
+import "./styles/dashboard.scoped.scss";
 import { useSelector, useDispatch } from "react-redux";
-import ClubDashboard from "./Club/ClubDashboard.jsx";
-import PlayerDashboard from "./Player/PlayerDashboard.jsx";
-import Header from "./Header.jsx";
+import Header from "../Header/Header.jsx";
 import LoadingScreen from "../LoadingScreen/LoadingScreen.jsx";
-import fetchCourtTypes from "../../utils/fetchCourtTypes";
+import fetchCourtTypesUtil from "../../utils/fetchCourtTypesUtil";
+import Sections from "./Sections.jsx";
+import Schedule from "./Schedule.jsx";
+import ConfigOpenHoursModal from "./modals/ConfigOpenHoursModal.jsx";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const userType = useSelector((state) => state.userType);
 
   useEffect(() => {
-    getEssentialData();
-    getCourtTypes();
+    fetchEssentialData();
+    fetchCourtTypes();
     // eslint-disable-next-line
   }, []);
 
-  const getEssentialData = async () => {
+  const fetchEssentialData = async () => {
     try {
       const res = await fetch("/api/dashboard/session");
       const parseRes = await res.json();
@@ -51,8 +52,8 @@ const Dashboard = () => {
     }
   };
 
-  const getCourtTypes = async () => {
-    const courtTypes = await fetchCourtTypes();
+  const fetchCourtTypes = async () => {
+    const courtTypes = await fetchCourtTypesUtil();
     dispatch({
       type: "SET_COURT_TYPES",
       payload: { courtTypes },
@@ -65,13 +66,11 @@ const Dashboard = () => {
     return (
       <>
         <Header />
-        {(() => {
-          if (userType === 2) {
-            return <ClubDashboard />;
-          } else if (userType === 3) {
-            return <PlayerDashboard />;
-          }
-        })()}
+        <div id="dashboard" data-dashboard>
+          {userType === 2 && <ConfigOpenHoursModal />}
+          <Sections />
+          <Schedule />
+        </div>
       </>
     );
   }

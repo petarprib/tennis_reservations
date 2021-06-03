@@ -31,11 +31,11 @@ app.use("/api/auth", require("./routes/auth"));
 
 app.use("/api/dashboard", require("./routes/dashboard"));
 
-//get all countries
+//get countries
 app.get("/api/countries", async (req, res) => {
   try {
     const countries = await pool.query("SELECT * FROM country ORDER BY name asc");
-    res.json(countries.rows);
+    return res.json(countries.rows);
   } catch (error) {
     console.error(error.message);
   }
@@ -49,7 +49,7 @@ app.get("/api/clubs/:country", async (req, res) => {
       "SELECT account.id, name, country FROM account INNER JOIN club_details ON account.id = club_details.club WHERE country = $1 AND type = $2 ORDER BY name asc",
       [country, 2]
     );
-    res.json(clubs.rows);
+    return res.json(clubs.rows);
   } catch (error) {
     console.error(error.message);
   }

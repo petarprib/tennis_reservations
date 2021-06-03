@@ -1,6 +1,6 @@
 import moment from "moment";
 
-const reserveTimeFn = async (time, club, court, date) => {
+const reserveTimeUtil = async (time, club, court, date) => {
   try {
     let chosenTime = moment(time, "HH:mm")
       .date(date.date())
@@ -21,4 +21,4 @@ const reserveTimeFn = async (time, club, court, date) => {
   }
 };
 
-export default reserveTimeFn;
+export default reserveTimeUtil;

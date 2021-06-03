@@ -1,4 +1,4 @@
-const deleteCourtFn = async (court) => {
+const deleteCourtUtil = async (court) => {
   try {
     const body = { court };
     await fetch("/api/dashboard/courts", {
@@ -12,4 +12,4 @@ const deleteCourtFn = async (court) => {
   }
 };
 
-export default deleteCourtFn;
+export default deleteCourtUtil;

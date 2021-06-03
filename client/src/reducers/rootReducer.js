@@ -3,10 +3,15 @@ import authReducer from "./authReducer";
 import closeTimeReducer from "./closeTimeReducer";
 import clubReducer from "./clubReducer";
 import courtsReducer from "./courtsReducer";
+import courtTypeReducer from "./courtTypeReducer";
 import courtTypesReducer from "./courtTypesReducer";
+import dateReducer from "./dateReducer";
+import filteredCourtTypesReducer from "./filteredCourtTypesReducer";
 import openTimeReducer from "./openTimeReducer";
-import userReducer from "./userReducer";
+import sectionReducer from "./sectionReducer";
+import selectedDateReducer from "./selectedDateReducer";
 import userNameReducer from "./userNameReducer";
+import userReducer from "./userReducer";
 import userTypeReducer from "./userTypeReducer";
 
 const rootReducer = combineReducers({
@@ -14,10 +19,15 @@ const rootReducer = combineReducers({
   closeTime: closeTimeReducer,
   club: clubReducer,
   courts: courtsReducer,
+  courtType: courtTypeReducer,
   courtTypes: courtTypesReducer,
+  date: dateReducer,
+  filteredCourtTypes: filteredCourtTypesReducer,
   openTime: openTimeReducer,
-  user: userReducer,
+  section: sectionReducer,
+  selectedDate: selectedDateReducer,
   userName: userNameReducer,
+  user: userReducer,
   userType: userTypeReducer,
 });
 

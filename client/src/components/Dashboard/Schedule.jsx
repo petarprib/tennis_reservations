@@ -1,21 +1,14 @@
 import React, { useState, useEffect, useRef, createRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
-import ScrollContainer from "react-indiana-drag-scroll";
-import fetchHours from "../../utils/fetchHours";
-import fetchReservations from "../../utils/fetchReservations";
-import reserveTimeFn from "../../utils/reserveTimeFn";
-import deleteCourtFn from "../../utils/deleteCourtFn";
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
+import fetchHoursUtil from "../../utils/fetchHoursUtil";
+import fetchReservationsUtil from "../../utils/fetchReservationsUtil";
+import reserveTimeUtil from "../../utils/reserveTimeUtil";
+import deleteCourtUtil from "../../utils/deleteCourtUtil";
 import "date-fns";
-import DateFnsUtils from "@date-io/date-fns";
-import InputLabel from "@material-ui/core/InputLabel";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
 import Tooltip from "@material-ui/core/Tooltip";
 import { withStyles } from "@material-ui/core/styles";
-import EditCourtModal from "./EditCourtModal.jsx";
+import EditCourtModal from "./modals/EditCourtModal.jsx";
 
 const HtmlTooltip = withStyles((theme) => ({
   tooltip: {
@@ -31,33 +24,29 @@ const HtmlTooltip = withStyles((theme) => ({
 
 const Schedule = () => {
   const dispatch = useDispatch();
-  const schedule = useRef(null);
   const hoursIndex = useRef();
-  // let myRef = createRef();
   const closeTime = useSelector((state) => state.closeTime);
   const openTime = useSelector((state) => state.openTime);
   const courts = useSelector((state) => state.courts);
-  const [courtType, setCourtType] = useState("");
+  const courtType = useSelector((state) => state.courtType);
   const courtTypes = useSelector((state) => state.courtTypes);
-  const [date, setDate] = useState(moment());
+  const date = useSelector((state) => state.date);
   const [filteredCourts, setfilteredCourts] = useState([]);
-  const [filteredCourtTypes, setFilteredCourtTypes] = useState([]);
   const [hours, setHours] = useState([]);
   const [reservations, setReservations] = useState([]);
-  const [selectedDate, setSelectedDate] = useState(new Date());
   const user = useSelector((state) => state.user);
   const userType = useSelector((state) => state.userType);
 
   useEffect(() => {
-    getCourts();
-    getCurrentDate();
-    getOpenCloseTimes();
-    getReservations();
+    fetchCourts();
+    fetchCurrentDate();
+    fetchOpenCloseTimes();
+    fetchReservations();
     // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
-    getUpdatedCourts();
+    fetchUpdatedCourts();
     // eslint-disable-next-line
   }, [courts]);
 
@@ -72,11 +61,11 @@ const Schedule = () => {
   }, [courts, courtTypes]);
 
   useEffect(() => {
-    getHours();
+    fetchHours();
     // eslint-disable-next-line
   }, [openTime, closeTime]);
 
-  const getCourts = async () => {
+  const fetchCourts = async () => {
     const res = await fetch("/api/dashboard/courts");
     const parseRes = await res.json();
     dispatch({
@@ -86,11 +75,14 @@ const Schedule = () => {
     setfilteredCourts(parseRes);
   };
 
-  const getCurrentDate = async () => {
-    setDate(moment(date));
+  const fetchCurrentDate = async () => {
+    dispatch({
+      type: "SET_DATE",
+      payload: { date: moment(date) },
+    });
   };
 
-  const getOpenCloseTimes = async () => {
+  const fetchOpenCloseTimes = async () => {
     try {
       const res = await fetch("/api/dashboard/open-hours");
       const parseRes = await res.json();
@@ -108,20 +100,23 @@ const Schedule = () => {
   };
 
   // Fetches opening and closing hours
-  const getHours = async () => {
-    const hours = await fetchHours(openTime, closeTime);
+  const fetchHours = async () => {
+    const hours = await fetchHoursUtil(openTime, closeTime);
     setHours(hours);
   };
 
-  const getReservations = async () => {
-    const reservations = await fetchReservations();
+  const fetchReservations = async () => {
+    const reservations = await fetchReservationsUtil();
     setReservations(reservations);
   };
 
   // Live update of court list after adding, deleting or editing a court
-  const getUpdatedCourts = async () => {
+  const fetchUpdatedCourts = async () => {
     setfilteredCourts(courts);
-    setCourtType(0);
+    dispatch({
+      type: "SET_COURT_TYPE",
+      payload: { courtType: 0 },
+    });
   };
 
   // Filters courts based on selected surface type
@@ -133,205 +128,162 @@ const Schedule = () => {
 
   // Filters court types based on surface types available at the club
   const filterCourtTypes = () => {
-    let courtTypesFilter = [];
+    let filtered = [];
 
     for (let i = 0; i < courtTypes.length; i++) {
       for (let j = 0; j < courts.length; j++) {
         if (courtTypes[i].id === courts[j].type_id) {
-          courtTypesFilter.push(courtTypes[i]);
+          filtered.push(courtTypes[i]);
           break;
         }
       }
     }
 
-    setFilteredCourtTypes([{ id: 0, type: "All" }, ...courtTypesFilter]);
+    dispatch({
+      type: "SET_FILTERED_COURT_TYPES",
+      payload: { filteredCourtTypes: [{ id: 0, type: "All" }, ...filtered] },
+    });
   };
 
   const reserveTime = async (time, club, court) => {
-    await reserveTimeFn(time, club, court, date);
-    getReservations();
-  };
-
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-    setDate(moment(date));
+    await reserveTimeUtil(time, club, court, date);
+    fetchReservations();
   };
 
   const deleteCourt = async (court) => {
-    await deleteCourtFn(court);
-    getCourts();
+    await deleteCourtUtil(court);
+    fetchCourts();
   };
 
-  let refList = [];
+  let courtRefs = [];
 
   const handleScroll = (e) => {
     let currentPosition = e.target.scrollLeft;
     hoursIndex.current.scrollLeft = currentPosition;
-    for (let ref of refList) {
+    for (let ref of courtRefs) {
       ref.current.scrollLeft = currentPosition;
     }
   };
 
   return (
     <div>
-      <div id="schedule-filter" data-dashboard>
-        <div>
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
-              inputVariant="outlined"
-              size="small"
-              margin="normal"
-              id="date-picker-dialog"
-              label="Date picker dialog"
-              format="dd/MM/yyyy"
-              value={selectedDate}
-              onChange={(date) => handleDateChange(date)}
-              // KeyboardButtonProps={{
-              //   "aria-label": "change date",
-              // }}
-            />
-          </MuiPickersUtilsProvider>
-        </div>
-        <div>
-          <FormControl
-            variant="outlined"
-            size="small"
-            // className={classes.formControl}
-          >
-            <InputLabel id="court-type-input">Court type</InputLabel>
-            <Select
-              labelId="court-type-select-label"
-              id="court-type-select"
-              value={courtType}
-              onChange={(event) => setCourtType(event.target.value)}
-              label="Court type"
-            >
-              {filteredCourtTypes.map((courtType) => (
-                <MenuItem key={courtType.id} value={courtType.id}>
-                  {courtType.type}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </div>
-      </div>
+      {filteredCourts.length > 0 && (
+        <>
+          <div id="color-guide" data-dashboard>
+            <div>
+              <p>Available</p>
+              <i className="fas fa-square-full available" data-dashboard />
+            </div>
+            <div>
+              <p>Unavailable</p>
+              <i className="fas fa-square-full unavailable" data-dashboard />
+            </div>
+            <div>
+              <p>You</p>
+              <i className="fas fa-square-full you" data-dashboard />
+            </div>
+          </div>
 
-      <div id="color-guide" data-dashboard>
-        <div>
-          <p>Available</p>
-          <i className="fas fa-square-full available" data-dashboard />
-        </div>
-        <div>
-          <p>Unavailable</p>
-          <i className="fas fa-square-full unavailable" data-dashboard />
-        </div>
-        <div>
-          <p>You</p>
-          <i className="fas fa-square-full you" data-dashboard />
-        </div>
-      </div>
+          <div id="schedule" data-dashboard>
+            <div id="hours-index" onScroll={(e) => handleScroll(e)} ref={hoursIndex} data-dashboard>
+              {hours.map((hour) => {
+                return (
+                  <div className="hour-index" key={hour} data-dashboard>
+                    <p>{hour}</p>
+                  </div>
+                );
+              })}
+            </div>
 
-      <div
-        id="schedule"
-        // innerRef={schedule}
-        // hideScrollbars={false}
-        data-dashboard
-      >
-        <div id="hours-index" onScroll={(e) => handleScroll(e)} ref={hoursIndex} data-dashboard>
-          {filteredCourts &&
-            hours.map((hour) => {
+            <div id="court-info-index" data-dashboard>
+              <p>Court #</p>
+              <p>Surface type</p>
+            </div>
+
+            {filteredCourts.map((court) => {
+              const newRef = createRef();
+              courtRefs.push(newRef);
               return (
-                <div className="hour-index" key={hour} data-dashboard>
-                  <p>{hour}</p>
+                <div className="court" key={court.number} data-dashboard>
+                  <div className="court-info" data-dashboard>
+                    <p className="court-number" data-dashboard>
+                      {court.number}
+                    </p>
+                    <p className="court-type" data-dashboard>
+                      {court.type}
+                    </p>
+                    {userType === 2 && (
+                      <EditCourtModal courtId={court.id} courtNumber={court.number} courtType={court.type_id} />
+                    )}
+                    {userType === 2 && <i className="fas fa-trash" onClick={() => deleteCourt(court.id)} />}
+                  </div>
+
+                  <div className="hours" onScroll={(e) => handleScroll(e)} ref={newRef} data-dashboard>
+                    {hours.map((hour) => {
+                      let playerReservation = false;
+                      let color = "rgb(154, 205, 50)";
+                      let nameAcronym;
+                      let name;
+                      let email;
+                      reservations.map((reservation) => {
+                        if (court.id !== reservation.court) return false;
+                        let now = moment(hour, "HH:mm")
+                          .date(date.date())
+                          .month(date.month())
+                          .year(date.year());
+                        let startTime = moment(reservation.start_time, "YYYY-MM-DD HH:mm:ss");
+                        let endTime = moment(reservation.end_time, "YYYY-MM-DD HH:mm:ss");
+                        if (now.isSame(startTime) || now.isBetween(startTime, endTime)) {
+                          if (reservation.player === user) {
+                            color = "rgb(135, 206, 235)";
+                          } else {
+                            playerReservation = true;
+                            color = "rgb(255, 70, 53)";
+                            nameAcronym = reservation.name.match(/\b(\w)/g).join("");
+                            name = reservation.name;
+                            email = reservation.email;
+                          }
+                          return false;
+                        }
+                        return true;
+                      });
+
+                      let basicHour = (
+                        <div
+                          key={hour}
+                          className="hour"
+                          style={{ backgroundColor: color }}
+                          onClick={() => reserveTime(hour, court.club, court.id)}
+                          data-dashboard
+                        >
+                          {userType === 2 && <p>{nameAcronym}</p>}
+                        </div>
+                      );
+
+                      let tooltipHour = (
+                        <HtmlTooltip
+                          key={hour}
+                          placement="top"
+                          title={
+                            <>
+                              <p>{name}</p>
+                              <p>{email}</p>
+                            </>
+                          }
+                        >
+                          {basicHour}
+                        </HtmlTooltip>
+                      );
+
+                      return playerReservation && userType === 2 ? tooltipHour : basicHour;
+                    })}
+                  </div>
                 </div>
               );
             })}
-        </div>
-        <div id="court-info-index" data-dashboard>
-          <p>Court #</p>
-          <p>Surface type</p>
-        </div>
-        {filteredCourts.map((court) => {
-          const newRef = createRef();
-          refList.push(newRef);
-          return (
-            <div className="court" key={court.number} data-dashboard>
-              <div className="court-info" data-dashboard>
-                <p className="court-number" data-dashboard>
-                  {court.number}
-                </p>
-                <p className="court-type" data-dashboard>
-                  {court.type}
-                </p>
-                {userType === 2 && (
-                  <EditCourtModal courtId={court.id} courtNumber={court.number} courtType={court.type_id} />
-                )}
-                {userType === 2 && <i class="fas fa-trash" onClick={() => deleteCourt(court.id)} />}
-              </div>
-              <div className="hours" onScroll={(e) => handleScroll(e)} ref={newRef} data-dashboard>
-                {hours.map((hour) => {
-                  let playerReservation = false;
-                  let color = "rgb(154, 205, 50)";
-                  let nameAcronym;
-                  let name;
-                  let email;
-                  reservations.map((reservation) => {
-                    if (court.id !== reservation.court) return false;
-                    let now = moment(hour, "HH:mm")
-                      .date(date.date())
-                      .month(date.month())
-                      .year(date.year());
-                    let startTime = moment(reservation.start_time, "YYYY-MM-DD HH:mm:ss");
-                    let endTime = moment(reservation.end_time, "YYYY-MM-DD HH:mm:ss");
-                    if (now.isSame(startTime) || now.isBetween(startTime, endTime)) {
-                      if (reservation.player === user) {
-                        color = "rgb(135, 206, 235)";
-                      } else {
-                        playerReservation = true;
-                        color = "rgb(255, 0, 0)";
-                        nameAcronym = reservation.name.match(/\b(\w)/g).join("");
-                        name = reservation.name;
-                        email = reservation.email;
-                      }
-                      return false;
-                    }
-                    return true;
-                  });
-
-                  let noTooltip = (
-                    <div
-                      key={hour}
-                      className="hour"
-                      style={{ backgroundColor: color }}
-                      onClick={() => reserveTime(hour, court.club, court.id)}
-                      data-dashboard
-                    >
-                      {userType === 2 && <p>{nameAcronym}</p>}
-                    </div>
-                  );
-
-                  let wTooltipInfo = (
-                    <HtmlTooltip
-                      key={hour}
-                      placement="top"
-                      title={
-                        <>
-                          <p>{name}</p>
-                          <p>{email}</p>
-                        </>
-                      }
-                    >
-                      {noTooltip}
-                    </HtmlTooltip>
-                  );
-
-                  return playerReservation && userType === 2 ? wTooltipInfo : noTooltip;
-                })}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

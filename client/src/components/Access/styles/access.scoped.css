@@ -1,4 +1,4 @@
-#background[data-home] {
+#background[data-access] {
   background-image: url("https://ik.imagekit.io/w1xennnidd/tennis_reservations/access-background-blurred_wFTcJoBgd.jpg");
   min-height: 100vh;
   background-position: right;
@@ -10,7 +10,7 @@
   align-items: center;
 }
 
-#form-container[data-home] {
+#form-container[data-access] {
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 15px;
   margin: 25px 10px;
@@ -18,7 +18,7 @@
   width: 100%;
   max-width: 350px;
 }
-#form-container[data-home] h1 {
+#form-container[data-access] > h1 {
   text-transform: uppercase;
   font-size: 1.5em;
   color: gray;
@@ -26,22 +26,22 @@
   margin-bottom: 10px;
 }
 
-.options[data-home] {
+.options[data-access] {
   text-align: right;
   margin-bottom: 10px;
 }
 
-#form small {
+#form > small {
   color: red;
   margin-bottom: 10px;
 }
 
-.input-error-div[data-home] {
+.input-error-div[data-access] {
   margin-bottom: 10px;
   position: relative;
 }
 
-.form-input[data-home] {
+.form-input[data-access] {
   outline: none;
   width: 100%;
   font-size: 1em;
@@ -51,11 +51,11 @@
   border-radius: 5px;
   color: gray;
 }
-.form-input[data-home]:focus {
-  box-shadow: 0px 0px 2px 2px olivedrab;
+.form-input[data-access]:focus {
+  box-shadow: 0px 0px 2px 2px #85b02b;
 }
 
-.country-list[data-home] {
+.country-list[data-access] {
   z-index: 1000;
   position: absolute;
   top: 45px;
@@ -67,7 +67,7 @@
   border: solid 1px lightgray;
 }
 
-.no-options[data-home], .option[data-home] {
+.no-options[data-access], .option[data-access] {
   height: 38px;
   display: flex;
   align-items: center;
@@ -75,33 +75,33 @@
   color: gray;
 }
 
-.country-item-focused[data-home] {
+.country-item-focused[data-access] {
   color: white;
-  background-color: olivedrab;
+  background-color: #85b02b;
 }
 
-.option[data-home]:hover {
+.option[data-access]:hover {
   color: white;
-  background-color: olivedrab;
+  background-color: #85b02b;
 }
 
 a {
   text-decoration: none;
-  color: olivedrab;
+  color: #85b02b;
 }
 
 #box {
   width: 320px;
 }
 
-#tabs[data-home] {
+#tabs[data-access] {
   display: grid;
   grid-template-columns: 1fr 1fr;
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 15px 15px 0 0;
 }
 
-.tab[data-home] p {
+.tab[data-access] > p {
   color: gray;
   font-size: 1.3em;
   padding: 15px 0;
@@ -110,13 +110,13 @@ a {
   text-align: center;
 }
 
-.shown[data-home] {
-  border-bottom: solid 1px olivedrab;
+.shown[data-access] {
+  border-bottom: solid 1px #85b02b;
 }
-.shown[data-home] p {
-  color: olivedrab;
+.shown[data-access] > p {
+  color: #85b02b;
 }
 
-.hidden[data-home] {
+.hidden[data-access] {
   border: none;
 }

@@ -1,11 +1,12 @@
 #header[data-dashboard] {
   width: 100%;
   height: 60px;
-  background-color: olivedrab;
-  margin-bottom: 40px;
+  background-color: #85b02b;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 10px 3px;
   display: flex;
   justify-content: center;
+  position: fixed;
+  z-index: 1000;
 }
 
 #header-content[data-dashboard] {
@@ -13,49 +14,98 @@
   max-width: 1920px;
   display: flex;
 }
-
-#greeting[data-dashboard],
-#logout[data-dashboard] {
+#header-content[data-dashboard] > div {
   display: flex;
   align-items: center;
 }
 
-#greeting[data-dashboard] {
-  margin: 0 auto 0 5px;
+#header-title[data-dashboard] {
+  margin: 0 auto 0 15px;
 }
-#greeting[data-dashboard] h1 {
-  font-size: 1.5rem;
+#header-title[data-dashboard] > img {
+  height: 35px;
   color: white;
+  margin-right: 5px;
+}
+#header-title[data-dashboard] > h1 {
+  font-size: 1.5rem;
+  color: #202020;
+  cursor: default;
 }
 
-#logout[data-dashboard] p {
-  background-color: tomato;
-  margin-right: 20px;
-  padding: 5px;
-  color: white;
+#logout[data-dashboard] > i {
+  color: #202020;
+  font-size: 1.3rem;
+  margin-right: 15px;
   cursor: pointer;
+  transition: 200ms;
+}
+#logout[data-dashboard] > i:hover {
+  color: #ff4635;
 }
 
 #dashboard[data-dashboard] {
   width: 100%;
   max-width: 1920px;
+  padding-top: 85px;
   margin: 0 auto;
 }
 
-#club-dashboard-options-wrapper[data-dashboard] {
-  width: 100%;
-  max-width: 1920px;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+#sections[data-dashboard] {
+  width: 90%;
+  max-width: 992px;
+  margin: 0 auto 25px auto;
+  gap: 20px;
 }
-@media (min-width: 576px) {
-  #club-dashboard-options-wrapper[data-dashboard] {
+@media (max-width: 768px) {
+  #sections[data-dashboard] {
     display: flex;
-    justify-content: space-around;
+    flex-direction: column-reverse;
+  }
+}
+@media (min-width: 768px) {
+  #sections[data-dashboard] {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
   }
 }
 
 #schedule-filter[data-dashboard] {
+  padding: 15px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border-radius: 5px;
+}
+
+#options[data-dashboard] {
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+@media (min-width: 401px) {
+  #options[data-dashboard] {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+#options[data-dashboard] > div {
+  padding: 15px;
+}
+
+.dashboard-functions[data-dashboard] {
   display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+.dashboard-functions[data-dashboard] > div {
+  color: #ff4635;
+  cursor: pointer;
+}
+.dashboard-functions[data-dashboard] > div > p {
+  display: inline-block;
+}
+
+.active[data-dashboard] {
+  font-weight: bold;
+  margin-left: 5px;
 }
 
 #datepicker[data-dashboard] {
@@ -70,6 +120,7 @@
 
 #color-guide[data-dashboard] > * > p {
   margin-right: 5px;
+  cursor: default;
 }
 
 .available[data-dashboard] {
@@ -77,7 +128,7 @@
 }
 
 .unavailable[data-dashboard] {
-  color: red;
+  color: #ff4635;
 }
 
 .you[data-dashboard] {
@@ -91,7 +142,7 @@
 #hours-index[data-dashboard] {
   display: flex;
   position: sticky;
-  top: 0;
+  top: 60px;
   overflow: auto;
   border-top: solid 1px gray;
   border-bottom: solid 1px gray;
@@ -114,11 +165,11 @@
   justify-content: center;
   align-items: center;
 }
-.hour-index[data-dashboard] p {
+.hour-index[data-dashboard] > p {
   font-weight: bold;
+  cursor: default;
 }
-
-.hour-index:last-of-type {
+.hour-index[data-dashboard]:last-of-type {
   border-right: none;
 }
 
@@ -127,10 +178,10 @@
   margin-left: 5px;
   margin-bottom: 10px;
 }
-#court-info-index[data-dashboard] p {
+#court-info-index[data-dashboard] > p {
   font-weight: bold;
 }
-#court-info-index[data-dashboard] p:first-of-type {
+#court-info-index[data-dashboard] > p:first-of-type {
   margin-right: 20px;
 }
 
@@ -152,20 +203,21 @@
   margin: 0 20px 0 5px;
   display: flex;
 }
-.court-info[data-dashboard] .court-number {
+.court-info[data-dashboard] > .court-number {
   width: 56px;
   margin-right: 20px;
   display: flex;
   justify-content: center;
 }
-.court-info[data-dashboard] .court-type {
+.court-info[data-dashboard] > .court-type {
   margin-right: auto;
 }
-.court-info[data-dashboard] .fas:hover {
+.court-info[data-dashboard] > div > .fas,
+.court-info[data-dashboard] > .fas {
   cursor: pointer;
 }
-.court-info[data-dashboard] .fa-trash {
-  color: red;
+.court-info[data-dashboard] > .fa-trash {
+  color: #ff4635;
   margin-left: 10px;
 }
 
@@ -178,7 +230,6 @@
   display: flex;
   justify-content: center;
 }
-
-.hour:last-of-type {
+.hour[data-dashboard]:last-of-type {
   border-right: none;
 }

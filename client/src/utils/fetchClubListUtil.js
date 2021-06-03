@@ -1,4 +1,4 @@
-const fetchClubList = async (id) => {
+const fetchClubListUtil = async (id) => {
   try {
     const res = await fetch(`/api/clubs/${id}`);
     const data = await res.json();
@@ -16,4 +16,4 @@ const fetchClubList = async (id) => {
   }
 };
 
-export default fetchClubList;
+export default fetchClubListUtil;

@@ -1,0 +1,49 @@
+@import "../../../styles/variables";
+
+#header[data-header] {
+  width: 100%;
+  height: 60px;
+  background-color: $grass;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 10px 3px;
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  z-index: 1000;
+}
+
+#header-content[data-header] {
+  width: 100%;
+  max-width: 1920px;
+  display: flex;
+  > div {
+    display: flex;
+    align-items: center;
+  }
+}
+
+#header-title[data-header] {
+  margin: 0 auto 0 15px;
+  > img {
+    height: 35px;
+    color: $white;
+    margin-right: 5px;
+  }
+  > h1 {
+    font-size: 1.5rem;
+    color: rgb(32, 32, 32);
+    cursor: default;
+  }
+}
+
+#logout[data-header] {
+  > i {
+    color: rgb(32, 32, 32);
+    font-size: 1.3rem;
+    margin-right: 15px;
+    cursor: pointer;
+    transition: 200ms;
+    &:hover {
+      color: $clay;
+    }
+  }
+}

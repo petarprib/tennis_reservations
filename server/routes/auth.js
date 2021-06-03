@@ -3,20 +3,20 @@ const pool = require("../db");
 const bcrypt = require("bcrypt");
 const validInfo = require("../middleware/validInfo");
 
-//register club
+// register
 router.post("/register", validInfo, async (req, res) => {
   try {
     const { country, club, name, email, password, type } = req.body;
 
     if (type === 2) {
-      const clubs = await pool.query("SELECT * FROM account WHERE email = $1 AND type = $2", [email, type]);
+      const clubs = await pool.query("SELECT id FROM account WHERE email = $1 AND type = $2", [email, type]);
 
       if (clubs.rows.length) {
         return res.status(401).json(["club exists"]);
       }
     } else if (type === 3) {
       const players = await pool.query(
-        "SELECT * FROM account INNER JOIN player_details ON account.id = player_details.player WHERE club = $1 AND email = $2 AND type = $3",
+        "SELECT id FROM account INNER JOIN player_details ON account.id = player_details.player WHERE club = $1 AND email = $2 AND type = $3",
         [club, email, type]
       );
 
@@ -49,14 +49,14 @@ router.post("/register", validInfo, async (req, res) => {
     req.session.accountType = newAccount.rows[0].type;
     req.session.club = req.session.accountType === 2 ? req.session.accountId : club;
 
-    res.json(true);
+    return res.json(true);
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 
-// login club
+// login
 router.post("/login", validInfo, async (req, res) => {
   try {
     const { club, email, password, type } = req.body;
@@ -89,20 +89,20 @@ router.post("/login", validInfo, async (req, res) => {
     req.session.accountType = account.rows[0].type;
     req.session.club = req.session.accountType === 2 ? req.session.accountId : club;
 
-    res.json(true);
+    return res.json(true);
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 
 // verify session
 router.get("/verify", async (req, res) => {
   try {
-    res.json(req.session.accountId ? true : false);
+    return res.json(req.session.accountId ? true : false);
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 
@@ -110,10 +110,10 @@ router.get("/verify", async (req, res) => {
 router.get("/logout", (req, res) => {
   try {
     req.session.destroy();
-    res.json(req.session ? true : false);
+    return res.json(req.session ? true : false);
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 

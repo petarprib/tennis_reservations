@@ -45,16 +45,16 @@ const ClubRegister = (props) => {
           },
         });
       } else {
-        parseRes.includes("country") ? setCountryError("This field is required") : setCountryError("");
-        parseRes.includes("name") ? setNameError("This field is required") : setNameError("");
-        parseRes.includes("email") ? setEmailError("Invalid email") : setEmailError("");
-        parseRes.includes("password")
-          ? setPasswordError(
-              "Must have minimum 8 characters of which at least 1 letter, 1 number and 1 special character"
-            )
-          : setPasswordError("");
-        parseRes.includes("repPassword") ? setRepPasswordError("Passwords do not match") : setRepPasswordError("");
-        parseRes.includes("club exists") ? setExistsError("Club with email already exists") : setExistsError("");
+        setCountryError(parseRes.includes("country") ? "This field is required" : "");
+        setNameError(parseRes.includes("name") ? "This field is required" : "");
+        setEmailError(parseRes.includes("email") ? "Invalid email" : "");
+        setPasswordError(
+          parseRes.includes("password")
+            ? "Must have minimum 8 characters of which at least 1 letter, 1 number and 1 special character"
+            : ""
+        );
+        setRepPasswordError(parseRes.includes("repPassword") ? "Password do not match" : "");
+        setExistsError(parseRes.includes("club exists") ? "Club with email already exists" : "");
       }
     } catch (error) {
       console.error(error.message);
@@ -64,15 +64,15 @@ const ClubRegister = (props) => {
   return (
     <>
       <h1>Club Register</h1>
-      <div className="options" data-home>
+      <div className="options" data-access>
         <Link to="/">Access as player</Link>
       </div>
-      <form id="form" onSubmit={(event) => handleSubmit(event)} data-home>
+      <form id="form" onSubmit={(event) => handleSubmit(event)} data-access>
         <FormControl
           fullWidth
           // className={classes.formControl}
         >
-          <div className="input-error-div" data-home>
+          <div className="input-error-div" data-access>
             <Autocomplete
               id="select-country"
               options={countries}
@@ -87,7 +87,7 @@ const ClubRegister = (props) => {
             />
             <small>{countryError}</small>
           </div>
-          <div className="input-error-div" data-home>
+          <div className="input-error-div" data-access>
             <TextField
               id="name"
               label="Club name"
@@ -99,7 +99,7 @@ const ClubRegister = (props) => {
             />
             <small>{nameError}</small>
           </div>
-          <div className="input-error-div" data-home>
+          <div className="input-error-div" data-access>
             <TextField
               id="email"
               label="Email"
@@ -111,7 +111,7 @@ const ClubRegister = (props) => {
             />
             <small>{emailError}</small>
           </div>
-          <div className="input-error-div" data-home>
+          <div className="input-error-div" data-access>
             <TextField
               id="password"
               label="Password"
@@ -123,7 +123,7 @@ const ClubRegister = (props) => {
             />
             <small>{passwordError}</small>
           </div>
-          <div className="input-error-div" data-home>
+          <div className="input-error-div" data-access>
             <TextField
               id="repeat-password"
               label="Repeat password"
@@ -141,7 +141,7 @@ const ClubRegister = (props) => {
           </Button>
         </FormControl>
       </form>
-      <div className="options" data-home>
+      <div className="options" data-access>
         <Link to="/club-login">Already registered? Log in</Link>
       </div>
     </>

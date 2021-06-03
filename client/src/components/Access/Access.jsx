@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import "./access.scoped.scss";
+import "./styles/access.scoped.scss";
+import fetchCountriesUtil from "../../utils/fetchCountriesUtil";
 import ClubLogin from "./Club/ClubLogin.jsx";
 import ClubRegister from "./Club/ClubRegister.jsx";
 import PlayerLogin from "./Player/PlayerLogin.jsx";
@@ -12,10 +13,10 @@ const Access = () => {
   const [countries, setCountries] = useState([]);
 
   useEffect(() => {
-    if (pathname === "/") setAccess(<PlayerLogin countries={countries} />);
-    else if (pathname === "/register") setAccess(<PlayerRegister countries={countries} />);
-    else if (pathname === "/club-login") setAccess(<ClubLogin />);
-    else if (pathname === "/club-register") setAccess(<ClubRegister countries={countries} />);
+    pathname === "/" && setAccess(<PlayerLogin countries={countries} />);
+    pathname === "/register" && setAccess(<PlayerRegister countries={countries} />);
+    pathname === "/club-login" && setAccess(<ClubLogin />);
+    pathname === "/club-register" && setAccess(<ClubRegister countries={countries} />);
   }, [pathname, countries]);
 
   useEffect(() => {
@@ -23,25 +24,13 @@ const Access = () => {
   }, []);
 
   const fetchCountries = async () => {
-    try {
-      const res = await fetch("/api/countries");
-      const parseRes = await res.json();
-      let countries = [];
-      parseRes.forEach((country) =>
-        countries.push({
-          name: country.name,
-          id: country.id,
-        })
-      );
-      setCountries(countries);
-    } catch (error) {
-      console.error(error.message);
-    }
+    const countryList = await fetchCountriesUtil();
+    setCountries(countryList);
   };
 
   return (
-    <div id="background" data-home>
-      <div id="form-container" data-home>
+    <div id="background" data-access>
+      <div id="form-container" data-access>
         {access}
       </div>
     </div>

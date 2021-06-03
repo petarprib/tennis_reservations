@@ -1,6 +1,6 @@
 import moment from "moment";
 
-const fetchReservations = async () => {
+const fetchReservationsUtil = async () => {
   try {
     const res = await fetch("/api/dashboard/reservations");
     const parseRes = await res.json();
@@ -17,4 +17,4 @@ const fetchReservations = async () => {
   }
 };
 
-export default fetchReservations;
+export default fetchReservationsUtil;

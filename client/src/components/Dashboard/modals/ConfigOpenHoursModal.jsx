@@ -33,11 +33,11 @@ const EditCourtModal = () => {
   const [closeTime, setCloseTime] = useState();
 
   useEffect(() => {
-    getWorkingHours();
+    fetchWorkingHours();
     // eslint-disable-next-line
   }, []);
 
-  const getWorkingHours = async () => {
+  const fetchWorkingHours = async () => {
     try {
       const res = await fetch("/api/dashboard/initial-club-config");
       const parseRes = await res.json();
@@ -78,11 +78,17 @@ const EditCourtModal = () => {
 
   return (
     <div>
-      <Modal disableBackdropClick disableEscapeKeyDown open={open} onClose={() => setOpen(false)}>
+      <Modal
+        style={{ zIndex: "900" }}
+        disableBackdropClick
+        disableEscapeKeyDown
+        open={open}
+        onClose={() => setOpen(false)}
+      >
         <div className={classes.paper}>
           <h2>Initial configuration</h2>
 
-          <form id="form" onSubmit={(event) => handleSubmit(event)} data-home>
+          <form id="form" onSubmit={(event) => handleSubmit(event)} data-access>
             <FormControl
               variant="outlined"
               size="small"

@@ -1,6 +1,6 @@
-@import "../../styles/variables";
+@import "../../../styles/variables";
 
-#background[data-home] {
+#background[data-access] {
   background-image: url("https://ik.imagekit.io/w1xennnidd/tennis_reservations/access-background-blurred_wFTcJoBgd.jpg");
   min-height: 100vh;
   background-position: right;
@@ -12,14 +12,14 @@
   align-items: center;
 }
 
-#form-container[data-home] {
+#form-container[data-access] {
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: $big-border-radius;
   margin: 25px 10px;
   padding: 25px;
   width: 100%;
   max-width: 350px;
-  h1 {
+  > h1 {
     text-transform: uppercase;
     font-size: 1.5em;
     color: $dark-grey;
@@ -28,27 +28,24 @@
   }
 }
 
-.options[data-home] {
+.options[data-access] {
   text-align: right;
   margin-bottom: 10px;
-
-  // &:not(:last-child) {
-  // }
 }
 
 #form {
-  small {
+  > small {
     color: rgb(255, 0, 0);
     margin-bottom: 10px;
   }
 }
 
-.input-error-div[data-home] {
+.input-error-div[data-access] {
   margin-bottom: 10px;
   position: relative;
 }
 
-.form-input[data-home] {
+.form-input[data-access] {
   outline: none;
   width: 100%;
   font-size: 1em;
@@ -62,7 +59,7 @@
   }
 }
 
-.country-list[data-home] {
+.country-list[data-access] {
   z-index: 1000;
   position: absolute;
   top: 45px;
@@ -82,12 +79,12 @@
   color: $dark-grey;
 }
 
-.country-item-focused[data-home] {
+.country-item-focused[data-access] {
   color: $white;
   background-color: $grass;
 }
 
-.option[data-home] {
+.option[data-access] {
   @extend %country-item;
   &:hover {
     // @extend %country-item-focused;
@@ -96,7 +93,7 @@
   }
 }
 
-.no-options[data-home] {
+.no-options[data-access] {
   @extend %country-item;
 }
 
@@ -109,15 +106,15 @@ a {
   width: 320px;
 }
 
-#tabs[data-home] {
+#tabs[data-access] {
   display: grid;
   grid-template-columns: 1fr 1fr;
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: $big-border-radius $big-border-radius 0 0;
 }
 
-.tab[data-home] {
-  p {
+.tab[data-access] {
+  > p {
     color: $dark-grey;
     font-size: 1.3em;
     padding: 15px 0;
@@ -127,13 +124,13 @@ a {
   }
 }
 
-.shown[data-home] {
+.shown[data-access] {
   border-bottom: solid 1px $grass;
-  p {
+  > p {
     color: $grass;
   }
 }
 
-.hidden[data-home] {
+.hidden[data-access] {
   border: none;
 }

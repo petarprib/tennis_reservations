@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import fetchClubList from "../../../utils/fetchClubList";
+import fetchClubListUtil from "../../../utils/fetchClubListUtil";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
@@ -32,7 +32,7 @@ const PlayerRegister = (props) => {
 
   const fetchClubs = async (id) => {
     setCountry(id);
-    const clubList = await fetchClubList(id);
+    const clubList = await fetchClubListUtil(id);
     setClubs(clubList);
   };
 
@@ -55,17 +55,17 @@ const PlayerRegister = (props) => {
           },
         });
       } else {
-        country === 0 ? setCountryError("This field is required") : setCountryError("");
-        parseRes.includes("club") ? setClubError("This field is required") : setClubError("");
-        parseRes.includes("name") ? setNameError("Name and surname are required") : setNameError("");
-        parseRes.includes("email") ? setEmailError("Invalid email") : setEmailError("");
-        parseRes.includes("password")
-          ? setPasswordError(
-              "Must have minimum 8 characters of which at least 1 letter, 1 number and 1 special character"
-            )
-          : setPasswordError("");
-        parseRes.includes("repPassword") ? setRepPasswordError("Passwords do not match") : setRepPasswordError("");
-        parseRes.includes("player exists") ? setExistsError("Player already exists") : setExistsError("");
+        setCountryError(country === 0 ? "This field is required" : "");
+        setClubError(parseRes.includes("club") ? "This field is required" : "");
+        setNameError(parseRes.includes("name") ? "Name and surname are required" : "");
+        setEmailError(parseRes.includes("email") ? "This field is required" : "");
+        setPasswordError(
+          parseRes.includes("password")
+            ? "Must have minimum 8 characters of which at least 1 letter, 1 number and 1 special character"
+            : ""
+        );
+        setRepPasswordError(parseRes.includes("repPassword") ? "Password do not match" : "");
+        setExistsError(parseRes.includes("player exists") ? "Player already exists" : "");
       }
     } catch (error) {
       console.error(error.message);
@@ -75,15 +75,15 @@ const PlayerRegister = (props) => {
   return (
     <>
       <h1>Player Register</h1>
-      <div className="options" data-home>
+      <div className="options" data-access>
         <Link to="/club-login">Access as club</Link>
       </div>
-      <form id="form" onSubmit={(event) => handleSubmit(event)} data-home>
+      <form id="form" onSubmit={(event) => handleSubmit(event)} data-access>
         <FormControl
           fullWidth
           // className={classes.formControl}
         >
-          <div className="input-error-div" data-home>
+          <div className="input-error-div" data-access>
             <Autocomplete
               id="select-country"
               options={countries}
@@ -98,7 +98,7 @@ const PlayerRegister = (props) => {
             />
             <small>{countryError}</small>
           </div>
-          <div className="input-error-div" data-home>
+          <div className="input-error-div" data-access>
             <Autocomplete
               id="select-club"
               options={clubs}
@@ -113,7 +113,7 @@ const PlayerRegister = (props) => {
             />
             <small>{clubError}</small>
           </div>
-          <div className="input-error-div" data-home>
+          <div className="input-error-div" data-access>
             <TextField
               id="name"
               label="Full name"
@@ -125,7 +125,7 @@ const PlayerRegister = (props) => {
             />
             <small>{nameError}</small>
           </div>
-          <div className="input-error-div" data-home>
+          <div className="input-error-div" data-access>
             <TextField
               id="email"
               label="Email"
@@ -138,7 +138,7 @@ const PlayerRegister = (props) => {
 
             <small>{emailError}</small>
           </div>
-          <div className="input-error-div" data-home>
+          <div className="input-error-div" data-access>
             <TextField
               id="password"
               label="Password"
@@ -150,7 +150,7 @@ const PlayerRegister = (props) => {
             />
             <small>{passwordError}</small>
           </div>
-          <div className="input-error-div" data-home>
+          <div className="input-error-div" data-access>
             <TextField
               id="repeat-password"
               label="Repeat password"
@@ -168,7 +168,7 @@ const PlayerRegister = (props) => {
           </Button>
         </FormControl>
       </form>
-      <div className="options" data-home>
+      <div className="options" data-access>
         <Link to="/">Already registered? Log in</Link>
       </div>
     </>
