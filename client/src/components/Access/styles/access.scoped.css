@@ -21,7 +21,7 @@
 #form-container[data-access] > h1 {
   text-transform: uppercase;
   font-size: 1.5em;
-  color: gray;
+  color: #808080;
   text-align: center;
   margin-bottom: 10px;
 }
@@ -32,7 +32,7 @@
 }
 
 #form > small {
-  color: red;
+  color: #ff0000;
   margin-bottom: 10px;
 }
 
@@ -47,9 +47,9 @@
   font-size: 1em;
   padding: 5px;
   height: 40px;
-  border: solid 1px lightgray;
+  border: solid 1px #d3d3d3;
   border-radius: 5px;
-  color: gray;
+  color: #808080;
 }
 .form-input[data-access]:focus {
   box-shadow: 0px 0px 2px 2px #85b02b;
@@ -63,8 +63,8 @@
   max-height: 230px;
   overflow: inherit;
   overflow-x: hidden;
-  background-color: white;
-  border: solid 1px lightgray;
+  background-color: #ffffff;
+  border: solid 1px #d3d3d3;
 }
 
 .no-options[data-access], .option[data-access] {
@@ -72,11 +72,11 @@
   display: flex;
   align-items: center;
   padding-left: 5px;
-  color: gray;
+  color: #808080;
 }
 
 .option[data-access]:hover {
-  color: white;
+  color: #ffffff;
   background-color: #85b02b;
 }
 
@@ -97,7 +97,7 @@ a {
 }
 
 .tab[data-access] > p {
-  color: gray;
+  color: #808080;
   font-size: 1.3em;
   padding: 15px 0;
   text-transform: uppercase;

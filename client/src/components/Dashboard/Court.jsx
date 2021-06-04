@@ -35,7 +35,7 @@ const Court = (props) => {
         {userType === 2 && showIcons && <DeleteCourtModal courtId={court.id} courtNumber={court.number} />}
       </div>
 
-      <div className="hours" onScroll={(e) => props.handleScroll(e)} ref={scrollRef} data-dashboard>
+      <div className="hours" onScroll={(event) => props.handleScroll(event)} ref={scrollRef} data-dashboard>
         {hours.map((hour) => {
           let playerReservation = false;
           let color = "rgb(154, 205, 50)";

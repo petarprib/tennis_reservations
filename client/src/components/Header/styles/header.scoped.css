@@ -24,22 +24,24 @@
 }
 #header-title[data-header] > img {
   height: 35px;
-  color: white;
+  color: #ffffff;
   margin-right: 5px;
 }
 #header-title[data-header] > h1 {
   font-size: 1.5rem;
-  color: #202020;
   cursor: default;
 }
 
-#logout[data-header] > i {
-  color: #202020;
-  font-size: 1.3rem;
+#user-menu[data-header] {
+  display: flex;
+  align-items: center;
   margin-right: 15px;
   cursor: pointer;
-  transition: 200ms;
 }
-#logout[data-header] > i:hover {
-  color: #ff4635;
+#user-menu[data-header] > p {
+  margin-right: 5px;
+}
+
+.menu-icon[data-header] {
+  margin-right: 10px;
 }

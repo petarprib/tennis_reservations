@@ -4,7 +4,6 @@ import moment from "moment";
 import fetchHoursUtil from "../../utils/fetchHoursUtil";
 import fetchReservationsUtil from "../../utils/fetchReservationsUtil";
 import "date-fns";
-
 import Court from "./Court.jsx";
 
 const Schedule = () => {
@@ -134,8 +133,8 @@ const Schedule = () => {
   };
 
   let scrollRefs = [];
-  const handleScroll = (e) => {
-    let currentPosition = e.target.scrollLeft;
+  const handleScroll = (event) => {
+    let currentPosition = event.target.scrollLeft;
     hoursIndex.current.scrollLeft = currentPosition;
     for (let ref of scrollRefs) {
       ref.current.scrollLeft = currentPosition;
@@ -162,7 +161,7 @@ const Schedule = () => {
           </div>
 
           <div id="schedule" data-dashboard>
-            <div id="hours-index" onScroll={(e) => handleScroll(e)} ref={hoursIndex} data-dashboard>
+            <div id="hours-index" onScroll={(event) => handleScroll(event)} ref={hoursIndex} data-dashboard>
               {hours.map((hour) => {
                 return (
                   <div className="hour-index" key={hour} data-dashboard>
@@ -180,7 +179,14 @@ const Schedule = () => {
             {filteredCourts.map((court) => {
               const scrollRef = createRef();
               scrollRefs.push(scrollRef);
-              return <Court key={court.id} court={court} scrollRef={scrollRef} handleScroll={(e) => handleScroll(e)} />;
+              return (
+                <Court
+                  key={court.id}
+                  court={court}
+                  scrollRef={scrollRef}
+                  handleScroll={(event) => handleScroll(event)}
+                />
+              );
             })}
           </div>
         </>

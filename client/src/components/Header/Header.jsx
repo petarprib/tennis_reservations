@@ -1,23 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import "./styles/header.scoped.scss";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import logOutUtil from "../../utils/logOutUtil";
-import { makeStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    "& > *": {
-      margin: theme.spacing(1),
-    },
+const StyledMenu = withStyles({
+  paper: {
+    border: "1px solid rgb(211, 211, 211)",
   },
-}));
+})((props) => (
+  <Menu
+    elevation={3}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: "bottom",
+      horizontal: "center",
+    }}
+    transformOrigin={{
+      vertical: "top",
+      horizontal: "center",
+    }}
+    {...props}
+  />
+));
+
+///////////////////////////////////////////
 
 const Header = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
+  const userName = useSelector((state) => state.userName);
+  const [menuOpen, setMenuOpen] = useState(null);
+
+  const handleClick = (event) => {
+    menuOpen === null ? setMenuOpen(event.currentTarget) : setMenuOpen(null);
+  };
+
+  const handleClose = () => {
+    setMenuOpen(null);
+  };
 
   const logOut = async () => {
-    const loggedOut = logOutUtil();
+    setMenuOpen(null);
+    const loggedOut = await logOutUtil();
     dispatch({
       type: "SET_AUTH",
       payload: {
@@ -35,10 +61,37 @@ const Header = () => {
             alt="logo"
             data-header
           />
-          <h1>Dashboard</h1>
         </div>
-        <div id="logout" className={classes.root} onClick={() => logOut()} data-header>
-          <i className="fas fa-sign-out-alt" />
+        <div>
+          <div onClick={(event) => handleClick(event)} id="user-menu" data-header>
+            <p>{userName}</p>
+            {menuOpen ? <i className="fas fa-caret-up" /> : <i className="fas fa-caret-down" />}
+          </div>
+          <StyledMenu
+            disableScrollLock={true}
+            anchorEl={menuOpen}
+            keepMounted
+            open={Boolean(menuOpen)}
+            onClose={handleClose}
+            data-header
+          >
+            <MenuItem onClick={handleClose}>
+              <i className="fas fa-user-alt menu-icon" data-header />
+              Change name
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <i className="fas fa-at menu-icon" data-header />
+              Change email
+            </MenuItem>
+            <MenuItem onClick={handleClose}>
+              <i className="fas fa-key menu-icon" data-header />
+              Change password
+            </MenuItem>
+            <MenuItem onClick={logOut}>
+              <i className="fas fa-sign-out-alt menu-icon" data-header />
+              Log out
+            </MenuItem>
+          </StyledMenu>
         </div>
       </div>
     </div>

@@ -88,7 +88,7 @@ const EditCourtModal = (props) => {
   return (
     <div>
       <i className="fas fa-edit" onClick={() => setOpen(true)} />
-      <Modal open={open} onClose={() => setOpen(false)}>
+      <Modal open={open} className="mui-fixed" onClose={() => setOpen(false)}>
         <Fade in={open}>
           <div className={classes.paper}>
             <h2>Edit court info</h2>

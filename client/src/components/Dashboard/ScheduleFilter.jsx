@@ -49,6 +49,7 @@ const ScheduleFilter = () => {
         >
           <InputLabel id="court-type-input">Court type</InputLabel>
           <Select
+            MenuProps={{ disableScrollLock: true }}
             labelId="court-type-select-label"
             id="court-type-select"
             value={courtType}
