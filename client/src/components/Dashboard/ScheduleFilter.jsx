@@ -26,7 +26,6 @@ const ScheduleFilter = () => {
   };
 
   return (
-    // <div id="schedule-filter" data-dashboard>
     <>
       <div>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -65,7 +64,6 @@ const ScheduleFilter = () => {
         </FormControl>
       </div>
     </>
-    // </div>
   );
 };
 

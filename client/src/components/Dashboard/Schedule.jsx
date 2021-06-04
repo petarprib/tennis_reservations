@@ -3,24 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import fetchHoursUtil from "../../utils/fetchHoursUtil";
 import fetchReservationsUtil from "../../utils/fetchReservationsUtil";
-import reserveTimeUtil from "../../utils/reserveTimeUtil";
-import deleteCourtUtil from "../../utils/deleteCourtUtil";
 import "date-fns";
-import Tooltip from "@material-ui/core/Tooltip";
-import { withStyles } from "@material-ui/core/styles";
 import EditCourtModal from "./modals/EditCourtModal.jsx";
-
-const HtmlTooltip = withStyles((theme) => ({
-  tooltip: {
-    backgroundColor: "#fff",
-    color: "#000",
-    // maxWidth: 220,
-    // fontSize: theme.typography.pxToRem(12),
-    fontSize: "14px",
-    border: "1px solid #000",
-    margin: "0 0 5px 0",
-  },
-}))(Tooltip);
+import DeleteCourtModal from "./modals/DeleteCourtModal.jsx";
+import HourInfoModal from "./modals/HourInfoModal";
 
 const Schedule = () => {
   const dispatch = useDispatch();
@@ -33,7 +19,7 @@ const Schedule = () => {
   const date = useSelector((state) => state.date);
   const [filteredCourts, setfilteredCourts] = useState([]);
   const [hours, setHours] = useState([]);
-  const [reservations, setReservations] = useState([]);
+  const reservations = useSelector((state) => state.reservations);
   const user = useSelector((state) => state.user);
   const userType = useSelector((state) => state.userType);
 
@@ -107,7 +93,10 @@ const Schedule = () => {
 
   const fetchReservations = async () => {
     const reservations = await fetchReservationsUtil();
-    setReservations(reservations);
+    dispatch({
+      type: "SET_RESERVATIONS",
+      payload: { reservations: reservations },
+    });
   };
 
   // Live update of court list after adding, deleting or editing a court
@@ -145,22 +134,11 @@ const Schedule = () => {
     });
   };
 
-  const reserveTime = async (time, club, court) => {
-    await reserveTimeUtil(time, club, court, date);
-    fetchReservations();
-  };
-
-  const deleteCourt = async (court) => {
-    await deleteCourtUtil(court);
-    fetchCourts();
-  };
-
-  let courtRefs = [];
-
+  let scrollRefs = [];
   const handleScroll = (e) => {
     let currentPosition = e.target.scrollLeft;
     hoursIndex.current.scrollLeft = currentPosition;
-    for (let ref of courtRefs) {
+    for (let ref of scrollRefs) {
       ref.current.scrollLeft = currentPosition;
     }
   };
@@ -201,10 +179,10 @@ const Schedule = () => {
             </div>
 
             {filteredCourts.map((court) => {
-              const newRef = createRef();
-              courtRefs.push(newRef);
+              const scrollRef = createRef();
+              scrollRefs.push(scrollRef);
               return (
-                <div className="court" key={court.number} data-dashboard>
+                <div key={court.number} className="court" data-dashboard>
                   <div className="court-info" data-dashboard>
                     <p className="court-number" data-dashboard>
                       {court.number}
@@ -215,10 +193,10 @@ const Schedule = () => {
                     {userType === 2 && (
                       <EditCourtModal courtId={court.id} courtNumber={court.number} courtType={court.type_id} />
                     )}
-                    {userType === 2 && <i className="fas fa-trash" onClick={() => deleteCourt(court.id)} />}
+                    {userType === 2 && <DeleteCourtModal courtId={court.id} courtNumber={court.number} />}
                   </div>
 
-                  <div className="hours" onScroll={(e) => handleScroll(e)} ref={newRef} data-dashboard>
+                  <div className="hours" onScroll={(e) => handleScroll(e)} ref={scrollRef} data-dashboard>
                     {hours.map((hour) => {
                       let playerReservation = false;
                       let color = "rgb(154, 205, 50)";
@@ -248,34 +226,18 @@ const Schedule = () => {
                         return true;
                       });
 
-                      let basicHour = (
-                        <div
+                      return (
+                        <HourInfoModal
                           key={hour}
-                          className="hour"
-                          style={{ backgroundColor: color }}
-                          onClick={() => reserveTime(hour, court.club, court.id)}
-                          data-dashboard
-                        >
-                          {userType === 2 && <p>{nameAcronym}</p>}
-                        </div>
+                          court={court}
+                          hour={hour}
+                          color={color}
+                          nameAcronym={nameAcronym}
+                          playerReservation={playerReservation}
+                          name={name}
+                          email={email}
+                        />
                       );
-
-                      let tooltipHour = (
-                        <HtmlTooltip
-                          key={hour}
-                          placement="top"
-                          title={
-                            <>
-                              <p>{name}</p>
-                              <p>{email}</p>
-                            </>
-                          }
-                        >
-                          {basicHour}
-                        </HtmlTooltip>
-                      );
-
-                      return playerReservation && userType === 2 ? tooltipHour : basicHour;
                     })}
                   </div>
                 </div>

@@ -3,6 +3,8 @@ import changeNameUtil from "../../../utils/changeNameUtil";
 import FormControl from "@material-ui/core/FormControl";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ChangeName = () => {
   const [newName, setNewName] = useState("");
@@ -14,12 +16,15 @@ const ChangeName = () => {
     if (typeof parseRes === "string") {
       return setError(parseRes);
     }
+    notify();
     setNewName("");
     setError("");
   };
 
+  const notify = () => toast.success("Name successfully changed");
+
   return (
-    <div>
+    <div className="dashboard-forms" data-dashboard>
       <form onSubmit={(event) => handleSubmit(event)}>
         <FormControl
           variant="outlined"

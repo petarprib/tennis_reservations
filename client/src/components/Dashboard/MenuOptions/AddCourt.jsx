@@ -7,6 +7,8 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddCourt = () => {
   const dispatch = useDispatch();
@@ -22,6 +24,7 @@ const AddCourt = () => {
 
     if (typeof parseRes !== "string") {
       fetchCourts();
+      notify(courtNumber);
       setCourtNumber("");
       setCourtType("");
       setCourtError("");
@@ -47,9 +50,10 @@ const AddCourt = () => {
     }
   };
 
+  const notify = (court) => toast.success(`Court ${court} added`);
+
   return (
-    // <div className="club-dashboard-options" data-dashboard>
-    <div>
+    <div className="dashboard-forms" data-dashboard>
       {userType === 2 && (
         <form onSubmit={(event) => addCourt(event)}>
           <FormControl
@@ -99,7 +103,6 @@ const AddCourt = () => {
         </form>
       )}
     </div>
-    // </div>
   );
 };
 

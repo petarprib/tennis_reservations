@@ -267,27 +267,31 @@ router.post("/reservations", async (req, res) => {
       );
 
       res.end();
+    } else if (reservation.rows[0].player === req.session.accountId) {
+      await pool.query("DELETE FROM reservation WHERE court = $1 AND start_time = $2", [court, startTime]);
+
+      res.end();
     } else {
-      if (req.session.accountType === 2) {
-        await pool.query("DELETE FROM reservation WHERE club = $1 AND court = $2 AND start_time = $3", [
-          req.session.accountId,
-          court,
-          startTime,
-        ]);
-
-        res.end();
-      } else if (reservation.rows[0].player === req.session.accountId) {
-        await pool.query("DELETE FROM reservation WHERE court = $1 AND player = $2 AND start_time = $3", [
-          court,
-          req.session.accountId,
-          startTime,
-        ]);
-
-        res.end();
-      } else {
-        res.end();
-      }
+      res.end();
     }
+  } catch (error) {
+    console.error(error.message);
+    return res.status(500).send("Server Error");
+  }
+});
+
+// deletes player reservation
+router.delete("/reservations", async (req, res) => {
+  try {
+    const { court, startTime } = req.body;
+
+    await pool.query("DELETE FROM reservation WHERE club = $1 AND court = $2 AND start_time = $3", [
+      req.session.accountId,
+      court,
+      startTime,
+    ]);
+
+    res.end();
   } catch (error) {
     console.error(error.message);
     return res.status(500).send("Server Error");

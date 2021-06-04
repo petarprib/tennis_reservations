@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
+import moment from "moment";
 import Modal from "@material-ui/core/Modal";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 import { MuiPickersUtilsProvider, KeyboardTimePicker } from "@material-ui/pickers";
 import FormControl from "@material-ui/core/FormControl";
 import Button from "@material-ui/core/Button";
-import moment from "moment";
-import { useDispatch } from "react-redux";
+import Fade from "@material-ui/core/Fade";
+import Backdrop from "@material-ui/core/Backdrop";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    // width: "400px",
     border: "none",
     boxShadow: "none",
     outline: "none",
@@ -84,48 +85,51 @@ const EditCourtModal = () => {
         disableEscapeKeyDown
         open={open}
         onClose={() => setOpen(false)}
+        BackdropComponent={Backdrop}
       >
-        <div className={classes.paper}>
-          <h2>Initial configuration</h2>
+        <Fade in={open}>
+          <div className={classes.paper}>
+            <h2>Initial configuration</h2>
 
-          <form id="form" onSubmit={(event) => handleSubmit(event)} data-access>
-            <FormControl
-              variant="outlined"
-              size="small"
-              // className={classes.formControl}
-            >
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardTimePicker
-                  ampm={false}
-                  minutesStep={30}
-                  margin="normal"
-                  id="open-time-picker"
-                  label="Select opening time"
-                  value={openTime}
-                  onChange={(time) => setOpenTime(time)}
-                  KeyboardButtonProps={{
-                    "aria-label": "change time",
-                  }}
-                />
-                <KeyboardTimePicker
-                  ampm={false}
-                  minutesStep={30}
-                  margin="normal"
-                  id="close-time-picker"
-                  label="Select closing time"
-                  value={closeTime}
-                  onChange={(time) => setCloseTime(time)}
-                  KeyboardButtonProps={{
-                    "aria-label": "change time",
-                  }}
-                />
-              </MuiPickersUtilsProvider>
-              <Button type="submit" variant="contained" color="primary">
-                Save
-              </Button>
-            </FormControl>
-          </form>
-        </div>
+            <form id="form" onSubmit={(event) => handleSubmit(event)} data-access>
+              <FormControl
+                variant="outlined"
+                size="small"
+                // className={classes.formControl}
+              >
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                  <KeyboardTimePicker
+                    ampm={false}
+                    minutesStep={30}
+                    margin="normal"
+                    id="open-time-picker"
+                    label="Select opening time"
+                    value={openTime}
+                    onChange={(time) => setOpenTime(time)}
+                    KeyboardButtonProps={{
+                      "aria-label": "change time",
+                    }}
+                  />
+                  <KeyboardTimePicker
+                    ampm={false}
+                    minutesStep={30}
+                    margin="normal"
+                    id="close-time-picker"
+                    label="Select closing time"
+                    value={closeTime}
+                    onChange={(time) => setCloseTime(time)}
+                    KeyboardButtonProps={{
+                      "aria-label": "change time",
+                    }}
+                  />
+                </MuiPickersUtilsProvider>
+                <Button type="submit" variant="contained" color="primary">
+                  Save
+                </Button>
+              </FormControl>
+            </form>
+          </div>
+        </Fade>
       </Modal>
     </div>
   );

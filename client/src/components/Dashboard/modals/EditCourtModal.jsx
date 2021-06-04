@@ -8,6 +8,9 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Button from "@material-ui/core/Button";
+import Fade from "@material-ui/core/Fade";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -55,6 +58,7 @@ const EditCourtModal = (props) => {
         setOpen(false);
         fetchCourts();
         setCourtError("");
+        notify();
       } else {
         setCourtError(parseRes);
       }
@@ -79,52 +83,56 @@ const EditCourtModal = (props) => {
     }
   };
 
+  const notify = () => toast.success("Court successfully edited");
+
   return (
     <div>
       <i className="fas fa-edit" onClick={() => setOpen(true)} />
       <Modal open={open} onClose={() => setOpen(false)}>
-        <div className={classes.paper}>
-          <h2>Edit court info</h2>
-          <form id="form" onSubmit={(event) => handleSubmit(event)} data-access>
-            <FormControl
-              variant="outlined"
-              size="small"
-              // className={classes.formControl}
-            >
-              <TextField
-                id="number"
-                label="Court number"
-                value={courtNumber}
+        <Fade in={open}>
+          <div className={classes.paper}>
+            <h2>Edit court info</h2>
+            <form id="form" onSubmit={(event) => handleSubmit(event)} data-access>
+              <FormControl
                 variant="outlined"
                 size="small"
-                autoComplete="off"
-                fullWidth
-                onChange={(event) => handleCourtNumInput(event.target.value)}
-              />
-              <InputLabel id="court-type-input">Court type</InputLabel>
-              <Select
-                labelId="court-type-select-label"
-                id="court-type-select"
-                value={courtType}
-                onChange={(event) => setCourtType(event.target.value)}
-                label="Court type"
+                // className={classes.formControl}
               >
-                {courtTypes.map((courtType) => (
-                  <MenuItem key={courtType.id} value={courtType.id}>
-                    {courtType.type}
-                  </MenuItem>
-                ))}
-              </Select>
-              <small>{courtError}</small>
-              <Button type="submit" variant="contained" color="primary">
-                Save
-              </Button>
-              <Button onClick={() => setOpen(false)} variant="contained" color="secondary">
-                Cancel
-              </Button>
-            </FormControl>
-          </form>
-        </div>
+                <TextField
+                  id="number"
+                  label="Court number"
+                  value={courtNumber}
+                  variant="outlined"
+                  size="small"
+                  autoComplete="off"
+                  fullWidth
+                  onChange={(event) => handleCourtNumInput(event.target.value)}
+                />
+                <InputLabel id="court-type-input">Court type</InputLabel>
+                <Select
+                  labelId="court-type-select-label"
+                  id="court-type-select"
+                  value={courtType}
+                  onChange={(event) => setCourtType(event.target.value)}
+                  label="Court type"
+                >
+                  {courtTypes.map((courtType) => (
+                    <MenuItem key={courtType.id} value={courtType.id}>
+                      {courtType.type}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <small>{courtError}</small>
+                <Button type="submit" variant="contained" color="primary">
+                  Save
+                </Button>
+                <Button onClick={() => setOpen(false)} variant="contained" color="secondary">
+                  Cancel
+                </Button>
+              </FormControl>
+            </form>
+          </div>
+        </Fade>
       </Modal>
     </div>
   );

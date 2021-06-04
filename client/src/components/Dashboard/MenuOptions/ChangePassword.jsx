@@ -3,6 +3,8 @@ import changePasswordUtil from "../../../utils/changePasswordUtil";
 import FormControl from "@material-ui/core/FormControl";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ChangePassword = () => {
   const [newPassword, setNewPassword] = useState("");
@@ -24,6 +26,7 @@ const ChangePassword = () => {
       setRepNewPasswordError(parseRes.includes("repNewPassword") ? "Your new password inputs do not match" : "");
       setCurrentPasswordError(parseRes.includes("currentPassword") ? "Your password is incorrect" : "");
     } else {
+      notify();
       setNewPassword("");
       setRepNewPassword("");
       setCurrentPassword("");
@@ -33,8 +36,10 @@ const ChangePassword = () => {
     }
   };
 
+  const notify = () => toast.success("Password successfully changed");
+
   return (
-    <div>
+    <div className="dashboard-forms" data-dashboard>
       <form onSubmit={(event) => handleSubmit(event)}>
         <FormControl
           variant="outlined"

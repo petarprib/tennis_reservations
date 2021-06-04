@@ -3,6 +3,8 @@ import changeEmailUtil from "../../../utils/changeEmailUtil";
 import FormControl from "@material-ui/core/FormControl";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ChangeEmail = () => {
   const [newEmail, setNewEmail] = useState("");
@@ -14,12 +16,15 @@ const ChangeEmail = () => {
     if (typeof parseRes === "string") {
       return setError(parseRes);
     }
+    notify();
     setNewEmail("");
     setError("");
   };
 
+  const notify = () => toast.success("Email successfully changed");
+
   return (
-    <div>
+    <div className="dashboard-forms" data-dashboard>
       <form onSubmit={(event) => handleSubmit(event)}>
         <FormControl
           variant="outlined"

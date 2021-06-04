@@ -79,15 +79,9 @@
   color: $dark-grey;
 }
 
-.country-item-focused[data-access] {
-  color: $white;
-  background-color: $grass;
-}
-
 .option[data-access] {
   @extend %country-item;
   &:hover {
-    // @extend %country-item-focused;
     color: $white;
     background-color: $grass;
   }
