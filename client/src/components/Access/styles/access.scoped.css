@@ -75,11 +75,6 @@
   color: gray;
 }
 
-.country-item-focused[data-access] {
-  color: white;
-  background-color: #85b02b;
-}
-
 .option[data-access]:hover {
   color: white;
   background-color: #85b02b;

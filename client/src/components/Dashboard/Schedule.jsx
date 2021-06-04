@@ -4,9 +4,8 @@ import moment from "moment";
 import fetchHoursUtil from "../../utils/fetchHoursUtil";
 import fetchReservationsUtil from "../../utils/fetchReservationsUtil";
 import "date-fns";
-import EditCourtModal from "./modals/EditCourtModal.jsx";
-import DeleteCourtModal from "./modals/DeleteCourtModal.jsx";
-import HourInfoModal from "./modals/HourInfoModal";
+
+import Court from "./Court.jsx";
 
 const Schedule = () => {
   const dispatch = useDispatch();
@@ -18,10 +17,7 @@ const Schedule = () => {
   const courtTypes = useSelector((state) => state.courtTypes);
   const date = useSelector((state) => state.date);
   const [filteredCourts, setfilteredCourts] = useState([]);
-  const [hours, setHours] = useState([]);
-  const reservations = useSelector((state) => state.reservations);
-  const user = useSelector((state) => state.user);
-  const userType = useSelector((state) => state.userType);
+  const hours = useSelector((state) => state.hours);
 
   useEffect(() => {
     fetchCourts();
@@ -88,7 +84,10 @@ const Schedule = () => {
   // Fetches opening and closing hours
   const fetchHours = async () => {
     const hours = await fetchHoursUtil(openTime, closeTime);
-    setHours(hours);
+    dispatch({
+      type: "SET_HOURS",
+      payload: { hours: hours },
+    });
   };
 
   const fetchReservations = async () => {
@@ -181,67 +180,7 @@ const Schedule = () => {
             {filteredCourts.map((court) => {
               const scrollRef = createRef();
               scrollRefs.push(scrollRef);
-              return (
-                <div key={court.number} className="court" data-dashboard>
-                  <div className="court-info" data-dashboard>
-                    <p className="court-number" data-dashboard>
-                      {court.number}
-                    </p>
-                    <p className="court-type" data-dashboard>
-                      {court.type}
-                    </p>
-                    {userType === 2 && (
-                      <EditCourtModal courtId={court.id} courtNumber={court.number} courtType={court.type_id} />
-                    )}
-                    {userType === 2 && <DeleteCourtModal courtId={court.id} courtNumber={court.number} />}
-                  </div>
-
-                  <div className="hours" onScroll={(e) => handleScroll(e)} ref={scrollRef} data-dashboard>
-                    {hours.map((hour) => {
-                      let playerReservation = false;
-                      let color = "rgb(154, 205, 50)";
-                      let nameAcronym;
-                      let name;
-                      let email;
-                      reservations.map((reservation) => {
-                        if (court.id !== reservation.court) return false;
-                        let now = moment(hour, "HH:mm")
-                          .date(date.date())
-                          .month(date.month())
-                          .year(date.year());
-                        let startTime = moment(reservation.start_time, "YYYY-MM-DD HH:mm:ss");
-                        let endTime = moment(reservation.end_time, "YYYY-MM-DD HH:mm:ss");
-                        if (now.isSame(startTime) || now.isBetween(startTime, endTime)) {
-                          if (reservation.player === user) {
-                            color = "rgb(135, 206, 235)";
-                          } else {
-                            playerReservation = true;
-                            color = "rgb(255, 70, 53)";
-                            nameAcronym = reservation.name.match(/\b(\w)/g).join("");
-                            name = reservation.name;
-                            email = reservation.email;
-                          }
-                          return false;
-                        }
-                        return true;
-                      });
-
-                      return (
-                        <HourInfoModal
-                          key={hour}
-                          court={court}
-                          hour={hour}
-                          color={color}
-                          nameAcronym={nameAcronym}
-                          playerReservation={playerReservation}
-                          name={name}
-                          email={email}
-                        />
-                      );
-                    })}
-                  </div>
-                </div>
-              );
+              return <Court key={court.id} court={court} scrollRef={scrollRef} handleScroll={(e) => handleScroll(e)} />;
             })}
           </div>
         </>
