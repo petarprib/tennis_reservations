@@ -1,9 +1,22 @@
 const express = require("express");
+const session = require("express-session");
+////////////////////////////////////////////////////////////////////////////////////
+
+var Redis = require("ioredis");
+var redis = new Redis();
+
+let RedisStore = require("connect-redis")(session);
+
+redis.on("error", console.error);
+redis.on("connect", function (err) {
+  console.log("connected to redis successfully");
+});
+
+////////////////////////////////////////////////////////////////////////////////////
 const app = express();
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const pool = require("./db");
-const session = require("express-session");
 require("dotenv").config();
 
 app.use(cors());
@@ -18,6 +31,9 @@ app.use(
       sameSite: true,
       maxAge: parseInt(process.env.SESSION_MAX_AGE),
     },
+    ////////////////////////////////////////////////////////////////////////////////////
+    // store: new RedisStore({ client: redis }),
+    ////////////////////////////////////////////////////////////////////////////////////
     name: process.env.SESSION_NAME,
     resave: false,
     rolling: true,

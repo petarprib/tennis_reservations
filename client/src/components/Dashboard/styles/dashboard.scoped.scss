@@ -31,7 +31,7 @@
 #options[data-dashboard] {
   border-radius: $small-border-radius;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-  @media (min-width: 400px) {
+  @media (min-width: 415px) {
     min-height: 240px;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -52,7 +52,7 @@
       display: inline-block;
     }
   }
-  @media (max-width: 400px) {
+  @media (max-width: 414px) {
     height: 100px;
   }
 }
@@ -65,15 +65,16 @@
   margin-bottom: 300px;
 }
 
-#color-guide[data-dashboard] > * {
-  display: flex;
-  justify-content: flex-end;
-  margin: 0 20px 5px 0;
-}
-
-#color-guide[data-dashboard] > * > p {
-  margin-right: 5px;
-  cursor: default;
+#color-guide[data-dashboard] {
+  > * {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 20px 5px 0;
+    > p {
+      margin-right: 5px;
+      cursor: default;
+    }
+  }
 }
 
 .available[data-dashboard] {
@@ -95,7 +96,7 @@
 #hours-index[data-dashboard] {
   display: flex;
   position: sticky;
-  top: 60px;
+  top: 0px;
   overflow: auto;
   border-top: solid 1px $light-grey;
   border-bottom: solid 1px $light-grey;

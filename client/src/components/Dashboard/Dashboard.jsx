@@ -15,10 +15,25 @@ const Dashboard = () => {
   const [openAddCourtModal, setOpenAddCourtModal] = useState(false);
 
   useEffect(() => {
+    fetchCourts();
     fetchEssentialData();
     fetchCourtTypes();
     // eslint-disable-next-line
   }, []);
+
+  const fetchCourts = async () => {
+    const res = await fetch("/api/dashboard/courts");
+    const parseRes = await res.json();
+
+    dispatch({
+      type: "SET_COURTS",
+      payload: { courts: parseRes },
+    });
+    dispatch({
+      type: "SET_FILTERED_COURTS",
+      payload: { filteredCourts: parseRes },
+    });
+  };
 
   const fetchEssentialData = async () => {
     try {

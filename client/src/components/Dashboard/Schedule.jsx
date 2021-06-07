@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, createRef } from "react";
+import React, { useEffect, useRef, createRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import fetchHoursUtil from "../../utils/fetchHoursUtil";
@@ -16,11 +16,11 @@ const Schedule = () => {
   const courtType = useSelector((state) => state.courtType);
   const courtTypes = useSelector((state) => state.courtTypes);
   const date = useSelector((state) => state.date);
-  const [filteredCourts, setfilteredCourts] = useState([]);
+  const filteredCourts = useSelector((state) => state.filteredCourts);
+  // const [filteredCourts, setfilteredCourts] = useState([]);
   const hours = useSelector((state) => state.hours);
 
   useEffect(() => {
-    fetchCourts();
     fetchCurrentDate();
     fetchOpenCloseTimes();
     fetchReservations();
@@ -46,16 +46,6 @@ const Schedule = () => {
     fetchHours();
     // eslint-disable-next-line
   }, [openTime, closeTime]);
-
-  const fetchCourts = async () => {
-    const res = await fetch("/api/dashboard/courts");
-    const parseRes = await res.json();
-    dispatch({
-      type: "SET_COURTS",
-      payload: { courts: parseRes },
-    });
-    setfilteredCourts(parseRes);
-  };
 
   const fetchCurrentDate = async () => {
     dispatch({
@@ -100,7 +90,10 @@ const Schedule = () => {
 
   // Live update of court list after adding, deleting or editing a court
   const fetchUpdatedCourts = async () => {
-    setfilteredCourts(courts);
+    dispatch({
+      type: "SET_FILTERED_COURTS",
+      payload: { filteredCourts: courts },
+    });
     dispatch({
       type: "SET_COURT_TYPE",
       payload: { courtType: 0 },
@@ -109,9 +102,16 @@ const Schedule = () => {
 
   // Filters courts based on selected surface type
   const filterCourts = () => {
-    if (courtType === 0) return setfilteredCourts(courts);
+    if (courtType === 0)
+      return dispatch({
+        type: "SET_FILTERED_COURTS",
+        payload: { filteredCourts: courts },
+      });
     const courtsFilter = courts.filter((court) => court.type_id === courtType);
-    setfilteredCourts(courtsFilter);
+    dispatch({
+      type: "SET_FILTERED_COURTS",
+      payload: { filteredCourts: courtsFilter },
+    });
   };
 
   // Filters court types based on surface types available at the club

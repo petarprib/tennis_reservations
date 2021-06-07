@@ -37,7 +37,6 @@ const AddCourt = (props) => {
   const [courtNumber, setCourtNumber] = useState("");
   const [courtType, setCourtType] = useState("");
   const courtTypes = useSelector((state) => state.courtTypes);
-  const userType = useSelector((state) => state.userType);
 
   const addCourt = async (event) => {
     event.preventDefault();

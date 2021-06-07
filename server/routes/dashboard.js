@@ -54,6 +54,7 @@ router.get("/open-hours", async (req, res) => {
 // get basic user info
 router.get("/session", async (req, res) => {
   try {
+    console.log(req.session);
     const basicInfo = await pool.query("SELECT name FROM account WHERE id = $1", [req.session.accountId]);
 
     const { accountId, accountType, club } = req.session;
