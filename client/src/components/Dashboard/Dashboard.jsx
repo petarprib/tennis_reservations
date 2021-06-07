@@ -1,16 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles/dashboard.scoped.scss";
 import { useSelector, useDispatch } from "react-redux";
 import Header from "../Header/Header.jsx";
 import LoadingScreen from "../LoadingScreen/LoadingScreen.jsx";
 import fetchCourtTypesUtil from "../../utils/fetchCourtTypesUtil";
-import Sections from "./Sections.jsx";
 import Schedule from "./Schedule.jsx";
-import ConfigOpenHoursModal from "./modals/ConfigOpenHoursModal.jsx";
+import ConfigOpenHours from "./modals/ConfigOpenHours.jsx";
+import AddCourtModal from "./modals/AddCourtModal.jsx";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const userType = useSelector((state) => state.userType);
+  const courts = useSelector((state) => state.courts);
+  const [openAddCourtModal, setOpenAddCourtModal] = useState(false);
 
   useEffect(() => {
     fetchEssentialData();
@@ -67,9 +69,29 @@ const Dashboard = () => {
       <>
         <Header />
         <div id="dashboard" data-dashboard>
-          {userType === 2 && <ConfigOpenHoursModal />}
-          <Sections />
-          <Schedule />
+          {userType === 2 && <ConfigOpenHours />}
+          {(() => {
+            if (courts.length > 0) {
+              return <Schedule />;
+            } else {
+              if (userType === 2) {
+                return (
+                  <>
+                    <p>
+                      No courts added, click <span onClick={() => setOpenAddCourtModal(true)}>here</span> to add
+                    </p>
+                    <AddCourtModal
+                      openAddCourtModal={openAddCourtModal}
+                      setOpenAddCourtModal={() => setOpenAddCourtModal(false)}
+                    />
+                  </>
+                );
+              }
+              if (userType === 3) {
+                return <p>No court yet, sorry</p>;
+              }
+            }
+          })()}
         </div>
       </>
     );

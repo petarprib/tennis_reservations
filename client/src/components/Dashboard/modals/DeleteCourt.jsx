@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DeleteCourtModal = (props) => {
+const DeleteCourt = (props) => {
   const { courtId, courtNumber } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -68,4 +68,4 @@ const DeleteCourtModal = (props) => {
   );
 };
 
-export default DeleteCourtModal;
+export default DeleteCourt;

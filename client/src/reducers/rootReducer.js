@@ -10,7 +10,6 @@ import filteredCourtTypesReducer from "./filteredCourtTypesReducer";
 import openTimeReducer from "./openTimeReducer";
 import reservationsReducer from "./reservationsReducer";
 import hoursReducer from "./hoursReducer";
-import sectionReducer from "./sectionReducer";
 import selectedDateReducer from "./selectedDateReducer";
 import userNameReducer from "./userNameReducer";
 import userReducer from "./userReducer";
@@ -28,7 +27,6 @@ const rootReducer = combineReducers({
   openTime: openTimeReducer,
   reservations: reservationsReducer,
   hours: hoursReducer,
-  section: sectionReducer,
   selectedDate: selectedDateReducer,
   userName: userNameReducer,
   user: userReducer,

@@ -5,6 +5,7 @@ import fetchHoursUtil from "../../utils/fetchHoursUtil";
 import fetchReservationsUtil from "../../utils/fetchReservationsUtil";
 import "date-fns";
 import Court from "./Court.jsx";
+import ScheduleFilter from "./ScheduleFilter.jsx";
 
 const Schedule = () => {
   const dispatch = useDispatch();
@@ -132,6 +133,7 @@ const Schedule = () => {
     });
   };
 
+  // when scrolling through the hours of a court, scrolls other courts and hours index simultaneously
   let scrollRefs = [];
   const handleScroll = (event) => {
     let currentPosition = event.target.scrollLeft;
@@ -145,6 +147,7 @@ const Schedule = () => {
     <div>
       {filteredCourts.length > 0 && (
         <>
+          <ScheduleFilter />
           <div id="color-guide" data-dashboard>
             <div>
               <p>Available</p>

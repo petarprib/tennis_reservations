@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EditCourtModal = () => {
+const EditCourt = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const [open, setOpen] = useState(false);
@@ -78,61 +78,59 @@ const EditCourtModal = () => {
   };
 
   return (
-    <div>
-      <Modal
-        style={{ zIndex: "900" }}
-        disableBackdropClick
-        disableEscapeKeyDown
-        open={open}
-        onClose={() => setOpen(false)}
-        BackdropComponent={Backdrop}
-      >
-        <Fade in={open}>
-          <div className={classes.paper}>
-            <h2>Initial configuration</h2>
+    <Modal
+      style={{ zIndex: "900" }}
+      disableBackdropClick
+      disableEscapeKeyDown
+      open={open}
+      onClose={() => setOpen(false)}
+      BackdropComponent={Backdrop}
+    >
+      <Fade in={open}>
+        <div className={classes.paper}>
+          <h2>Initial configuration</h2>
 
-            <form id="form" onSubmit={(event) => handleSubmit(event)} data-access>
-              <FormControl
-                variant="outlined"
-                size="small"
-                // className={classes.formControl}
-              >
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                  <KeyboardTimePicker
-                    ampm={false}
-                    minutesStep={30}
-                    margin="normal"
-                    id="open-time-picker"
-                    label="Select opening time"
-                    value={openTime}
-                    onChange={(time) => setOpenTime(time)}
-                    KeyboardButtonProps={{
-                      "aria-label": "change time",
-                    }}
-                  />
-                  <KeyboardTimePicker
-                    ampm={false}
-                    minutesStep={30}
-                    margin="normal"
-                    id="close-time-picker"
-                    label="Select closing time"
-                    value={closeTime}
-                    onChange={(time) => setCloseTime(time)}
-                    KeyboardButtonProps={{
-                      "aria-label": "change time",
-                    }}
-                  />
-                </MuiPickersUtilsProvider>
-                <Button type="submit" variant="contained" color="primary">
-                  Save
-                </Button>
-              </FormControl>
-            </form>
-          </div>
-        </Fade>
-      </Modal>
-    </div>
+          <form id="form" onSubmit={(event) => handleSubmit(event)} data-access>
+            <FormControl
+              variant="outlined"
+              size="small"
+              // className={classes.formControl}
+            >
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardTimePicker
+                  ampm={false}
+                  minutesStep={30}
+                  margin="normal"
+                  id="open-time-picker"
+                  label="Select opening time"
+                  value={openTime}
+                  onChange={(time) => setOpenTime(time)}
+                  KeyboardButtonProps={{
+                    "aria-label": "change time",
+                  }}
+                />
+                <KeyboardTimePicker
+                  ampm={false}
+                  minutesStep={30}
+                  margin="normal"
+                  id="close-time-picker"
+                  label="Select closing time"
+                  value={closeTime}
+                  onChange={(time) => setCloseTime(time)}
+                  KeyboardButtonProps={{
+                    "aria-label": "change time",
+                  }}
+                />
+              </MuiPickersUtilsProvider>
+              <Button type="submit" variant="contained" color="primary">
+                Save
+              </Button>
+            </FormControl>
+          </form>
+        </div>
+      </Fade>
+    </Modal>
   );
 };
 
-export default EditCourtModal;
+export default EditCourt;

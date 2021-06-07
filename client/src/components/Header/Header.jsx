@@ -5,6 +5,9 @@ import logOutUtil from "../../utils/logOutUtil";
 import { withStyles } from "@material-ui/core/styles";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import ChangeName from "../Dashboard/modals/ChangeName";
+import ChangeEmail from "../Dashboard/modals/ChangeEmail";
+import ChangePassword from "../Dashboard/modals/ChangePassword";
 
 const StyledMenu = withStyles({
   paper: {
@@ -25,8 +28,6 @@ const StyledMenu = withStyles({
     {...props}
   />
 ));
-
-///////////////////////////////////////////
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -72,20 +73,17 @@ const Header = () => {
             anchorEl={menuOpen}
             keepMounted
             open={Boolean(menuOpen)}
-            onClose={handleClose}
+            onClose={() => setMenuOpen(null)}
             data-header
           >
-            <MenuItem onClick={handleClose}>
-              <i className="fas fa-user-alt menu-icon" data-header />
-              Change name
+            <MenuItem>
+              <ChangeName handleClose={() => handleClose()} />
             </MenuItem>
-            <MenuItem onClick={handleClose}>
-              <i className="fas fa-at menu-icon" data-header />
-              Change email
+            <MenuItem>
+              <ChangeEmail handleClose={() => handleClose()} />
             </MenuItem>
-            <MenuItem onClick={handleClose}>
-              <i className="fas fa-key menu-icon" data-header />
-              Change password
+            <MenuItem>
+              <ChangePassword handleClose={() => handleClose()} />
             </MenuItem>
             <MenuItem onClick={logOut}>
               <i className="fas fa-sign-out-alt menu-icon" data-header />

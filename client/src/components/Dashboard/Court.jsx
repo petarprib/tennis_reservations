@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import moment from "moment";
-import EditCourtModal from "./modals/EditCourtModal.jsx";
-import DeleteCourtModal from "./modals/DeleteCourtModal.jsx";
-import HourInfoModal from "./modals/HourInfoModal";
+import EditCourt from "./modals/EditCourt.jsx";
+import DeleteCourt from "./modals/DeleteCourt.jsx";
+import Hour from "./Hour";
 
 const Court = (props) => {
   const { court, scrollRef } = props;
@@ -30,9 +30,9 @@ const Court = (props) => {
           {court.type}
         </p>
         {userType === 2 && showIcons && (
-          <EditCourtModal courtId={court.id} courtNumber={court.number} courtType={court.type_id} />
+          <EditCourt courtId={court.id} courtNumber={court.number} courtType={court.type_id} />
         )}
-        {userType === 2 && showIcons && <DeleteCourtModal courtId={court.id} courtNumber={court.number} />}
+        {userType === 2 && showIcons && <DeleteCourt courtId={court.id} courtNumber={court.number} />}
       </div>
 
       <div className="hours" onScroll={(event) => props.handleScroll(event)} ref={scrollRef} data-dashboard>
@@ -66,7 +66,7 @@ const Court = (props) => {
           });
 
           return (
-            <HourInfoModal
+            <Hour
               key={hour}
               court={court}
               hour={hour}

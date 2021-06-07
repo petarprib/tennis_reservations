@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import addCourtUtil from "../../../utils/addCourtUtil";
+import addCourtUtil from "../../utils/addCourtUtil";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
@@ -56,7 +56,7 @@ const AddCourt = () => {
     <div className="dashboard-forms" data-dashboard>
       {userType === 2 && (
         <form onSubmit={(event) => addCourt(event)}>
-          <FormControl
+          {/* <FormControl
             variant="outlined"
             size="small"
             // className={classes.formControl}
@@ -99,7 +99,7 @@ const AddCourt = () => {
               Add court
             </Button>
             <p>{courtError}</p>
-          </FormControl>
+          </FormControl> */}
         </form>
       )}
     </div>

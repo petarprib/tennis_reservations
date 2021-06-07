@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import "../styles/dashboard.scoped.scss";
-import reserveTimeUtil from "../../../utils/reserveTimeUtil";
 import fetchReservationsUtil from "../../../utils/fetchReservationsUtil";
 import deleteReservationUtil from "../../../utils/deleteReservationUtil";
 import { useSelector, useDispatch } from "react-redux";
@@ -27,13 +26,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PlayerReservationInfoModal = (props) => {
-  const { court, hour, color, nameAcronym, playerReservation, name, email } = props;
+const HourInfoModal = (props) => {
+  const { court, hour, name, email, open } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
   const date = useSelector((state) => state.date);
-  const [open, setOpen] = useState(false);
-  const userType = useSelector((state) => state.userType);
 
   const fetchReservations = async () => {
     const reservations = await fetchReservationsUtil();
@@ -43,18 +40,9 @@ const PlayerReservationInfoModal = (props) => {
     });
   };
 
-  const reserveTime = async (time, club, court) => {
-    if (playerReservation && userType === 2) {
-      setOpen(true);
-    } else {
-      await reserveTimeUtil(time, club, court, date);
-      fetchReservations();
-    }
-  };
-
   const deleteReservation = async (court, time) => {
     await deleteReservationUtil(court, time, date);
-    setOpen(false);
+    props.setOpen();
     notify();
     fetchReservations();
   };
@@ -62,31 +50,21 @@ const PlayerReservationInfoModal = (props) => {
   const notify = () => toast.success("Reservation deleted");
 
   return (
-    <div>
-      <div
-        className="hour"
-        style={{ backgroundColor: color }}
-        onClick={() => reserveTime(hour, court.club, court.id)}
-        data-dashboard
-      >
-        {userType === 2 && <p>{nameAcronym}</p>}
-      </div>
-      <Modal open={open} onClose={() => setOpen(false)} BackdropComponent={Backdrop}>
-        <Fade in={open}>
-          <div className={classes.paper}>
-            <p>{name}</p>
-            <p>{email}</p>
-            <Button onClick={() => setOpen(false)} variant="contained">
-              Close
-            </Button>
-            <Button onClick={() => deleteReservation(court.id, hour)} variant="contained" color="secondary">
-              Delete
-            </Button>
-          </div>
-        </Fade>
-      </Modal>
-    </div>
+    <Modal open={open} onClose={() => props.setOpen()} BackdropComponent={Backdrop}>
+      <Fade in={open}>
+        <div className={classes.paper}>
+          <p>{name}</p>
+          <p>{email}</p>
+          <Button onClick={() => props.setOpen()} variant="contained">
+            Close
+          </Button>
+          <Button onClick={() => deleteReservation(court.id, hour)} variant="contained" color="secondary">
+            Delete
+          </Button>
+        </div>
+      </Fade>
+    </Modal>
   );
 };
 
-export default PlayerReservationInfoModal;
+export default HourInfoModal;
