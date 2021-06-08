@@ -5,8 +5,8 @@ import Header from "../Header/Header.jsx";
 import LoadingScreen from "../LoadingScreen/LoadingScreen.jsx";
 import fetchCourtTypesUtil from "../../utils/fetchCourtTypesUtil";
 import Schedule from "./Schedule.jsx";
-import ConfigOpenHours from "./modals/ConfigOpenHours.jsx";
-import AddCourtModal from "./modals/AddCourtModal.jsx";
+import ConfigOpenHours from "../../modals/ConfigOpenHours.jsx";
+import AddCourtModal from "../../modals/AddCourtModal.jsx";
 
 const Dashboard = () => {
   const dispatch = useDispatch();

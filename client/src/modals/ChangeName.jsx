@@ -60,25 +60,9 @@ const ChangeName = (props) => {
           <div className={classes.paper}>
             <h2>Change name</h2>
             <form onSubmit={(event) => handleSubmit(event)}>
-              <FormControl
-                variant="outlined"
-                size="small"
-                // className={classes.formControl}
-              >
-                <TextField
-                  id="change-name"
-                  label="New name"
-                  variant="outlined"
-                  autoComplete="off"
-                  value={newName}
-                  onChange={(event) => setNewName(event.target.value)}
-                  size="small"
-                />
-                <small>{error}</small>
-                <Button type="submit" variant="contained" color="primary">
-                  Submit
-                </Button>
-              </FormControl>
+              <input type="text" />
+              <input type="text" />
+              <input type="text" />
             </form>
           </div>
         </Fade>

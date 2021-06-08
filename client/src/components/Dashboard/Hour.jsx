@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import reserveTimeUtil from "../../utils/reserveTimeUtil";
 import fetchReservationsUtil from "../../utils/fetchReservationsUtil";
 import "react-toastify/dist/ReactToastify.css";
-import HourInfoModal from "./modals/HourInfoModal";
+import HourInfoModal from "../../modals/HourInfoModal";
 
 const Hour = (props) => {
   const { court, hour, color, nameAcronym, playerReservation, name, email } = props;
