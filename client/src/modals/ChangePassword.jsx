@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import changePasswordUtil from "../utils/changePasswordUtil";
-// import Modal from "@material-ui/core/Modal";
-import Modal from "react-bootstrap/Modal";
+import Modal from "@material-ui/core/Modal";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import Button from "@material-ui/core/Button";
@@ -71,14 +70,56 @@ const ChangePassword = (props) => {
         <i className="fas fa-key menu-icon" data-header />
         Change password
       </div>
-      <Modal
-        show={open}
-        onHide={() => setOpen(false)}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <h1>whataver</h1>
+      <Modal open={open} className="mui-fixed" onClose={() => setOpen(false)}>
+        <Fade in={open}>
+          <div className={classes.paper}>
+            <h2>Change password</h2>
+            <form onSubmit={(event) => handleSubmit(event)}>
+              <FormControl
+                variant="outlined"
+                size="small"
+                // className={classes.formControl}
+              >
+                <TextField
+                  id="new-password"
+                  label="New password"
+                  variant="outlined"
+                  type="password"
+                  autoComplete="off"
+                  value={newPassword}
+                  onChange={(event) => setNewPassword(event.target.value)}
+                  size="small"
+                />
+                <small>{newPasswordError}</small>
+                <TextField
+                  id="rep-new-password"
+                  label="Rep new password"
+                  variant="outlined"
+                  type="password"
+                  autoComplete="off"
+                  value={repNewPassword}
+                  onChange={(event) => setRepNewPassword(event.target.value)}
+                  size="small"
+                />
+                <small>{repNewPasswordError}</small>
+                <TextField
+                  id="current-password"
+                  label="Current password"
+                  variant="outlined"
+                  type="password"
+                  autoComplete="off"
+                  value={currentPassword}
+                  onChange={(event) => setCurrentPassword(event.target.value)}
+                  size="small"
+                />
+                <small>{currentPasswordError}</small>
+                <Button type="submit" variant="contained" color="primary">
+                  Submit
+                </Button>
+              </FormControl>
+            </form>
+          </div>
+        </Fade>
       </Modal>
     </>
   );
