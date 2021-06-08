@@ -34,7 +34,7 @@
   border-radius: 4px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
-@media (min-width: 400px) {
+@media (min-width: 415px) {
   #options[data-dashboard] {
     min-height: 240px;
     display: grid;
@@ -57,7 +57,7 @@
 .dashboard-functions[data-dashboard] > div > p {
   display: inline-block;
 }
-@media (max-width: 400px) {
+@media (max-width: 414px) {
   .dashboard-functions[data-dashboard] {
     height: 100px;
   }
@@ -76,7 +76,6 @@
   justify-content: flex-end;
   margin: 0 20px 5px 0;
 }
-
 #color-guide[data-dashboard] > * > p {
   margin-right: 5px;
   cursor: default;
@@ -101,7 +100,7 @@
 #hours-index[data-dashboard] {
   display: flex;
   position: sticky;
-  top: 60px;
+  top: 0px;
   overflow: auto;
   border-top: solid 1px #d3d3d3;
   border-bottom: solid 1px #d3d3d3;

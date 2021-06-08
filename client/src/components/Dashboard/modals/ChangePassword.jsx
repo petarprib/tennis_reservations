@@ -70,7 +70,7 @@ const ChangePassword = (props) => {
         <i className="fas fa-key menu-icon" data-header />
         Change password
       </div>
-      <Modal disableEnforceFocus open={open} className="mui-fixed" onClose={() => setOpen(false)}>
+      <Modal open={open} className="mui-fixed" onClose={() => setOpen(false)}>
         <Fade in={open}>
           <div className={classes.paper}>
             <h2>Change password</h2>
