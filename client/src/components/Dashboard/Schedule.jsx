@@ -5,7 +5,6 @@ import fetchHoursUtil from "../../utils/fetchHoursUtil";
 import fetchReservationsUtil from "../../utils/fetchReservationsUtil";
 import "date-fns";
 import Court from "./Court.jsx";
-import ScheduleFilter from "./ScheduleFilter.jsx";
 
 const Schedule = () => {
   const dispatch = useDispatch();
@@ -17,7 +16,6 @@ const Schedule = () => {
   const courtTypes = useSelector((state) => state.courtTypes);
   const date = useSelector((state) => state.date);
   const filteredCourts = useSelector((state) => state.filteredCourts);
-  // const [filteredCourts, setfilteredCourts] = useState([]);
   const hours = useSelector((state) => state.hours);
 
   useEffect(() => {
@@ -144,57 +142,30 @@ const Schedule = () => {
   };
 
   return (
-    <>
-      {filteredCourts.length > 0 && (
-        <>
-          <ScheduleFilter />
-          <div id="color-guide" data-dashboard>
-            <div>
-              <p>Available</p>
-              <i className="fas fa-square-full available" data-dashboard />
+    <div id="schedule" data-dashboard>
+      <div id="hours-index" onScroll={(event) => handleScroll(event)} ref={hoursIndex} data-dashboard>
+        {hours.map((hour) => {
+          return (
+            <div className="hour-index" key={hour} data-dashboard>
+              <p>{hour}</p>
             </div>
-            <div>
-              <p>Unavailable</p>
-              <i className="fas fa-square-full unavailable" data-dashboard />
-            </div>
-            <div>
-              <p>You</p>
-              <i className="fas fa-square-full you" data-dashboard />
-            </div>
-          </div>
+          );
+        })}
+      </div>
 
-          <div id="schedule" data-dashboard>
-            <div id="hours-index" onScroll={(event) => handleScroll(event)} ref={hoursIndex} data-dashboard>
-              {hours.map((hour) => {
-                return (
-                  <div className="hour-index" key={hour} data-dashboard>
-                    <p>{hour}</p>
-                  </div>
-                );
-              })}
-            </div>
+      <div id="court-info-index" data-dashboard>
+        <p>Court #</p>
+        <p>Surface type</p>
+      </div>
 
-            <div id="court-info-index" data-dashboard>
-              <p>Court #</p>
-              <p>Surface type</p>
-            </div>
-
-            {filteredCourts.map((court) => {
-              const scrollRef = createRef();
-              scrollRefs.push(scrollRef);
-              return (
-                <Court
-                  key={court.id}
-                  court={court}
-                  scrollRef={scrollRef}
-                  handleScroll={(event) => handleScroll(event)}
-                />
-              );
-            })}
-          </div>
-        </>
-      )}
-    </>
+      {filteredCourts.map((court) => {
+        const scrollRef = createRef();
+        scrollRefs.push(scrollRef);
+        return (
+          <Court key={court.id} court={court} scrollRef={scrollRef} handleScroll={(event) => handleScroll(event)} />
+        );
+      })}
+    </div>
   );
 };
 

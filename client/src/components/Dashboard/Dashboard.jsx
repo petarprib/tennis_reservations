@@ -7,11 +7,15 @@ import fetchCourtTypesUtil from "../../utils/fetchCourtTypesUtil";
 import Schedule from "./Schedule.jsx";
 import ConfigOpenHours from "../../modals/ConfigOpenHours.jsx";
 import AddCourtModal from "../../modals/AddCourtModal.jsx";
+import AddCourtButton from "./AddCourtButton.jsx";
+import ScheduleFilter from "./ScheduleFilter.jsx";
+import ColorGuide from "./ColorGuide.jsx";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const userType = useSelector((state) => state.userType);
   const courts = useSelector((state) => state.courts);
+  const filteredCourts = useSelector((state) => state.filteredCourts);
   const [openAddCourtModal, setOpenAddCourtModal] = useState(false);
 
   useEffect(() => {
@@ -77,33 +81,50 @@ const Dashboard = () => {
     });
   };
 
+  console.log(filteredCourts);
+
   if (userType === "loading") {
     return <LoadingScreen />;
   } else {
     return (
       <>
         <Header />
-        <div id="dashboard" data-dashboard>
+        <div id="dashboard" className={!courts.length && "center-court-message"} data-dashboard>
           {userType === 2 && <ConfigOpenHours />}
+          {userType === 2 && <AddCourtButton />}
           {(() => {
             if (courts.length > 0) {
-              return <Schedule />;
+              return (
+                <>
+                  <div id="schedule-tools" data-dashboard>
+                    <ScheduleFilter />
+                    <ColorGuide />
+                  </div>
+                  <Schedule />
+                </>
+              );
             } else {
               if (userType === 2) {
                 return (
-                  <>
-                    <p>
-                      No courts added, click <span onClick={() => setOpenAddCourtModal(true)}>here</span> to add
-                    </p>
-                    <AddCourtModal
-                      openAddCourtModal={openAddCourtModal}
-                      setOpenAddCourtModal={() => setOpenAddCourtModal(false)}
+                  <div className="no-courts" data-dashboard>
+                    <p>It seems no court has been added</p>
+                    <img
+                      src="https://ik.imagekit.io/w1xennnidd/tennis_reservations/sadsmiley_4lfUL6lgU.png"
+                      alt="sadsmiley"
                     />
-                  </>
+                    <p>Click on the plus button to add one</p>
+                  </div>
                 );
-              }
-              if (userType === 3) {
-                return <p>No court yet, sorry</p>;
+              } else if (userType === 3) {
+                return (
+                  <div className="no-courts" data-dashboard>
+                    <p>Sorry, it seems no courts have been added</p>
+                    <img
+                      src="https://ik.imagekit.io/w1xennnidd/tennis_reservations/sadsmiley_4lfUL6lgU.png"
+                      alt="sadsmiley"
+                    />
+                  </div>
+                );
               }
             }
           })()}
