@@ -1,19 +1,9 @@
 const express = require("express");
-const session = require("express-session");
-////////////////////////////////////////////////////////////////////////////////////
-
-var Redis = require("ioredis");
-var redis = new Redis();
-
-let RedisStore = require("connect-redis")(session);
-
-redis.on("error", console.error);
-redis.on("connect", function (err) {
-  console.log("connected to redis successfully");
-});
-
-////////////////////////////////////////////////////////////////////////////////////
 const app = express();
+const session = require("express-session");
+const Redis = require("ioredis");
+const redis = new Redis();
+const RedisStore = require("connect-redis")(session);
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const pool = require("./db");
@@ -29,11 +19,9 @@ app.use(
       httpOnly: true,
       secure: false, // false in development only
       sameSite: true,
-      maxAge: parseInt(process.env.SESSION_MAX_AGE),
+      maxAge: parseInt(process.env.SESSION_IDLE_TIMEOUT),
     },
-    ////////////////////////////////////////////////////////////////////////////////////
-    // store: new RedisStore({ client: redis }),
-    ////////////////////////////////////////////////////////////////////////////////////
+    store: new RedisStore({ client: redis }),
     name: process.env.SESSION_NAME,
     resave: false,
     rolling: true,

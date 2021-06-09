@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles/header.scoped.scss";
 import { useSelector, useDispatch } from "react-redux";
 import logOutUtil from "../../utils/logOutUtil";
@@ -15,7 +15,7 @@ const StyledMenu = withStyles({
   },
 })((props) => (
   <Menu
-    elevation={3}
+    elevation={2}
     getContentAnchorEl={null}
     anchorOrigin={{
       vertical: "bottom",
@@ -33,6 +33,16 @@ const Header = () => {
   const dispatch = useDispatch();
   const userName = useSelector((state) => state.userName);
   const [menuOpen, setMenuOpen] = useState(null);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleClick = (event) => {
     menuOpen === null ? setMenuOpen(event.currentTarget) : setMenuOpen(null);
@@ -56,7 +66,7 @@ const Header = () => {
   return (
     <div id="header" data-header>
       <div id="header-content" data-header>
-        <div id="header-title" data-header>
+        <div id="header-logo" data-header>
           <img
             src="https://ik.imagekit.io/w1xennnidd/tennis_reservations/tennis-court-svgrepo-com_SqosYyvPx.svg"
             alt="logo"
@@ -65,8 +75,7 @@ const Header = () => {
         </div>
         <div>
           <div onClick={(event) => handleClick(event)} id="user-menu" data-header>
-            <p>{userName}</p>
-            {menuOpen ? <i className="fas fa-caret-up" /> : <i className="fas fa-caret-down" />}
+            <i class="fas fa-bars" data-header />
           </div>
           <StyledMenu
             disableScrollLock={true}

@@ -88,7 +88,7 @@ router.post("/login", validInfo, async (req, res) => {
     req.session.accountId = account.rows[0].id;
     req.session.accountType = account.rows[0].type;
     req.session.club = req.session.accountType === 2 ? req.session.accountId : club;
-    console.log("SESSION: ", req.session);
+
     return res.json(true);
   } catch (error) {
     console.error(error.message);

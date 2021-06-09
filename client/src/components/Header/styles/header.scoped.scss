@@ -21,7 +21,7 @@
   }
 }
 
-#header-title[data-header] {
+#header-logo[data-header] {
   margin: 0 auto 0 15px;
   > img {
     height: 35px;
@@ -41,6 +41,9 @@
   cursor: pointer;
   > p {
     margin-right: 5px;
+  }
+  > .fa-bars {
+    font-size: 1.7rem;
   }
 }
 

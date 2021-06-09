@@ -19,15 +19,15 @@
   align-items: center;
 }
 
-#header-title[data-header] {
+#header-logo[data-header] {
   margin: 0 auto 0 15px;
 }
-#header-title[data-header] > img {
+#header-logo[data-header] > img {
   height: 35px;
   color: #ffffff;
   margin-right: 5px;
 }
-#header-title[data-header] > h1 {
+#header-logo[data-header] > h1 {
   font-size: 1.5rem;
   cursor: default;
 }
@@ -40,6 +40,9 @@
 }
 #user-menu[data-header] > p {
   margin-right: 5px;
+}
+#user-menu[data-header] > .fa-bars {
+  font-size: 1.7rem;
 }
 
 .menu-icon[data-header] {
