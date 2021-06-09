@@ -4,11 +4,11 @@ import AddIcon from "@material-ui/icons/Add";
 
 const AddCourtButton = () => {
   return (
-    // <div id="add-court-button" data-dashboard>
-    <Fab id="add-court-button" data-dashboard color="primary" aria-label="add">
-      <AddIcon />
-    </Fab>
-    // </div>
+    <div id="add-court-button" data-dashboard>
+      <Fab data-dashboard color="primary" aria-label="add">
+        <AddIcon />
+      </Fab>
+    </div>
   );
 };
 

@@ -32,17 +32,49 @@
 }
 
 #add-court-button[data-dashboard] {
-  // display: flex;
-  // justify-content: flex-end;
+  display: flex;
+  justify-content: flex-end;
+  @media (min-width: 769px) {
+    justify-content: flex-start;
+  }
   // margin-right: 20px;
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
+  // position: fixed;
+  // right: 20px;
+  // bottom: 20px;
 }
 
-#schedule-tools[data-dashboard] {
+#schedule-filter[data-dashboard] {
+  > div {
+    width: 100%;
+    > div {
+      width: 100%;
+    }
+  }
+  @media (min-width: 769px) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+}
+
+#dashboard-tools[data-dashboard] {
+  padding: 0 10px;
+  margin-bottom: 10px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  @media (min-width: 351px) {
+    grid-template-columns: 60% 40%;
+  }
+  @media (min-width: 460px) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media (min-width: 769px) {
+    gap: 20px;
+    grid-template-columns: 1fr 4fr 1fr;
+  }
+  @media (min-width: 993px) {
+    gap: 20px;
+    grid-template-columns: 1fr 2fr 1fr;
+  }
 }
 
 // #sections[data-dashboard] {
@@ -59,10 +91,6 @@
 //     grid-template-columns: 1fr 2fr;
 //   }
 // }
-
-#schedule-filter[data-dashboard] {
-  display: flex;
-}
 
 // #options[data-dashboard] {
 //   border-radius: $small-border-radius;
@@ -105,7 +133,6 @@
   > * {
     display: flex;
     justify-content: flex-end;
-    margin: 0 20px 5px 0;
     > p {
       margin-right: 5px;
       cursor: default;

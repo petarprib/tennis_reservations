@@ -14,27 +14,14 @@
   background-color: rgba(255, 255, 255, 0.7);
   border-radius: 15px;
   width: 100%;
+  max-width: 350px;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-@media (max-width: 414px) {
-  #form-container[data-access] {
-    min-height: 100vh;
-    border-radius: 0;
-  }
-}
-@media (min-width: 415px) {
-  #form-container[data-access] {
-    display: flex;
-    flex-direction: column-reverse;
-    margin: 25px 10px;
-    padding: 25px;
-    max-width: 350px;
-  }
+  padding: 25px;
 }
 #form-container[data-access] > div {
-  width: 80%;
+  width: 100%;
 }
 #form-container[data-access] > div > h1 {
   text-transform: uppercase;
@@ -43,9 +30,29 @@
   text-align: center;
   margin-bottom: 10px;
 }
+@media (max-width: 414px) {
+  #form-container[data-access] {
+    min-height: 100vh;
+    border-radius: 0;
+    max-width: none;
+  }
+}
+@media (min-width: 415px) {
+  #form-container[data-access] {
+    display: flex;
+    flex-direction: column-reverse;
+    margin: 25px 10px;
+  }
+  #form-container[data-access] > div {
+    width: 100%;
+  }
+}
 
 .options[data-access] {
   text-align: right;
+}
+
+.options:first-of-type {
   margin-bottom: 10px;
 }
 

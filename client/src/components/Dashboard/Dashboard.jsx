@@ -15,15 +15,24 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const userType = useSelector((state) => state.userType);
   const courts = useSelector((state) => state.courts);
-  const filteredCourts = useSelector((state) => state.filteredCourts);
   const [openAddCourtModal, setOpenAddCourtModal] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
+    handleResize();
     fetchCourts();
     fetchEssentialData();
     fetchCourtTypes();
     // eslint-disable-next-line
   }, []);
+
+  const handleResize = () => {
+    const setNewWith = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    window.addEventListener("resize", setNewWith);
+    return () => window.removeEventListener("resize", setNewWith);
+  };
 
   const fetchCourts = async () => {
     const res = await fetch("/api/dashboard/courts");
@@ -32,10 +41,6 @@ const Dashboard = () => {
     dispatch({
       type: "SET_COURTS",
       payload: { courts: parseRes },
-    });
-    dispatch({
-      type: "SET_FILTERED_COURTS",
-      payload: { filteredCourts: parseRes },
     });
   };
 
@@ -81,28 +86,55 @@ const Dashboard = () => {
     });
   };
 
-  console.log(filteredCourts);
-
   if (userType === "loading") {
     return <LoadingScreen />;
   } else {
     return (
       <>
         <Header />
-        <div id="dashboard" className={!courts.length && "center-court-message"} data-dashboard>
+        <div id="dashboard" className={`${!courts.length && "center-court-message"}`} data-dashboard>
           {userType === 2 && <ConfigOpenHours />}
-          {userType === 2 && <AddCourtButton />}
+          {/* {userType === 2 && <AddCourtButton />} */}
           {(() => {
             if (courts.length > 0) {
-              return (
-                <>
-                  <div id="schedule-tools" data-dashboard>
-                    <ScheduleFilter />
-                    <ColorGuide />
-                  </div>
-                  <Schedule />
-                </>
-              );
+              if (windowWidth <= 350) {
+                return (
+                  <>
+                    <div id="dashboard-tools" data-dashboard>
+                      {userType === 2 && <AddCourtButton />}
+                      <ScheduleFilter />
+                      <ColorGuide />
+                    </div>
+                    <Schedule />
+                  </>
+                );
+              }
+              if (windowWidth >= 351 && windowWidth <= 768) {
+                return (
+                  <>
+                    <div id="dashboard-tools" data-dashboard>
+                      <ScheduleFilter />
+                      <div>
+                        {userType === 2 && <AddCourtButton />}
+                        <ColorGuide />
+                      </div>
+                    </div>
+                    <Schedule />
+                  </>
+                );
+              }
+              if (windowWidth > 768) {
+                return (
+                  <>
+                    <div id="dashboard-tools" data-dashboard>
+                      {userType === 2 && <AddCourtButton />}
+                      <ScheduleFilter />
+                      <ColorGuide />
+                    </div>
+                    <Schedule />
+                  </>
+                );
+              }
             } else {
               if (userType === 2) {
                 return (

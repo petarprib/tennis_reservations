@@ -29,18 +29,55 @@
 }
 
 #add-court-button[data-dashboard] {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-}
-
-#schedule-tools[data-dashboard] {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-#schedule-filter[data-dashboard] {
   display: flex;
+  justify-content: flex-end;
+}
+@media (min-width: 769px) {
+  #add-court-button[data-dashboard] {
+    justify-content: flex-start;
+  }
+}
+
+#schedule-filter[data-dashboard] > div {
+  width: 100%;
+}
+#schedule-filter[data-dashboard] > div > div {
+  width: 100%;
+}
+@media (min-width: 769px) {
+  #schedule-filter[data-dashboard] {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+}
+
+#dashboard-tools[data-dashboard] {
+  padding: 0 10px;
+  margin-bottom: 10px;
+  display: grid;
+}
+@media (min-width: 351px) {
+  #dashboard-tools[data-dashboard] {
+    grid-template-columns: 60% 40%;
+  }
+}
+@media (min-width: 460px) {
+  #dashboard-tools[data-dashboard] {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (min-width: 769px) {
+  #dashboard-tools[data-dashboard] {
+    gap: 20px;
+    grid-template-columns: 1fr 4fr 1fr;
+  }
+}
+@media (min-width: 993px) {
+  #dashboard-tools[data-dashboard] {
+    gap: 20px;
+    grid-template-columns: 1fr 2fr 1fr;
+  }
 }
 
 #datepicker[data-dashboard] {
@@ -50,7 +87,6 @@
 #color-guide[data-dashboard] > * {
   display: flex;
   justify-content: flex-end;
-  margin: 0 20px 5px 0;
 }
 #color-guide[data-dashboard] > * > p {
   margin-right: 5px;
