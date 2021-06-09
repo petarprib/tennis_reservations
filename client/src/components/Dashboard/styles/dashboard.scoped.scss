@@ -12,11 +12,11 @@
   max-width: 992px;
   margin: 0 auto 25px auto;
   gap: 20px;
-  @media (max-width: 768px) {
+  @media (max-width: 992px) {
     display: flex;
     flex-direction: column-reverse;
   }
-  @media (min-width: 768px) {
+  @media (min-width: 992px) {
     display: grid;
     grid-template-columns: 1fr 2fr;
   }
@@ -96,7 +96,7 @@
 #hours-index[data-dashboard] {
   display: flex;
   position: sticky;
-  top: 0px;
+  top: 60px;
   overflow: auto;
   border-top: solid 1px $light-grey;
   border-bottom: solid 1px $light-grey;
@@ -160,12 +160,15 @@
     margin-right: auto;
   }
   > div {
-    > .fas {
-      cursor: pointer;
-    }
-    &:last-of-type > i {
-      color: $clay;
-      margin-left: 10px;
+    display: flex;
+    > div {
+      > .fas {
+        cursor: pointer;
+      }
+      &:last-of-type > i {
+        color: $clay;
+        margin-left: 10px;
+      }
     }
   }
 }

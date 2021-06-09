@@ -144,7 +144,7 @@ const Schedule = () => {
   };
 
   return (
-    <div>
+    <>
       {filteredCourts.length > 0 && (
         <>
           <ScheduleFilter />
@@ -194,7 +194,7 @@ const Schedule = () => {
           </div>
         </>
       )}
-    </div>
+    </>
   );
 };
 

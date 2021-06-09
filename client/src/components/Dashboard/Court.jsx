@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import EditCourt from "../../modals/EditCourt.jsx";
@@ -13,6 +13,16 @@ const Court = (props) => {
   const user = useSelector((state) => state.user);
   const userType = useSelector((state) => state.userType);
   const [showIcons, setShowIcons] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div
@@ -29,10 +39,25 @@ const Court = (props) => {
         <p className="court-type" data-dashboard>
           {court.type}
         </p>
-        {userType === 2 && showIcons && (
-          <EditCourt courtId={court.id} courtNumber={court.number} courtType={court.type_id} />
-        )}
-        {userType === 2 && showIcons && <DeleteCourt courtId={court.id} courtNumber={court.number} />}
+        {(() => {
+          if (userType === 2) {
+            if (windowWidth > 992 && showIcons) {
+              return (
+                <div>
+                  <EditCourt courtId={court.id} courtNumber={court.number} courtType={court.type_id} />
+                  <DeleteCourt courtId={court.id} courtNumber={court.number} />
+                </div>
+              );
+            } else if (windowWidth <= 992) {
+              return (
+                <div>
+                  <EditCourt courtId={court.id} courtNumber={court.number} courtType={court.type_id} />
+                  <DeleteCourt courtId={court.id} courtNumber={court.number} />
+                </div>
+              );
+            }
+          }
+        })()}
       </div>
 
       <div className="hours" onScroll={(event) => props.handleScroll(event)} ref={scrollRef} data-dashboard>

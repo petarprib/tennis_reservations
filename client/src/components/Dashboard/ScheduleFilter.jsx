@@ -26,7 +26,7 @@ const ScheduleFilter = () => {
   };
 
   return (
-    <>
+    <div>
       <div>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <KeyboardDatePicker
@@ -64,7 +64,7 @@ const ScheduleFilter = () => {
           </Select>
         </FormControl>
       </div>
-    </>
+    </div>
   );
 };
 

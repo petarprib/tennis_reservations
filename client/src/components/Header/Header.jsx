@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./styles/header.scoped.scss";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import logOutUtil from "../../utils/logOutUtil";
 import { withStyles } from "@material-ui/core/styles";
 import Menu from "@material-ui/core/Menu";
@@ -31,18 +31,7 @@ const StyledMenu = withStyles({
 
 const Header = () => {
   const dispatch = useDispatch();
-  const userName = useSelector((state) => state.userName);
   const [menuOpen, setMenuOpen] = useState(null);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const handleClick = (event) => {
     menuOpen === null ? setMenuOpen(event.currentTarget) : setMenuOpen(null);
@@ -64,7 +53,7 @@ const Header = () => {
   };
 
   return (
-    <div id="header" data-header>
+    <nav data-header>
       <div id="header-content" data-header>
         <div id="header-logo" data-header>
           <img
@@ -75,7 +64,7 @@ const Header = () => {
         </div>
         <div>
           <div onClick={(event) => handleClick(event)} id="user-menu" data-header>
-            <i class="fas fa-bars" data-header />
+            <i className="fas fa-bars" data-header />
           </div>
           <StyledMenu
             disableScrollLock={true}
@@ -101,7 +90,7 @@ const Header = () => {
           </StyledMenu>
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
 

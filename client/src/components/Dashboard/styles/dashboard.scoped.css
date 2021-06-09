@@ -11,13 +11,13 @@
   margin: 0 auto 25px auto;
   gap: 20px;
 }
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   #sections[data-dashboard] {
     display: flex;
     flex-direction: column-reverse;
   }
 }
-@media (min-width: 768px) {
+@media (min-width: 992px) {
   #sections[data-dashboard] {
     display: grid;
     grid-template-columns: 1fr 2fr;
@@ -100,7 +100,7 @@
 #hours-index[data-dashboard] {
   display: flex;
   position: sticky;
-  top: 0px;
+  top: 60px;
   overflow: auto;
   border-top: solid 1px #d3d3d3;
   border-bottom: solid 1px #d3d3d3;
@@ -164,10 +164,13 @@
 .court-info[data-dashboard] > .court-type {
   margin-right: auto;
 }
-.court-info[data-dashboard] > div > .fas {
+.court-info[data-dashboard] > div {
+  display: flex;
+}
+.court-info[data-dashboard] > div > div > .fas {
   cursor: pointer;
 }
-.court-info[data-dashboard] > div:last-of-type > i {
+.court-info[data-dashboard] > div > div:last-of-type > i {
   color: #ff4635;
   margin-left: 10px;
 }
