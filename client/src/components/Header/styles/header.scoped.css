@@ -11,7 +11,7 @@ nav[data-header] {
 
 #header-content[data-header] {
   width: 100%;
-  max-width: 1920px;
+  max-width: 1280px;
   display: flex;
 }
 #header-content[data-header] > div {

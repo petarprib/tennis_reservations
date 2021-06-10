@@ -1,7 +1,8 @@
 #dashboard[data-dashboard] {
   width: 100%;
-  min-height: 100vh;
-  max-width: 1920px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding-top: 85px;
   margin: 0 auto;
 }
@@ -38,28 +39,44 @@
   }
 }
 
-#schedule-filter[data-dashboard] > div {
-  width: 100%;
+#schedule-filter[data-dashboard] {
+  display: grid;
 }
-#schedule-filter[data-dashboard] > div > div {
-  width: 100%;
+#schedule-filter[data-dashboard] > div {
+  align-self: center;
+}
+@media (min-width: 351px) {
+  #schedule-filter[data-dashboard] {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
 }
 @media (min-width: 769px) {
   #schedule-filter[data-dashboard] {
-    display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 15px;
   }
 }
 
 #dashboard-tools[data-dashboard] {
+  width: 100%;
+  max-width: 1280px;
   padding: 0 10px;
-  margin-bottom: 10px;
+  margin: 0 auto 10px auto;
   display: grid;
 }
 @media (min-width: 351px) {
   #dashboard-tools[data-dashboard] {
     grid-template-columns: 60% 40%;
+  }
+  #dashboard-tools[data-dashboard] > div:first-of-type {
+    display: flex;
+    align-items: center;
+  }
+  #dashboard-tools[data-dashboard] > div:last-of-type {
+    grid-template-columns: 1fr 1fr;
+    align-self: end;
+    gap: 15px;
   }
 }
 @media (min-width: 460px) {
@@ -69,13 +86,13 @@
 }
 @media (min-width: 769px) {
   #dashboard-tools[data-dashboard] {
-    gap: 20px;
+    gap: 15px;
     grid-template-columns: 1fr 4fr 1fr;
   }
 }
 @media (min-width: 993px) {
   #dashboard-tools[data-dashboard] {
-    gap: 20px;
+    gap: 15px;
     grid-template-columns: 1fr 2fr 1fr;
   }
 }
@@ -84,6 +101,11 @@
   margin-bottom: 300px;
 }
 
+#color-guide[data-dashboard] {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 #color-guide[data-dashboard] > * {
   display: flex;
   justify-content: flex-end;
@@ -103,10 +125,6 @@
 
 .you[data-dashboard] {
   color: #87ceeb;
-}
-
-#schedule[data-dashboard] {
-  width: 100%;
 }
 
 #hours-index[data-dashboard] {
@@ -129,7 +147,6 @@
 .hour-index[data-dashboard] {
   min-width: 60px;
   height: 40px;
-  width: 100%;
   border-right: solid 1px #d3d3d3;
   display: flex;
   justify-content: center;
@@ -192,7 +209,6 @@
   overflow: auto;
 }
 .hours[data-dashboard] > div {
-  width: 100%;
   min-width: 60px;
   cursor: pointer;
 }

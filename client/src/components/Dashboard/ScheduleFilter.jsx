@@ -27,43 +27,38 @@ const ScheduleFilter = () => {
 
   return (
     <div id="schedule-filter" data-dashboard>
-      <div>
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
-            inputVariant="outlined"
-            size="small"
-            margin="normal"
-            id="date-picker"
-            label="Date"
-            format="dd/MM/yyyy"
-            value={selectedDate}
-            onChange={(date) => handleDateChange(date)}
-          />
-        </MuiPickersUtilsProvider>
-      </div>
-      <div>
-        <FormControl
-          variant="outlined"
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <KeyboardDatePicker
+          inputVariant="outlined"
           size="small"
-          // className={classes.formControl}
+          id="date-picker"
+          label="Date"
+          format="dd/MM/yyyy"
+          value={selectedDate}
+          onChange={(date) => handleDateChange(date)}
+        />
+      </MuiPickersUtilsProvider>
+      <FormControl
+        variant="outlined"
+        size="small"
+        // className={classes.formControl}
+      >
+        <InputLabel id="court-type-input">Court type</InputLabel>
+        <Select
+          MenuProps={{ disableScrollLock: true }}
+          labelId="court-type-select-label"
+          id="court-type-select"
+          value={courtType}
+          onChange={(event) => dispatch({ type: "SET_COURT_TYPE", payload: { courtType: event.target.value } })}
+          label="Court type"
         >
-          <InputLabel id="court-type-input">Court type</InputLabel>
-          <Select
-            MenuProps={{ disableScrollLock: true }}
-            labelId="court-type-select-label"
-            id="court-type-select"
-            value={courtType}
-            onChange={(event) => dispatch({ type: "SET_COURT_TYPE", payload: { courtType: event.target.value } })}
-            label="Court type"
-          >
-            {filteredCourtTypes.map((courtType) => (
-              <MenuItem key={courtType.id} value={courtType.id}>
-                {courtType.type}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
+          {filteredCourtTypes.map((courtType) => (
+            <MenuItem key={courtType.id} value={courtType.id}>
+              {courtType.type}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
     </div>
   );
 };
