@@ -94,7 +94,6 @@ const Dashboard = () => {
         <Header />
         <div id="dashboard" className={`${!courts.length && "center-court-message"}`} data-dashboard>
           {userType === 2 && <ConfigOpenHours />}
-          {/* {userType === 2 && <AddCourtButton />} */}
           {(() => {
             if (courts.length > 0) {
               if (windowWidth <= 350) {
@@ -113,7 +112,9 @@ const Dashboard = () => {
                 return (
                   <>
                     <div id="dashboard-tools" data-dashboard>
-                      <ScheduleFilter />
+                      <div>
+                        <ScheduleFilter />
+                      </div>
                       <div>
                         {userType === 2 && <AddCourtButton />}
                         <ColorGuide />
