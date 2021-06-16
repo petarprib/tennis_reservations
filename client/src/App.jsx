@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import "./App.scss";
+import "./styles/mui_overrides.scss";
 import { Switch, Route, Redirect, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Access from "./components/Access/Access.jsx";

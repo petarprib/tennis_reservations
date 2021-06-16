@@ -6,26 +6,52 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, createStyles } from "@material-ui/core/styles";
+// import styled from "styled-components";
+// import Popper from "@material-ui/core/styles";
 
-const useStyles = makeStyles({
-  root: {
-    "&. MuiAutocomplete-listbox": {
-      backgroundColor: "red",
-    },
-    // background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
-    // border: "solid 5px red",
-    // borderRadius: "15px",
-    // borderRadius: 3,
-    // boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
-    // color: "white",
-    // height: 48,
-    // padding: "0 30px",
-  },
-});
+// const useStyles = makeStyles((theme) =>
+//   createStyles({
+//     root: {
+//       "& .MuiAutocomplete-listbox": {
+//         border: "solid 3px red",
+//         // backgroundColor: "red",
+//       },
+//       // background: "linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)",
+//       // border: "solid 5px red",
+//       // borderRadius: "15px",
+//       // borderRadius: 3,
+//       // boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+//       // color: "white",
+//       // height: 48,
+//       // padding: "0 30px",
+//     },
+//   })
+// );
+
+// const CustomPopper = (props) => {
+//   const classes = useStyles();
+//   return <Popper {...props} className={classes.root} placement="bottom" />;
+// };
+
+// const useStyles = makeStyles((theme) =>
+//   createStyles({
+
+//   });
+// );
+
+// const StyledButton = styled(Button)`
+//   background-color: red;
+//   color: #fff;
+//   box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+//   padding: 7px 14px;
+//   &:hover {
+//     background-color: orange;
+//   }
+// `;
 
 const PlayerLogin = (props) => {
-  const classes = useStyles();
+  // const classes = useStyles();
   const dispatch = useDispatch();
   const [countries, setCountries] = useState([]);
   const [clubs, setClubs] = useState([]);
@@ -81,6 +107,7 @@ const PlayerLogin = (props) => {
 
   return (
     <>
+      {/* <StyledButton>Customized</StyledButton> */}
       <h1>Player Login</h1>
       <div className="options" data-access>
         <Link to="/club-login">Access as club</Link>
@@ -96,12 +123,13 @@ const PlayerLogin = (props) => {
               options={countries}
               getOptionLabel={(country) => country.name}
               size="small"
-              className={classes.root}
+              // className={classes.root}
               onChange={(event, value) => {
                 if (!value) return;
                 fetchClubs(value.id);
               }}
               renderInput={(params) => <TextField {...params} label="Select country" variant="outlined" />}
+              // PopperComponent={CustomPopper}
             />
             <small>{countryError}</small>
           </div>
@@ -110,12 +138,12 @@ const PlayerLogin = (props) => {
               id="select-club"
               options={clubs}
               getOptionLabel={(club) => club.name}
+              // className={classes.root}
               onChange={(event, value) => {
                 if (!value) return;
                 setClub(value.id);
               }}
               size="small"
-              className={classes.root}
               renderInput={(params) => <TextField {...params} label="Select club" variant="outlined" />}
             />
             <small>{clubError}</small>
@@ -145,7 +173,7 @@ const PlayerLogin = (props) => {
             <small>{passwordError}</small>
           </div>
           <small>{loginError}</small>
-          <Button type="submit" variant="contained" color="primary">
+          <Button className="button" type="submit" variant="contained" color="primary" data-access>
             Log in
           </Button>
         </FormControl>

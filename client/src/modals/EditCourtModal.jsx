@@ -27,15 +27,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EditCourt = (props) => {
-  const { courtId } = props;
+const EditCourtModal = (props) => {
+  const { open, courtId } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
   const [courtNumber, setCourtNumber] = useState("");
   const [courtError, setCourtError] = useState("");
   const [courtType, setCourtType] = useState("");
   const courtTypes = useSelector((state) => state.courtTypes);
-  const [open, setOpen] = useState(false);
+  // const [open, props.close] = useState(false);
 
   useEffect(() => {
     setCourtNumber(props.courtNumber);
@@ -54,7 +54,7 @@ const EditCourt = (props) => {
       });
       const parseRes = await res.json();
       if (typeof parseRes !== "string") {
-        setOpen(false);
+        props.close();
         fetchCourts();
         setCourtError("");
         notify();
@@ -85,56 +85,53 @@ const EditCourt = (props) => {
   const notify = () => toast.success("Court successfully edited");
 
   return (
-    <div>
-      <i className="fas fa-edit" onClick={() => setOpen(true)} />
-      <Modal open={open} className="mui-fixed" onClose={() => setOpen(false)}>
-        <Fade in={open}>
-          <div className={classes.paper}>
-            <h2>Edit court info</h2>
-            <form id="form" onSubmit={(event) => handleSubmit(event)} data-access>
-              <FormControl
+    <Modal open={open} className="mui-fixed" onClose={() => props.close()}>
+      <Fade in={open}>
+        <div className={classes.paper}>
+          <h2 data-modals>Edit court info</h2>
+          <form id="form" onSubmit={(event) => handleSubmit(event)} data-access>
+            <FormControl
+              variant="outlined"
+              size="small"
+              // className={classes.formControl}
+            >
+              <TextField
+                id="number"
+                label="Court number"
+                value={courtNumber}
                 variant="outlined"
                 size="small"
-                // className={classes.formControl}
+                autoComplete="off"
+                fullWidth
+                onChange={(event) => handleCourtNumInput(event.target.value)}
+              />
+              <InputLabel id="court-type-input">Court type</InputLabel>
+              <Select
+                labelId="court-type-select-label"
+                id="court-type-select"
+                value={courtType}
+                onChange={(event) => setCourtType(event.target.value)}
+                label="Court type"
               >
-                <TextField
-                  id="number"
-                  label="Court number"
-                  value={courtNumber}
-                  variant="outlined"
-                  size="small"
-                  autoComplete="off"
-                  fullWidth
-                  onChange={(event) => handleCourtNumInput(event.target.value)}
-                />
-                <InputLabel id="court-type-input">Court type</InputLabel>
-                <Select
-                  labelId="court-type-select-label"
-                  id="court-type-select"
-                  value={courtType}
-                  onChange={(event) => setCourtType(event.target.value)}
-                  label="Court type"
-                >
-                  {courtTypes.map((courtType) => (
-                    <MenuItem key={courtType.id} value={courtType.id}>
-                      {courtType.type}
-                    </MenuItem>
-                  ))}
-                </Select>
-                <small>{courtError}</small>
-                <Button type="submit" variant="contained" color="primary">
-                  Save
-                </Button>
-                <Button onClick={() => setOpen(false)} variant="contained" color="secondary">
-                  Cancel
-                </Button>
-              </FormControl>
-            </form>
-          </div>
-        </Fade>
-      </Modal>
-    </div>
+                {courtTypes.map((courtType) => (
+                  <MenuItem key={courtType.id} value={courtType.id}>
+                    {courtType.type}
+                  </MenuItem>
+                ))}
+              </Select>
+              <small>{courtError}</small>
+              <Button type="submit" variant="contained" color="primary">
+                Save
+              </Button>
+              <Button onClick={() => props.close()} variant="contained" color="secondary">
+                Cancel
+              </Button>
+            </FormControl>
+          </form>
+        </div>
+      </Fade>
+    </Modal>
   );
 };
 
-export default EditCourt;
+export default EditCourtModal;

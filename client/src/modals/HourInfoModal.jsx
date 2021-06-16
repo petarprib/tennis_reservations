@@ -1,5 +1,5 @@
 import React from "react";
-import "../components/Dashboard/styles/dashboard.scoped.scss";
+import "./styles/modals.scoped.scss";
 import fetchReservationsUtil from "../utils/fetchReservationsUtil";
 import deleteReservationUtil from "../utils/deleteReservationUtil";
 import { useSelector, useDispatch } from "react-redux";
@@ -13,6 +13,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
+    width: "90%",
+    maxWidth: "300px",
     border: "none",
     boxShadow: "none",
     outline: "none",
@@ -52,7 +54,7 @@ const HourInfoModal = (props) => {
   return (
     <Modal open={open} onClose={() => props.setOpen()} BackdropComponent={Backdrop}>
       <Fade in={open}>
-        <div className={classes.paper}>
+        <div id="delete-hour" className={classes.paper} data-modals>
           <p>{name}</p>
           <p>{email}</p>
           <Button onClick={() => props.setOpen()} variant="contained">

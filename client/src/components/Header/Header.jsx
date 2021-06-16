@@ -5,9 +5,9 @@ import logOutUtil from "../../utils/logOutUtil";
 import { withStyles } from "@material-ui/core/styles";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import ChangeName from "../../modals/ChangeName.jsx";
-import ChangeEmail from "../../modals/ChangeEmail.jsx";
-import ChangePassword from "../../modals/ChangePassword.jsx";
+import ChangeNameModal from "../../modals/ChangeNameModal.jsx";
+import ChangeEmailModal from "../../modals/ChangeEmailModal.jsx";
+import ChangePasswordModal from "../../modals/ChangePasswordModal.jsx";
 
 const StyledMenu = withStyles({
   paper: {
@@ -75,13 +75,13 @@ const Header = () => {
             data-header
           >
             <MenuItem>
-              <ChangeName handleClose={() => handleClose()} />
+              <ChangeNameModal handleClose={() => handleClose()} />
             </MenuItem>
             <MenuItem>
-              <ChangeEmail handleClose={() => handleClose()} />
+              <ChangeEmailModal handleClose={() => handleClose()} />
             </MenuItem>
             <MenuItem>
-              <ChangePassword handleClose={() => handleClose()} />
+              <ChangePasswordModal handleClose={() => handleClose()} />
             </MenuItem>
             <MenuItem onClick={logOut}>
               <i className="fas fa-sign-out-alt menu-icon" data-header />

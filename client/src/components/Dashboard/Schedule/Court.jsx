@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import moment from "moment";
-import EditCourt from "../../modals/EditCourt.jsx";
-import DeleteCourt from "../../modals/DeleteCourt.jsx";
+import EditCourtModal from "../../../modals/EditCourtModal.jsx";
+import DeleteCourtModal from "../../../modals/DeleteCourtModal.jsx";
 import Hour from "./Hour";
 
 const Court = (props) => {
@@ -13,6 +13,8 @@ const Court = (props) => {
   const user = useSelector((state) => state.user);
   const userType = useSelector((state) => state.userType);
   const [showIcons, setShowIcons] = useState(false);
+  const [openEditCourt, setOpenEditCourt] = useState(false);
+  const [openDeleteCourt, setOpenDeleteCourt] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -44,15 +46,32 @@ const Court = (props) => {
             if (windowWidth > 992 && showIcons) {
               return (
                 <div>
-                  <EditCourt courtId={court.id} courtNumber={court.number} courtType={court.type_id} />
-                  <DeleteCourt courtId={court.id} courtNumber={court.number} />
+                  <div>
+                    <i className="fas fa-edit" onClick={() => setOpenEditCourt(true)} />
+                  </div>
+                  <EditCourtModal
+                    open={openEditCourt}
+                    close={() => setOpenEditCourt(false)}
+                    courtId={court.id}
+                    courtNumber={court.number}
+                    courtType={court.type_id}
+                  />
+                  <div>
+                    <i className="fas fa-trash" onClick={() => setOpenDeleteCourt(true)} />
+                  </div>
+                  <DeleteCourtModal
+                    open={openDeleteCourt}
+                    close={() => setOpenDeleteCourt(false)}
+                    courtId={court.id}
+                    courtNumber={court.number}
+                  />
                 </div>
               );
             } else if (windowWidth <= 992) {
               return (
                 <div>
-                  <EditCourt courtId={court.id} courtNumber={court.number} courtType={court.type_id} />
-                  <DeleteCourt courtId={court.id} courtNumber={court.number} />
+                  <EditCourtModal courtId={court.id} courtNumber={court.number} courtType={court.type_id} />
+                  <DeleteCourtModal courtId={court.id} courtNumber={court.number} />
                 </div>
               );
             }
@@ -77,7 +96,7 @@ const Court = (props) => {
             let endTime = moment(reservation.end_time, "YYYY-MM-DD HH:mm:ss");
             if (now.isSame(startTime) || now.isBetween(startTime, endTime)) {
               if (reservation.player === user) {
-                color = "rgb(135, 206, 235)";
+                color = "rgb(63, 81, 181)";
               } else {
                 playerReservation = true;
                 color = "rgb(255, 70, 53)";

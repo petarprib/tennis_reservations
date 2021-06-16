@@ -136,7 +136,7 @@ const ClubRegister = (props) => {
             <small>{repPasswordError}</small>
           </div>
           <small>{existsError}</small>
-          <Button type="submit" variant="contained" color="primary">
+          <Button className="button" type="submit" variant="contained" color="primary" data-access>
             Register
           </Button>
         </FormControl>

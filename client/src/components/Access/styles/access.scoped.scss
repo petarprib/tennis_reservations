@@ -61,9 +61,12 @@
   }
 }
 
-.input-error-div[data-access] {
+.input-error-div {
   margin-bottom: 10px;
   position: relative;
+  > small {
+    color: red;
+  }
 }
 
 .form-input[data-access] {
@@ -106,6 +109,10 @@
     color: $white;
     background-color: $grass;
   }
+}
+
+.button[data-access] {
+  margin-bottom: 10px;
 }
 
 .no-options[data-access] {

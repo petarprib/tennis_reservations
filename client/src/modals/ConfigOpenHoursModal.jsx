@@ -13,6 +13,11 @@ import Backdrop from "@material-ui/core/Backdrop";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
+    width: "90%",
+    maxWidth: "300px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
     border: "none",
     boxShadow: "none",
     outline: "none",
@@ -26,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EditCourt = () => {
+const EditCourtModal = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const [open, setOpen] = useState(false);
@@ -88,7 +93,7 @@ const EditCourt = () => {
     >
       <Fade in={open}>
         <div className={classes.paper}>
-          <h2>Initial configuration</h2>
+          <h2 data-modals>Initial configuration</h2>
 
           <form id="form" onSubmit={(event) => handleSubmit(event)} data-access>
             <FormControl
@@ -133,4 +138,4 @@ const EditCourt = () => {
   );
 };
 
-export default EditCourt;
+export default EditCourtModal;

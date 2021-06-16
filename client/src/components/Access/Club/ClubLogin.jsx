@@ -78,7 +78,7 @@ const ClubLogin = () => {
             <small>{passwordError}</small>
           </div>
           <small>{loginError}</small>
-          <Button type="submit" variant="contained" color="primary">
+          <Button className="button" type="submit" variant="contained" color="primary" data-access>
             Log in
           </Button>
         </FormControl>
