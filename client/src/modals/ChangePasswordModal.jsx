@@ -11,6 +11,11 @@ import "react-toastify/dist/ReactToastify.css";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
+    width: "90%",
+    maxWidth: "300px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
     border: "none",
     boxShadow: "none",
     outline: "none",
@@ -24,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ChangePassword = (props) => {
+const ChangePasswordModal = (props) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [newPassword, setNewPassword] = useState("");
@@ -73,13 +78,9 @@ const ChangePassword = (props) => {
       <Modal open={open} className="mui-fixed" onClose={() => setOpen(false)}>
         <Fade in={open}>
           <div className={classes.paper}>
-            <h2>Change password</h2>
+            <h2 data-modals>Change password</h2>
             <form onSubmit={(event) => handleSubmit(event)}>
-              <FormControl
-                variant="outlined"
-                size="small"
-                // className={classes.formControl}
-              >
+              <FormControl variant="outlined" size="small">
                 <TextField
                   id="new-password"
                   label="New password"
@@ -90,7 +91,9 @@ const ChangePassword = (props) => {
                   onChange={(event) => setNewPassword(event.target.value)}
                   size="small"
                 />
-                <small>{newPasswordError}</small>
+                <small className="input-error" data-modals>
+                  {newPasswordError}
+                </small>
                 <TextField
                   id="rep-new-password"
                   label="Rep new password"
@@ -101,7 +104,9 @@ const ChangePassword = (props) => {
                   onChange={(event) => setRepNewPassword(event.target.value)}
                   size="small"
                 />
-                <small>{repNewPasswordError}</small>
+                <small className="input-error" data-modals>
+                  {repNewPasswordError}
+                </small>
                 <TextField
                   id="current-password"
                   label="Current password"
@@ -112,7 +117,9 @@ const ChangePassword = (props) => {
                   onChange={(event) => setCurrentPassword(event.target.value)}
                   size="small"
                 />
-                <small>{currentPasswordError}</small>
+                <small className="input-error" data-modals>
+                  {currentPasswordError}
+                </small>
                 <Button type="submit" variant="contained" color="primary">
                   Submit
                 </Button>
@@ -125,4 +132,4 @@ const ChangePassword = (props) => {
   );
 };
 
-export default ChangePassword;
+export default ChangePasswordModal;

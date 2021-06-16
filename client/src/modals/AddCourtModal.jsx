@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import "./styles/modals.scoped.scss";
 import { makeStyles } from "@material-ui/core/styles";
 import addCourtUtil from "../utils/addCourtUtil";
 import Modal from "@material-ui/core/Modal";
@@ -15,6 +16,11 @@ import "react-toastify/dist/ReactToastify.css";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
+    width: "90%",
+    maxWidth: "300px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
     border: "none",
     boxShadow: "none",
     outline: "none",
@@ -28,29 +34,43 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AddCourt = (props) => {
-  const { openAddCourtModal } = props;
+const AddCourtModal = (props) => {
+  const { openModal, closeModal } = props;
   const dispatch = useDispatch();
   const classes = useStyles();
-  // const [open, setOpen] = useState(false);
-  const [courtError, setCourtError] = useState("");
-  const [courtNumber, setCourtNumber] = useState("");
   const [courtType, setCourtType] = useState("");
+  const [courtTypeError, setCourtTypeError] = useState("");
+  const [courtNumber, setCourtNumber] = useState("");
+  const [courtNumberError, setCourtNumberError] = useState("");
   const courtTypes = useSelector((state) => state.courtTypes);
 
-  const addCourt = async (event) => {
+  const AddCourtModal = async (event) => {
     event.preventDefault();
-    const parseRes = await addCourtUtil(courtType, courtNumber);
-
-    if (typeof parseRes !== "string") {
-      fetchCourts();
-      notify(courtNumber);
-      setCourtNumber("");
-      setCourtType("");
-      setCourtError("");
-      props.setOpenAddCourtModal();
+    if (!courtType || !courtNumber) {
+      if (!courtType) {
+        setCourtTypeError("You must choose a court type");
+      } else {
+        setCourtTypeError("");
+      }
+      if (!courtNumber) {
+        setCourtNumberError("The court doesn't have an assigned number");
+      } else {
+        setCourtNumberError("");
+      }
     } else {
-      setCourtError(parseRes);
+      const parseRes = await addCourtUtil(courtType, courtNumber);
+      setCourtTypeError("");
+
+      if (typeof parseRes !== "string") {
+        fetchCourts();
+        notify(courtNumber);
+        setCourtNumber("");
+        setCourtType("");
+        setCourtNumberError("");
+        closeModal();
+      } else {
+        setCourtNumberError(parseRes);
+      }
     }
   };
 
@@ -73,23 +93,22 @@ const AddCourt = (props) => {
 
   const notify = (court) => toast.success(`Court ${court} added`);
 
-  // const openModal = () => {
-  //   setOpen(true);
-  //   // props.handleClose();
-  // };
+  const handleCloseModal = () => {
+    setCourtType("");
+    setCourtNumber("");
+    setCourtTypeError("");
+    setCourtNumberError("");
+    closeModal();
+  };
 
   return (
     <>
-      <Modal open={openAddCourtModal} className="mui-fixed" onClose={() => props.setOpenAddCourtModal(false)}>
-        <Fade in={openAddCourtModal}>
+      <Modal open={openModal} className="mui-fixed" onClose={() => handleCloseModal()}>
+        <Fade in={openModal}>
           <div className={classes.paper}>
-            <h2>Add court</h2>
-            <form onSubmit={(event) => addCourt(event)}>
-              <FormControl
-                variant="outlined"
-                size="small"
-                // className={classes.formControl}
-              >
+            <h2 data-modals>Add court</h2>
+            <form onSubmit={(event) => AddCourtModal(event)}>
+              <FormControl variant="outlined" size="small" fullWidth>
                 <InputLabel id="court-type-input">Court type</InputLabel>
                 <Select
                   labelId="court-type-select-label"
@@ -115,6 +134,9 @@ const AddCourt = (props) => {
                     </MenuItem>
                   ))}
                 </Select>
+                <small className="input-error" data-modals>
+                  {courtTypeError}
+                </small>
                 <TextField
                   id="court-number"
                   label="Court number"
@@ -124,10 +146,12 @@ const AddCourt = (props) => {
                   onChange={(event) => handleCourtNumInput(event.target.value)}
                   size="small"
                 />
+                <small className="input-error" data-modals>
+                  {courtNumberError}
+                </small>
                 <Button type="submit" variant="contained" color="primary">
                   Add court
                 </Button>
-                <p>{courtError}</p>
               </FormControl>
             </form>
           </div>
@@ -137,4 +161,4 @@ const AddCourt = (props) => {
   );
 };
 
-export default AddCourt;
+export default AddCourtModal;

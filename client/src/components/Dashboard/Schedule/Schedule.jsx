@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, createRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
-import fetchHoursUtil from "../../utils/fetchHoursUtil";
-import fetchReservationsUtil from "../../utils/fetchReservationsUtil";
+import fetchHoursUtil from "../../../utils/fetchHoursUtil";
+import fetchReservationsUtil from "../../../utils/fetchReservationsUtil";
 import "date-fns";
 import Court from "./Court.jsx";
 
@@ -158,13 +158,15 @@ const Schedule = () => {
         <p>Surface type</p>
       </div>
 
-      {filteredCourts.map((court) => {
-        const scrollRef = createRef();
-        scrollRefs.push(scrollRef);
-        return (
-          <Court key={court.id} court={court} scrollRef={scrollRef} handleScroll={(event) => handleScroll(event)} />
-        );
-      })}
+      <div>
+        {filteredCourts.map((court) => {
+          const scrollRef = createRef();
+          scrollRefs.push(scrollRef);
+          return (
+            <Court key={court.id} court={court} scrollRef={scrollRef} handleScroll={(event) => handleScroll(event)} />
+          );
+        })}
+      </div>
     </div>
   );
 };

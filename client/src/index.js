@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
-import "./index.scss";
 import App from "./App.jsx";
 import { Provider } from "react-redux";
 import store from "./store";
@@ -12,7 +11,7 @@ ReactDOM.render(
     <Provider store={store}>
       <Router>
         <App />
-        <ToastContainer toastStyle={{ backgroundColor: "rgb(135, 206, 235)", color: "rgb(32, 32, 32)" }} />
+        <ToastContainer toastStyle={{ backgroundColor: "#3F51B5", color: "#ffffff" }} />
       </Router>
     </Provider>
   </React.StrictMode>,

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import deleteCourtUtil from "../utils/deleteCourtUtil";
 import { makeStyles } from "@material-ui/core/styles";
@@ -24,12 +24,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DeleteCourt = (props) => {
-  const { courtId, courtNumber } = props;
+const DeleteCourtModal = (props) => {
+  const { open, courtId, courtNumber } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
-
-  const [open, setOpen] = useState(false);
+  // const [open, props.close] useState(false);
 
   const fetchCourts = async () => {
     const res = await fetch("/api/dashboard/courts");
@@ -49,23 +48,20 @@ const DeleteCourt = (props) => {
   const notify = (courtNumber) => toast.success(`Court ${courtNumber} deleted`);
 
   return (
-    <div>
-      <i className="fas fa-trash" onClick={() => setOpen(true)} />
-      <Modal open={open} onClose={() => setOpen(false)} BackdropComponent={Backdrop}>
-        <Fade in={open}>
-          <div className={classes.paper}>
-            <p>Are you sure you want to delete court {courtNumber}?</p>
-            <Button onClick={() => setOpen(false)} variant="contained" color="">
-              Cancel
-            </Button>
-            <Button onClick={() => deleteCourt(courtId)} variant="contained" color="secondary">
-              Delete
-            </Button>
-          </div>
-        </Fade>
-      </Modal>
-    </div>
+    <Modal open={open} onClose={() => props.close()} BackdropComponent={Backdrop}>
+      <Fade in={open}>
+        <div className={classes.paper}>
+          <p>Are you sure you want to delete court {courtNumber}?</p>
+          <Button onClick={() => props.close()} variant="contained" color="">
+            Cancel
+          </Button>
+          <Button onClick={() => deleteCourt(courtId)} variant="contained" color="secondary">
+            Delete
+          </Button>
+        </div>
+      </Fade>
+    </Modal>
   );
 };
 
-export default DeleteCourt;
+export default DeleteCourtModal;

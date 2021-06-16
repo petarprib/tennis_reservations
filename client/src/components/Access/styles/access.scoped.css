@@ -61,9 +61,12 @@
   margin-bottom: 10px;
 }
 
-.input-error-div[data-access] {
+.input-error-div {
   margin-bottom: 10px;
   position: relative;
+}
+.input-error-div > small {
+  color: red;
 }
 
 .form-input[data-access] {
@@ -103,6 +106,10 @@
 .option[data-access]:hover {
   color: #ffffff;
   background-color: #85b02b;
+}
+
+.button[data-access] {
+  margin-bottom: 10px;
 }
 
 a {

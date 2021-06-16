@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import changeEmailUtil from "../utils/changeEmailUtil";
+import changeNameUtil from "../utils/changeNameUtil";
 import Modal from "@material-ui/core/Modal";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
@@ -11,6 +11,11 @@ import "react-toastify/dist/ReactToastify.css";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
+    width: "90%",
+    maxWidth: "300px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
     border: "none",
     boxShadow: "none",
     outline: "none",
@@ -24,21 +29,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ChangeEmail = (props) => {
+const ChangeNameModal = (props) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const [newEmail, setNewEmail] = useState("");
+  const [newName, setNewName] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    let parseRes = await changeEmailUtil(newEmail);
+    let parseRes = await changeNameUtil(newName);
     if (typeof parseRes === "string") {
       return setError(parseRes);
     }
     notify();
     setOpen(false);
-    setNewEmail("");
+    setNewName("");
     setError("");
   };
 
@@ -47,34 +52,32 @@ const ChangeEmail = (props) => {
     props.handleClose();
   };
 
-  const notify = () => toast.success("Email successfully changed");
+  const notify = () => toast.success("Name successfully changed");
 
   return (
     <>
       <div onClick={() => openModal()}>
-        <i className="fas fa-at menu-icon" data-header />
-        Change email
+        <i className="fas fa-user-alt menu-icon" data-header />
+        Change name
       </div>
       <Modal open={open} className="mui-fixed" onClose={() => setOpen(false)}>
         <Fade in={open}>
           <div className={classes.paper}>
-            <h2>Change email</h2>
+            <h2 data-modals>Change name</h2>
             <form onSubmit={(event) => handleSubmit(event)}>
-              <FormControl
-                variant="outlined"
-                size="small"
-                // className={classes.formControl}
-              >
+              <FormControl variant="outlined" size="small">
                 <TextField
-                  id="change-email"
-                  label="New email"
+                  id="change-name"
+                  label="New name"
                   variant="outlined"
                   autoComplete="off"
-                  value={newEmail}
-                  onChange={(event) => setNewEmail(event.target.value)}
+                  value={newName}
+                  onChange={(event) => setNewName(event.target.value)}
                   size="small"
                 />
-                <small>{error}</small>
+                <small className="input-error" data-modals>
+                  {error}
+                </small>
                 <Button type="submit" variant="contained" color="primary">
                   Submit
                 </Button>
@@ -87,4 +90,4 @@ const ChangeEmail = (props) => {
   );
 };
 
-export default ChangeEmail;
+export default ChangeNameModal;

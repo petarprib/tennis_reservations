@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import "./styles/dashboard.scoped.scss";
+import "../styles/dashboard.scoped.scss";
 import { useSelector, useDispatch } from "react-redux";
-import reserveTimeUtil from "../../utils/reserveTimeUtil";
-import fetchReservationsUtil from "../../utils/fetchReservationsUtil";
+import reserveTimeUtil from "../../../utils/reserveTimeUtil";
+import fetchReservationsUtil from "../../../utils/fetchReservationsUtil";
 import "react-toastify/dist/ReactToastify.css";
-import HourInfoModal from "../../modals/HourInfoModal";
+import HourInfoModal from "../../../modals/HourInfoModal";
 
 const Hour = (props) => {
   const { court, hour, color, nameAcronym, playerReservation, name, email } = props;
@@ -31,7 +31,7 @@ const Hour = (props) => {
   };
 
   return (
-    <div>
+    <>
       <div
         className="hour"
         style={{ backgroundColor: color }}
@@ -49,7 +49,7 @@ const Hour = (props) => {
         open={open}
         setOpen={() => setOpen(false)}
       />
-    </div>
+    </>
   );
 };
 

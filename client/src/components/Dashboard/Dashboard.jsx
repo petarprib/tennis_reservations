@@ -4,18 +4,16 @@ import { useSelector, useDispatch } from "react-redux";
 import Header from "../Header/Header.jsx";
 import LoadingScreen from "../LoadingScreen/LoadingScreen.jsx";
 import fetchCourtTypesUtil from "../../utils/fetchCourtTypesUtil";
-import Schedule from "./Schedule.jsx";
-import ConfigOpenHours from "../../modals/ConfigOpenHours.jsx";
-import AddCourtModal from "../../modals/AddCourtModal.jsx";
-import AddCourtButton from "./AddCourtButton.jsx";
-import ScheduleFilter from "./ScheduleFilter.jsx";
-import ColorGuide from "./ColorGuide.jsx";
+import Schedule from "./Schedule/Schedule.jsx";
+import ConfigOpenHoursModal from "../../modals/ConfigOpenHoursModal.jsx";
+import AddCourtButton from "./Tools/AddCourtButton.jsx";
+import ScheduleFilter from "./Tools/ScheduleFilter.jsx";
+import ColorGuide from "./Tools/ColorGuide.jsx";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const userType = useSelector((state) => state.userType);
   const courts = useSelector((state) => state.courts);
-  const [openAddCourtModal, setOpenAddCourtModal] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -92,8 +90,8 @@ const Dashboard = () => {
     return (
       <>
         <Header />
-        <div id="dashboard" className={`${!courts.length && "center-court-message"}`} data-dashboard>
-          {userType === 2 && <ConfigOpenHours />}
+        <div id={!courts.length ? "no-courts-dashboard" : "dashboard"} data-dashboard>
+          {userType === 2 && <ConfigOpenHoursModal />}
           {(() => {
             if (courts.length > 0) {
               if (windowWidth <= 350) {
@@ -108,7 +106,7 @@ const Dashboard = () => {
                   </>
                 );
               }
-              if (windowWidth >= 351 && windowWidth <= 768) {
+              if (windowWidth > 350 && windowWidth <= 768) {
                 return (
                   <>
                     <div id="dashboard-tools" data-dashboard>
@@ -127,7 +125,7 @@ const Dashboard = () => {
               if (windowWidth > 768) {
                 return (
                   <>
-                    <div id="dashboard-tools" data-dashboard>
+                    <div id={userType === 2 ? "dashboard-tools" : "dashboard-tools-player"} data-dashboard>
                       {userType === 2 && <AddCourtButton />}
                       <ScheduleFilter />
                       <ColorGuide />
@@ -139,14 +137,17 @@ const Dashboard = () => {
             } else {
               if (userType === 2) {
                 return (
-                  <div className="no-courts" data-dashboard>
-                    <p>It seems no court has been added</p>
-                    <img
-                      src="https://ik.imagekit.io/w1xennnidd/tennis_reservations/sadsmiley_4lfUL6lgU.png"
-                      alt="sadsmiley"
-                    />
-                    <p>Click on the plus button to add one</p>
-                  </div>
+                  <>
+                    <AddCourtButton />
+                    <div className="no-courts" data-dashboard>
+                      <p>It seems no court has been added</p>
+                      <img
+                        src="https://ik.imagekit.io/w1xennnidd/tennis_reservations/sadsmiley_4lfUL6lgU.png"
+                        alt="sadface"
+                      />
+                      <p>Click on the plus button to add one</p>
+                    </div>
+                  </>
                 );
               } else if (userType === 3) {
                 return (
@@ -154,7 +155,7 @@ const Dashboard = () => {
                     <p>Sorry, it seems no courts have been added</p>
                     <img
                       src="https://ik.imagekit.io/w1xennnidd/tennis_reservations/sadsmiley_4lfUL6lgU.png"
-                      alt="sadsmiley"
+                      alt="sadface"
                     />
                   </div>
                 );
