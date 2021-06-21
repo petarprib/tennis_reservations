@@ -7,9 +7,15 @@ const RedisStore = require("connect-redis")(session);
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 require("dotenv").config();
+const path = require("path");
 
 app.use(cors());
 app.use(express.json());
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "client/build")));
+}
+
 app.use(cookieParser());
 app.set("trust proxy", 1);
 app.use(
@@ -35,6 +41,10 @@ app.use("/api/auth", require("./routes/auth"));
 app.use("/api/access", require("./routes/access"));
 
 app.use("/api/dashboard", require("./routes/dashboard"));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client/build/index.html"));
+});
 
 const PORT = process.env.APP_PORT || 5000;
 
