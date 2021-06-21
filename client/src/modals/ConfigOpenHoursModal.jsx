@@ -11,6 +11,7 @@ import Button from "@material-ui/core/Button";
 import Fade from "@material-ui/core/Fade";
 import Backdrop from "@material-ui/core/Backdrop";
 
+// Have yet to put this into a global theme to avoid repetition across modal components
 const useStyles = makeStyles((theme) => ({
   paper: {
     width: "90%",
@@ -96,12 +97,7 @@ const EditCourtModal = () => {
           <h2 data-modals>Initial configuration</h2>
 
           <form id="form" onSubmit={(event) => handleSubmit(event)} data-access>
-            <FormControl
-              variant="outlined"
-              size="small"
-              fullWidth
-              // className={classes.formControl}
-            >
+            <FormControl variant="outlined" size="small" fullWidth>
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardTimePicker
                   ampm={false}

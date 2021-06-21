@@ -45,23 +45,15 @@ const Header = () => {
     setMenuOpen(null);
     const loggedOut = await logOutUtil();
 
-    if (loggedOut === true) {
-      dispatch({
-        type: "SET_AUTH",
-        payload: {
-          auth: loggedOut,
-        },
-      });
-    } else {
-      dispatch({
-        type: "SET_AUTH",
-        payload: {
-          auth: loggedOut,
-        },
-      });
-      // eslint-disable-next-line
-      window.location.href = window.location.href;
-    }
+    dispatch({
+      type: "SET_AUTH",
+      payload: {
+        auth: loggedOut,
+      },
+    });
+
+    // eslint-disable-next-line
+    window.location.href = window.location.href;
   };
 
   return (

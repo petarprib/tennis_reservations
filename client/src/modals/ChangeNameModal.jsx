@@ -9,6 +9,7 @@ import Fade from "@material-ui/core/Fade";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// Have yet to put this into a global theme to avoid repetition across modal components
 const useStyles = makeStyles((theme) => ({
   paper: {
     width: "90%",

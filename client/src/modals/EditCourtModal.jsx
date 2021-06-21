@@ -13,6 +13,7 @@ import Fade from "@material-ui/core/Fade";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// Have yet to put this into a global theme to avoid repetition across modal components
 const useStyles = makeStyles((theme) => ({
   paper: {
     width: "90%",
@@ -42,7 +43,6 @@ const EditCourtModal = (props) => {
   const [courtError, setCourtError] = useState("");
   const [courtType, setCourtType] = useState("");
   const courtTypes = useSelector((state) => state.courtTypes);
-  // const [open, props.close] = useState(false);
 
   useEffect(() => {
     setCourtNumber(props.courtNumber);
@@ -118,14 +118,7 @@ const EditCourtModal = (props) => {
               onChange={(event) => handleCourtNumInput(event.target.value)}
             />
             <small data-modals>{emptyInputError}</small>
-            <FormControl
-              variant="outlined"
-              size="small"
-              fullWidth
-              className="modal-margin-top"
-              data-modals
-              // className={classes.formControl}
-            >
+            <FormControl variant="outlined" size="small" fullWidth className="modal-margin-top" data-modals>
               <InputLabel id="court-type-input">Court type</InputLabel>
               <Select
                 labelId="court-type-select-label"

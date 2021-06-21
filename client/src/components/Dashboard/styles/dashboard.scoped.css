@@ -157,10 +157,6 @@
   }
 }
 
-#datepicker[data-dashboard] {
-  margin-bottom: 300px;
-}
-
 #color-guide[data-dashboard] {
   display: flex;
   flex-direction: column;
@@ -288,12 +284,4 @@
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.show[data-dashboard] {
-  display: block;
-}
-
-.hide[data-dashboard] {
-  display: none;
 }

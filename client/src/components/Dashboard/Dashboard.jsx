@@ -2,25 +2,29 @@ import React, { useState, useEffect } from "react";
 import "./styles/dashboard.scoped.scss";
 import { useSelector, useDispatch } from "react-redux";
 import Header from "../Header/Header.jsx";
-import LoadingScreen from "../LoadingScreen/LoadingScreen.jsx";
 import fetchCourtTypesUtil from "../../utils/fetchCourtTypesUtil";
 import Schedule from "./Schedule/Schedule.jsx";
 import ConfigOpenHoursModal from "../../modals/ConfigOpenHoursModal.jsx";
 import AddCourtButton from "./Tools/AddCourtButton.jsx";
 import ScheduleFilter from "./Tools/ScheduleFilter.jsx";
 import ColorGuide from "./Tools/ColorGuide.jsx";
+import Fade from "@material-ui/core/Fade";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const userType = useSelector((state) => state.userType);
+  const [noCourts, setNoCourts] = useState(false);
   const courts = useSelector((state) => state.courts);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const userType = useSelector((state) => state.userData.userType);
 
   useEffect(() => {
     handleResize();
     fetchCourts();
     fetchEssentialData();
     fetchCourtTypes();
+    setTimeout(() => {
+      setNoCourts(true);
+    }, 1000);
     // eslint-disable-next-line
   }, []);
 
@@ -47,29 +51,15 @@ const Dashboard = () => {
       const res = await fetch("/api/dashboard/session");
       const parseRes = await res.json();
 
-      console.log(parseRes);
       dispatch({
-        type: "SET_USER_NAME",
+        type: "SET_USER_DATA",
         payload: {
-          userName: parseRes.name,
-        },
-      });
-      dispatch({
-        type: "SET_USER",
-        payload: {
-          user: parseRes.accountId,
-        },
-      });
-      dispatch({
-        type: "SET_USER_TYPE",
-        payload: {
-          userType: parseRes.accountType,
-        },
-      });
-      dispatch({
-        type: "SET_CLUB",
-        payload: {
-          club: parseRes.club,
+          userData: {
+            userName: parseRes.name,
+            user: parseRes.accountId,
+            userType: parseRes.accountType,
+            club: parseRes.club,
+          },
         },
       });
     } catch (error) {
@@ -85,61 +75,59 @@ const Dashboard = () => {
     });
   };
 
-  if (userType === "loading") {
-    return <LoadingScreen />;
-  } else {
-    return (
-      <>
-        <Header />
-        <div id={!courts.length ? "no-courts-dashboard" : "dashboard"} data-dashboard>
-          {userType === 2 && <ConfigOpenHoursModal />}
-          {(() => {
-            if (courts.length > 0) {
-              if (windowWidth <= 350) {
-                return (
-                  <>
-                    <div id="dashboard-tools" data-dashboard>
-                      {userType === 2 && <AddCourtButton />}
+  return (
+    <>
+      <Header />
+      <div id={!courts.length ? "no-courts-dashboard" : "dashboard"} data-dashboard>
+        {userType === 2 && <ConfigOpenHoursModal />}
+        {(() => {
+          if (courts.length > 0) {
+            if (windowWidth <= 350) {
+              return (
+                <>
+                  <div id="dashboard-tools" data-dashboard>
+                    {userType === 2 && <AddCourtButton />}
+                    <ScheduleFilter />
+                    <ColorGuide />
+                  </div>
+                  <Schedule />
+                </>
+              );
+            }
+            if (windowWidth > 350 && windowWidth <= 768) {
+              return (
+                <>
+                  <div id="dashboard-tools" data-dashboard>
+                    <div>
                       <ScheduleFilter />
+                    </div>
+                    <div>
+                      {userType === 2 && <AddCourtButton />}
                       <ColorGuide />
                     </div>
-                    <Schedule />
-                  </>
-                );
-              }
-              if (windowWidth > 350 && windowWidth <= 768) {
-                return (
-                  <>
-                    <div id="dashboard-tools" data-dashboard>
-                      <div>
-                        <ScheduleFilter />
-                      </div>
-                      <div>
-                        {userType === 2 && <AddCourtButton />}
-                        <ColorGuide />
-                      </div>
-                    </div>
-                    <Schedule />
-                  </>
-                );
-              }
-              if (windowWidth > 768) {
-                return (
-                  <>
-                    <div id={userType === 2 ? "dashboard-tools" : "dashboard-tools-player"} data-dashboard>
-                      {userType === 2 && <AddCourtButton />}
-                      <ScheduleFilter />
-                      <ColorGuide />
-                    </div>
-                    <Schedule />
-                  </>
-                );
-              }
-            } else {
-              if (userType === 2) {
-                return (
-                  <>
-                    <AddCourtButton />
+                  </div>
+                  <Schedule />
+                </>
+              );
+            }
+            if (windowWidth > 768) {
+              return (
+                <>
+                  <div id={userType === 2 ? "dashboard-tools" : "dashboard-tools-player"} data-dashboard>
+                    {userType === 2 && <AddCourtButton />}
+                    <ScheduleFilter />
+                    <ColorGuide />
+                  </div>
+                  <Schedule />
+                </>
+              );
+            }
+          } else {
+            if (userType === 2) {
+              return (
+                <>
+                  <AddCourtButton />
+                  <Fade in={noCourts} timeout={500}>
                     <div className="no-courts" data-dashboard>
                       <p>It seems no court has been added</p>
                       <img
@@ -148,10 +136,12 @@ const Dashboard = () => {
                       />
                       <p>Click on the plus button to add one</p>
                     </div>
-                  </>
-                );
-              } else if (userType === 3) {
-                return (
+                  </Fade>
+                </>
+              );
+            } else if (userType === 3) {
+              return (
+                <Fade in={noCourts} timeout={500}>
                   <div className="no-courts" data-dashboard>
                     <p>Sorry, it seems no courts have been added</p>
                     <img
@@ -159,14 +149,15 @@ const Dashboard = () => {
                       alt="sadface"
                     />
                   </div>
-                );
-              }
+                </Fade>
+              );
             }
-          })()}
-        </div>
-      </>
-    );
-  }
+          }
+        })()}
+      </div>
+    </>
+  );
+  // }
 };
 
 export default Dashboard;

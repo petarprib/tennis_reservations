@@ -38,11 +38,7 @@ const ScheduleFilter = () => {
           onChange={(date) => handleDateChange(date)}
         />
       </MuiPickersUtilsProvider>
-      <FormControl
-        variant="outlined"
-        size="small"
-        // className={classes.formControl}
-      >
+      <FormControl variant="outlined" size="small">
         <InputLabel id="court-type-input">Court type</InputLabel>
         <Select
           MenuProps={{ disableScrollLock: true }}

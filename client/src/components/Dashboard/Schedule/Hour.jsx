@@ -11,7 +11,7 @@ const Hour = (props) => {
   const dispatch = useDispatch();
   const date = useSelector((state) => state.date);
   const [open, setOpen] = useState(false);
-  const userType = useSelector((state) => state.userType);
+  const userType = useSelector((state) => state.userData.userType);
 
   const fetchReservations = async () => {
     const reservations = await fetchReservationsUtil();

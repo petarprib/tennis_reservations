@@ -14,6 +14,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// Have yet to put this into a global theme to avoid repetition across modal components
 const useStyles = makeStyles((theme) => ({
   paper: {
     width: "90%",
@@ -146,9 +147,7 @@ const AddCourtModal = (props) => {
                 size="small"
                 fullWidth
               />
-              <small className="modal-input-margins" data-modals>
-                {courtNumberError}
-              </small>
+              <small data-modals>{courtNumberError}</small>
               <Button
                 type="submit"
                 variant="contained"

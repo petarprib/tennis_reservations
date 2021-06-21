@@ -10,6 +10,7 @@ import Backdrop from "@material-ui/core/Backdrop";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// Have yet to put this into a global theme to avoid repetition across modal components
 const useStyles = makeStyles((theme) => ({
   paper: {
     width: "90%",
@@ -31,7 +32,6 @@ const DeleteCourtModal = (props) => {
   const { open, courtId, courtNumber } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
-  // const [open, props.close] useState(false);
 
   const fetchCourts = async () => {
     const res = await fetch("/api/dashboard/courts");

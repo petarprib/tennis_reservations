@@ -3,7 +3,7 @@ const pool = require("../db");
 const bcrypt = require("bcrypt");
 const validPasswords = require("../middleware/validPasswords");
 
-// get whether opening and closing times have been determined
+// Get whether opening and closing times have been determined
 router.get("/initial-club-config", async (req, res) => {
   try {
     const openHoursConfiguration = await pool.query(
@@ -16,11 +16,11 @@ router.get("/initial-club-config", async (req, res) => {
     return res.json({ open_time, close_time, config_open_hours });
   } catch (error) {
     console.error(error.message);
-    return res.status(500).send("Server Error");
+    res.status(500).send("Server Error");
   }
 });
 
-// set opening and closing times
+// Set opening and closing times
 router.put("/initial-club-config", async (req, res) => {
   try {
     const { formatOpenTime, formatCloseTime } = req.body;
@@ -33,11 +33,11 @@ router.put("/initial-club-config", async (req, res) => {
     res.end();
   } catch (error) {
     console.error(error.message);
-    return res.status(500).send("Server Error");
+    res.status(500).send("Server Error");
   }
 });
 
-// get opening and closing times
+// Get opening and closing times
 router.get("/open-hours", async (req, res) => {
   try {
     const openHours = await pool.query("SELECT open_time, close_time FROM club_details WHERE club = $1", [
@@ -47,11 +47,11 @@ router.get("/open-hours", async (req, res) => {
     return res.json(openHours.rows[0]);
   } catch (error) {
     console.error(error.message);
-    return res.status(500).send("Server Error");
+    res.status(500).send("Server Error");
   }
 });
 
-// get basic user info
+// Get basic user info
 router.get("/session", async (req, res) => {
   try {
     const { accountId, accountType, club, name } = req.session;
@@ -59,11 +59,11 @@ router.get("/session", async (req, res) => {
     return res.json({ accountId, accountType, club, name });
   } catch (error) {
     console.error(error.message);
-    return res.status(500).send("Server Error");
+    res.status(500).send("Server Error");
   }
 });
 
-// change user name
+// Change user name
 router.put("/accounts/name", async (req, res) => {
   try {
     const { newName } = req.body;
@@ -80,11 +80,11 @@ router.put("/accounts/name", async (req, res) => {
     return res.json(true);
   } catch (error) {
     console.error(error.message);
-    return res.status(500).send("Server Error");
+    res.status(500).send("Server Error");
   }
 });
 
-// change user email
+// Change user email
 router.put("/accounts/email", async (req, res) => {
   try {
     const { newEmail } = req.body;
@@ -119,11 +119,11 @@ router.put("/accounts/email", async (req, res) => {
     return res.json(true);
   } catch (error) {
     console.error(error.message);
-    return res.status(500).send("Server Error");
+    res.status(500).send("Server Error");
   }
 });
 
-// change user password
+// Change user password
 router.put("/accounts/password", validPasswords, async (req, res) => {
   try {
     const { newPassword } = req.body;
@@ -136,11 +136,11 @@ router.put("/accounts/password", validPasswords, async (req, res) => {
     return res.json(true);
   } catch (error) {
     console.error(error.message);
-    return res.status(500).send("Server Error");
+    res.status(500).send("Server Error");
   }
 });
 
-// get court types
+// Get court types
 router.get("/court-types", async (req, res) => {
   try {
     const courtTypes = await pool.query("SELECT id, type FROM court_type");
@@ -148,11 +148,11 @@ router.get("/court-types", async (req, res) => {
     return res.json(courtTypes.rows);
   } catch (error) {
     console.error(error.message);
-    return res.status(500).send("Server Error");
+    res.status(500).send("Server Error");
   }
 });
 
-// get courts
+// Get courts
 router.get("/courts", async (req, res) => {
   try {
     const courts = await pool.query(
@@ -163,11 +163,11 @@ router.get("/courts", async (req, res) => {
     return res.json(courts.rows);
   } catch (error) {
     console.error(error.message);
-    return res.status(500).send("Server Error");
+    res.status(500).send("Server Error");
   }
 });
 
-// add court
+// Add court
 router.post("/courts", async (req, res) => {
   try {
     const { courtType, courtNumber } = req.body;
@@ -190,11 +190,11 @@ router.post("/courts", async (req, res) => {
     return res.json(newCourt.rows[0]);
   } catch (error) {
     console.error(error.message);
-    return res.status(500).send("Server Error");
+    res.status(500).send("Server Error");
   }
 });
 
-// delete court
+// Delete court
 router.delete("/courts", async (req, res) => {
   try {
     const { court } = req.body;
@@ -206,11 +206,11 @@ router.delete("/courts", async (req, res) => {
     res.end();
   } catch (error) {
     console.error(error.message);
-    return res.status(500).send("Server Error");
+    res.status(500).send("Server Error");
   }
 });
 
-// edit court
+// Edit court
 router.put("/courts", async (req, res) => {
   try {
     const { courtId, courtNumber, courtType } = req.body;
@@ -234,25 +234,26 @@ router.put("/courts", async (req, res) => {
     return res.json(true);
   } catch (error) {
     console.error(error.message);
-    return res.status(500).send("Server Error");
+    res.status(500).send("Server Error");
   }
 });
 
-// get reservations
+// Get reservations
 router.get("/reservations", async (req, res) => {
   try {
     const reservations = await pool.query(
-      "SELECT reservation.*, account.email, account.name FROM reservation INNER JOIN account ON reservation.player = account.id ORDER BY start_time ASC"
+      "SELECT reservation.*, account.email, account.name FROM reservation INNER JOIN account ON reservation.player = account.id WHERE club = $1 ORDER BY start_time ASC",
+      [req.session.club]
     );
 
     return res.json(reservations.rows);
   } catch (error) {
     console.error(error.message);
-    return res.status(500).send("Server Error");
+    res.status(500).send("Server Error");
   }
 });
 
-// add reservation
+// Add reservation
 router.post("/reservations", async (req, res) => {
   try {
     const { club, court, startTime, endTime } = req.body;
@@ -278,11 +279,11 @@ router.post("/reservations", async (req, res) => {
     }
   } catch (error) {
     console.error(error.message);
-    return res.status(500).send("Server Error");
+    res.status(500).send("Server Error");
   }
 });
 
-// deletes player reservation
+// Deletes player reservation
 router.delete("/reservations", async (req, res) => {
   try {
     const { court, startTime } = req.body;
@@ -296,7 +297,7 @@ router.delete("/reservations", async (req, res) => {
     res.end();
   } catch (error) {
     console.error(error.message);
-    return res.status(500).send("Server Error");
+    res.status(500).send("Server Error");
   }
 });
 

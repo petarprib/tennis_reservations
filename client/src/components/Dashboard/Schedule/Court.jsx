@@ -10,8 +10,8 @@ const Court = (props) => {
   const date = useSelector((state) => state.date);
   const hours = useSelector((state) => state.hours);
   const reservations = useSelector((state) => state.reservations);
-  const user = useSelector((state) => state.user);
-  const userType = useSelector((state) => state.userType);
+  const user = useSelector((state) => state.userData.user);
+  const userType = useSelector((state) => state.userData.userType);
   const [showIcons, setShowIcons] = useState(false);
   const [openEditCourt, setOpenEditCourt] = useState(false);
   const [openDeleteCourt, setOpenDeleteCourt] = useState(false);
@@ -25,8 +25,6 @@ const Court = (props) => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
-  // console.log(openEditCourt);
 
   return (
     <>

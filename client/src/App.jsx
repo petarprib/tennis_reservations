@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import "./App.scss";
-import "./styles/mui_overrides.scss";
+// import "./styles/mui_overrides.scss";
+import theme from "./styles/theme.jsx";
+import { MuiThemeProvider } from "@material-ui/core";
 import { Switch, Route, Redirect, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Access from "./components/Access/Access.jsx";
@@ -12,8 +14,6 @@ const App = () => {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
-  console.log(auth);
-
   useEffect(() => {
     isAuth();
     // eslint-disable-next-line
@@ -23,22 +23,12 @@ const App = () => {
     try {
       const res = await fetch("/api/auth/verify");
       const parseRes = await res.json();
-      if (parseRes === true) {
-        return dispatch({
-          type: "SET_AUTH",
-          payload: {
-            auth: parseRes,
-          },
-        });
-      } else {
-        return dispatch({
-          type: "SET_AUTH",
-          payload: {
-            auth: parseRes,
-          },
-        });
-      }
-      // return parseRes;
+      return dispatch({
+        type: "SET_AUTH",
+        payload: {
+          auth: parseRes,
+        },
+      });
     } catch (error) {
       console.error(error.message);
     }
@@ -48,7 +38,7 @@ const App = () => {
     return <LoadingScreen />;
   } else {
     return (
-      <>
+      <MuiThemeProvider theme={theme}>
         <Switch>
           <Route path="/" exact render={() => (!auth ? <Access /> : <Redirect to="/dashboard" />)} />
           <Route path="/register" render={() => (!auth ? <Access /> : <Redirect to="/dashboard" />)} />
@@ -56,7 +46,7 @@ const App = () => {
           <Route path="/club-register" render={() => (!auth ? <Access /> : <Redirect to="/dashboard" />)} />
           <Route path="/dashboard" render={() => (auth ? <Dashboard /> : <Redirect to="/" />)} />
         </Switch>
-      </>
+      </MuiThemeProvider>
     );
   }
 };

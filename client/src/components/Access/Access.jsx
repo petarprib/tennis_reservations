@@ -31,7 +31,7 @@ const Access = () => {
   return (
     <div id="background" data-access>
       <div id="form-container" data-access>
-        <div>{access}</div>
+        {access}
       </div>
     </div>
   );

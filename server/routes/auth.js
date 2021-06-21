@@ -3,7 +3,7 @@ const pool = require("../db");
 const bcrypt = require("bcrypt");
 const validInfo = require("../middleware/validInfo");
 
-// register
+// Register
 router.post("/register", validInfo, async (req, res) => {
   try {
     const { country, club, name, email, password, type } = req.body;
@@ -53,11 +53,11 @@ router.post("/register", validInfo, async (req, res) => {
     return res.json(true);
   } catch (error) {
     console.error(error.message);
-    return res.status(500).send("Server Error");
+    res.status(500).send("Server Error");
   }
 });
 
-// login
+// Login
 router.post("/login", validInfo, async (req, res) => {
   try {
     const { club, email, password, type } = req.body;
@@ -94,28 +94,28 @@ router.post("/login", validInfo, async (req, res) => {
     return res.json(true);
   } catch (error) {
     console.error(error.message);
-    return res.status(500).send("Server Error");
+    res.status(500).send("Server Error");
   }
 });
 
-// verify session
+// Verify session
 router.get("/verify", async (req, res) => {
   try {
     return res.json(req.session.accountId ? true : false);
   } catch (error) {
     console.error(error.message);
-    return res.status(500).send("Server Error");
+    res.status(500).send("Server Error");
   }
 });
 
-// logout
+// Logout
 router.get("/logout", (req, res) => {
   try {
     req.session.destroy();
     return res.json(req.session ? true : false);
   } catch (error) {
     console.error(error.message);
-    return res.status(500).send("Server Error");
+    res.status(500).send("Server Error");
   }
 });
 

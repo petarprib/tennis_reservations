@@ -1,14 +1,16 @@
-import React, { useEffect, useRef, createRef } from "react";
+import React, { useState, useEffect, useRef, createRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import fetchHoursUtil from "../../../utils/fetchHoursUtil";
 import fetchReservationsUtil from "../../../utils/fetchReservationsUtil";
 import "date-fns";
 import Court from "./Court.jsx";
+import Fade from "@material-ui/core/Fade";
 
 const Schedule = () => {
   const dispatch = useDispatch();
   const hoursIndex = useRef();
+  const [loaded, setLoaded] = useState(false);
   const closeTime = useSelector((state) => state.closeTime);
   const openTime = useSelector((state) => state.openTime);
   const courts = useSelector((state) => state.courts);
@@ -22,6 +24,9 @@ const Schedule = () => {
     fetchCurrentDate();
     fetchOpenCloseTimes();
     fetchReservations();
+    setTimeout(() => {
+      setLoaded(true);
+    }, 500);
     // eslint-disable-next-line
   }, []);
 
@@ -131,7 +136,7 @@ const Schedule = () => {
     });
   };
 
-  // when scrolling through the hours of a court, scrolls other courts and hours index simultaneously
+  // When scrolling through the hours of a court, scrolls other courts and hours index simultaneously
   let scrollRefs = [];
   const handleScroll = (event) => {
     let currentPosition = event.target.scrollLeft;
@@ -142,32 +147,34 @@ const Schedule = () => {
   };
 
   return (
-    <div id="schedule" data-dashboard>
-      <div id="hours-index" onScroll={(event) => handleScroll(event)} ref={hoursIndex} data-dashboard>
-        {hours.map((hour) => {
-          return (
-            <div className="hour-index" key={hour} data-dashboard>
-              <p>{hour}</p>
-            </div>
-          );
-        })}
-      </div>
+    <Fade in={loaded} timeout={500}>
+      <div id="schedule" data-dashboard>
+        <div id="hours-index" onScroll={(event) => handleScroll(event)} ref={hoursIndex} data-dashboard>
+          {hours.map((hour) => {
+            return (
+              <div className="hour-index" key={hour} data-dashboard>
+                <p>{hour}</p>
+              </div>
+            );
+          })}
+        </div>
 
-      <div id="court-info-index" data-dashboard>
-        <p>Court #</p>
-        <p>Surface type</p>
-      </div>
+        <div id="court-info-index" data-dashboard>
+          <p>Court #</p>
+          <p>Surface type</p>
+        </div>
 
-      <div>
-        {filteredCourts.map((court) => {
-          const scrollRef = createRef();
-          scrollRefs.push(scrollRef);
-          return (
-            <Court key={court.id} court={court} scrollRef={scrollRef} handleScroll={(event) => handleScroll(event)} />
-          );
-        })}
+        <div>
+          {filteredCourts.map((court) => {
+            const scrollRef = createRef();
+            scrollRefs.push(scrollRef);
+            return (
+              <Court key={court.id} court={court} scrollRef={scrollRef} handleScroll={(event) => handleScroll(event)} />
+            );
+          })}
+        </div>
       </div>
-    </div>
+    </Fade>
   );
 };
 

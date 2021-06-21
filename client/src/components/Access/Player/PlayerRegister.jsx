@@ -6,10 +6,12 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-// import { makeStyles } from "@material-ui/core/styles";
+import Fade from "@material-ui/core/Fade";
 
 const PlayerRegister = (props) => {
   const dispatch = useDispatch();
+  // eslint-disable-next-line
+  const [loaded, setLoaded] = useState(true);
   const [countries, setCountries] = useState([]);
   const [clubs, setClubs] = useState([]);
   const [country, setCountry] = useState(0);
@@ -73,105 +75,102 @@ const PlayerRegister = (props) => {
   };
 
   return (
-    <>
-      <h1>Player Register</h1>
-      <div className="options" data-access>
-        <Link to="/club-login">Access as club</Link>
-      </div>
-      <form id="form" onSubmit={(event) => handleSubmit(event)} data-access>
-        <FormControl
-          fullWidth
-          // className={classes.formControl}
-        >
-          <div className="input-error-div" data-access>
-            <Autocomplete
-              id="select-country"
-              options={countries}
-              getOptionLabel={(country) => country.name}
-              size="small"
-              // className={classes.root}
-              onChange={(event, value) => {
-                if (!value) return;
-                fetchClubs(value.id);
-              }}
-              renderInput={(params) => <TextField {...params} label="Select country" variant="outlined" />}
-            />
-            <small>{countryError}</small>
-          </div>
-          <div className="input-error-div" data-access>
-            <Autocomplete
-              id="select-club"
-              options={clubs}
-              getOptionLabel={(club) => club.name}
-              onChange={(event, value) => {
-                if (!value) return;
-                setClub(value.id);
-              }}
-              size="small"
-              // className={classes.root}
-              renderInput={(params) => <TextField {...params} label="Select club" variant="outlined" />}
-            />
-            <small>{clubError}</small>
-          </div>
-          <div className="input-error-div" data-access>
-            <TextField
-              id="name"
-              label="Full name"
-              variant="outlined"
-              size="small"
-              autoComplete="off"
-              fullWidth
-              onChange={(event) => setName(event.target.value)}
-            />
-            <small>{nameError}</small>
-          </div>
-          <div className="input-error-div" data-access>
-            <TextField
-              id="email"
-              label="Email"
-              variant="outlined"
-              size="small"
-              autoComplete="off"
-              fullWidth
-              onChange={(event) => setEmail(event.target.value)}
-            />
+    <Fade in={loaded} timeout={500}>
+      <div>
+        <h1>Player Register</h1>
+        <div className="options" data-access>
+          <Link to="/club-login">Access as club</Link>
+        </div>
+        <form id="form" onSubmit={(event) => handleSubmit(event)} data-access>
+          <FormControl fullWidth>
+            <div className="input-error-div" data-access>
+              <Autocomplete
+                id="select-country"
+                options={countries}
+                getOptionLabel={(country) => country.name}
+                size="small"
+                onChange={(event, value) => {
+                  if (!value) return;
+                  fetchClubs(value.id);
+                }}
+                renderInput={(params) => <TextField {...params} label="Select country" variant="outlined" />}
+              />
+              <small>{countryError}</small>
+            </div>
+            <div className="input-error-div" data-access>
+              <Autocomplete
+                id="select-club"
+                options={clubs}
+                getOptionLabel={(club) => club.name}
+                onChange={(event, value) => {
+                  if (!value) return;
+                  setClub(value.id);
+                }}
+                size="small"
+                renderInput={(params) => <TextField {...params} label="Select club" variant="outlined" />}
+              />
+              <small>{clubError}</small>
+            </div>
+            <div className="input-error-div" data-access>
+              <TextField
+                id="name"
+                label="Full name"
+                variant="outlined"
+                size="small"
+                autoComplete="off"
+                fullWidth
+                onChange={(event) => setName(event.target.value)}
+              />
+              <small>{nameError}</small>
+            </div>
+            <div className="input-error-div" data-access>
+              <TextField
+                id="email"
+                label="Email"
+                variant="outlined"
+                size="small"
+                autoComplete="off"
+                fullWidth
+                onChange={(event) => setEmail(event.target.value)}
+              />
 
-            <small>{emailError}</small>
-          </div>
-          <div className="input-error-div" data-access>
-            <TextField
-              id="password"
-              label="Password"
-              variant="outlined"
-              size="small"
-              type="password"
-              fullWidth
-              onChange={(event) => setPassword(event.target.value)}
-            />
-            <small>{passwordError}</small>
-          </div>
-          <div className="input-error-div" data-access>
-            <TextField
-              id="repeat-password"
-              label="Repeat password"
-              variant="outlined"
-              size="small"
-              type="password"
-              fullWidth
-              onChange={(event) => setRepPassword(event.target.value)}
-            />
-            <small>{repPasswordError}</small>
-          </div>
-          <small>{existsError}</small>
-          <Button className="button" type="submit" variant="contained" color="primary" data-access>
-            Register
-          </Button>
-        </FormControl>
-      </form>
-      <div className="options" data-access>
-        <Link to="/">Already registered? Log in</Link>
+              <small>{emailError}</small>
+            </div>
+            <div className="input-error-div" data-access>
+              <TextField
+                id="password"
+                label="Password"
+                variant="outlined"
+                size="small"
+                type="password"
+                fullWidth
+                onChange={(event) => setPassword(event.target.value)}
+              />
+              <small>{passwordError}</small>
+            </div>
+            <div className="input-error-div" data-access>
+              <TextField
+                id="repeat-password"
+                label="Repeat password"
+                variant="outlined"
+                size="small"
+                type="password"
+                fullWidth
+                onChange={(event) => setRepPassword(event.target.value)}
+              />
+              <small>{repPasswordError}</small>
+            </div>
+            <small>{existsError}</small>
+            <Button className="button" type="submit" variant="contained" color="primary" data-access>
+              Register
+            </Button>
+          </FormControl>
+        </form>
+        <div className="options" data-access>
+          <Link to="/">Already registered? Log in</Link>
+        </div>
       </div>
-    </>
+    </Fade>
   );
 };
 
