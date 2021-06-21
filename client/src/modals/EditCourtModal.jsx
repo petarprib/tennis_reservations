@@ -7,6 +7,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import Fade from "@material-ui/core/Fade";
 import { toast } from "react-toastify";
@@ -14,6 +15,11 @@ import "react-toastify/dist/ReactToastify.css";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
+    width: "90%",
+    maxWidth: "300px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
     border: "none",
     boxShadow: "none",
     outline: "none",
@@ -32,6 +38,7 @@ const EditCourtModal = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [courtNumber, setCourtNumber] = useState("");
+  const [emptyInputError, setEmptyInputError] = useState("");
   const [courtError, setCourtError] = useState("");
   const [courtType, setCourtType] = useState("");
   const courtTypes = useSelector((state) => state.courtTypes);
@@ -46,20 +53,24 @@ const EditCourtModal = (props) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const body = { courtId, courtNumber, courtType };
-      const res = await fetch("/api/dashboard/courts", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      const parseRes = await res.json();
-      if (typeof parseRes !== "string") {
-        props.close();
-        fetchCourts();
-        setCourtError("");
-        notify();
+      if (courtNumber !== "") {
+        const body = { courtId, courtNumber, courtType };
+        const res = await fetch("/api/dashboard/courts", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        const parseRes = await res.json();
+        if (typeof parseRes !== "string") {
+          props.close();
+          fetchCourts();
+          setCourtError("");
+          notify();
+        } else {
+          setCourtError(parseRes);
+        }
       } else {
-        setCourtError(parseRes);
+        setEmptyInputError("The court number field can't be empty");
       }
     } catch (error) {
       console.error(error.message);
@@ -84,27 +95,37 @@ const EditCourtModal = (props) => {
 
   const notify = () => toast.success("Court successfully edited");
 
+  const handleClose = () => {
+    props.close();
+    setEmptyInputError("");
+    setCourtError("");
+  };
+
   return (
-    <Modal open={open} className="mui-fixed" onClose={() => props.close()}>
+    <Modal open={open} className="mui-fixed" onClose={() => handleClose()}>
       <Fade in={open}>
         <div className={classes.paper}>
           <h2 data-modals>Edit court info</h2>
           <form id="form" onSubmit={(event) => handleSubmit(event)} data-access>
+            <TextField
+              id="number"
+              label="Court number"
+              value={courtNumber}
+              variant="outlined"
+              size="small"
+              autoComplete="off"
+              fullWidth
+              onChange={(event) => handleCourtNumInput(event.target.value)}
+            />
+            <small data-modals>{emptyInputError}</small>
             <FormControl
               variant="outlined"
               size="small"
+              fullWidth
+              className="modal-margin-top"
+              data-modals
               // className={classes.formControl}
             >
-              <TextField
-                id="number"
-                label="Court number"
-                value={courtNumber}
-                variant="outlined"
-                size="small"
-                autoComplete="off"
-                fullWidth
-                onChange={(event) => handleCourtNumInput(event.target.value)}
-              />
               <InputLabel id="court-type-input">Court type</InputLabel>
               <Select
                 labelId="court-type-select-label"
@@ -119,13 +140,15 @@ const EditCourtModal = (props) => {
                   </MenuItem>
                 ))}
               </Select>
-              <small>{courtError}</small>
-              <Button type="submit" variant="contained" color="primary">
-                Save
-              </Button>
-              <Button onClick={() => props.close()} variant="contained" color="secondary">
-                Cancel
-              </Button>
+              <small data-modals>{courtError}</small>
+              <ButtonGroup variant="contained" className="modal-margin-top" data-modals fullWidth>
+                <Button onClick={() => handleClose()} variant="contained">
+                  Cancel
+                </Button>
+                <Button type="submit" variant="contained" color="primary">
+                  Save
+                </Button>
+              </ButtonGroup>
             </FormControl>
           </form>
         </div>

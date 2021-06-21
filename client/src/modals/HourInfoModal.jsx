@@ -5,6 +5,7 @@ import deleteReservationUtil from "../utils/deleteReservationUtil";
 import { useSelector, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import Fade from "@material-ui/core/Fade";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -57,12 +58,14 @@ const HourInfoModal = (props) => {
         <div id="delete-hour" className={classes.paper} data-modals>
           <p>{name}</p>
           <p>{email}</p>
-          <Button onClick={() => props.setOpen()} variant="contained">
-            Close
-          </Button>
-          <Button onClick={() => deleteReservation(court.id, hour)} variant="contained" color="secondary">
-            Delete
-          </Button>
+          <ButtonGroup variant="contained" fullWidth>
+            <Button onClick={() => props.setOpen()} variant="contained">
+              Close
+            </Button>
+            <Button onClick={() => deleteReservation(court.id, hour)} variant="contained" color="secondary">
+              Delete
+            </Button>
+          </ButtonGroup>
         </div>
       </Fade>
     </Modal>

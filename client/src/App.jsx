@@ -12,6 +12,8 @@ const App = () => {
   const auth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
+  console.log(auth);
+
   useEffect(() => {
     isAuth();
     // eslint-disable-next-line
@@ -21,12 +23,22 @@ const App = () => {
     try {
       const res = await fetch("/api/auth/verify");
       const parseRes = await res.json();
-      dispatch({
-        type: "SET_AUTH",
-        payload: {
-          auth: parseRes === true ? true : false,
-        },
-      });
+      if (parseRes === true) {
+        return dispatch({
+          type: "SET_AUTH",
+          payload: {
+            auth: parseRes,
+          },
+        });
+      } else {
+        return dispatch({
+          type: "SET_AUTH",
+          payload: {
+            auth: parseRes,
+          },
+        });
+      }
+      // return parseRes;
     } catch (error) {
       console.error(error.message);
     }

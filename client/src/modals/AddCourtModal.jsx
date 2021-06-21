@@ -108,7 +108,7 @@ const AddCourtModal = (props) => {
           <div className={classes.paper}>
             <h2 data-modals>Add court</h2>
             <form onSubmit={(event) => AddCourtModal(event)}>
-              <FormControl variant="outlined" size="small" fullWidth>
+              <FormControl variant="outlined" size="small" fullWidth className="modal-margin-bottom" data-modals>
                 <InputLabel id="court-type-input">Court type</InputLabel>
                 <Select
                   labelId="court-type-select-label"
@@ -134,25 +134,31 @@ const AddCourtModal = (props) => {
                     </MenuItem>
                   ))}
                 </Select>
-                <small className="input-error" data-modals>
-                  {courtTypeError}
-                </small>
-                <TextField
-                  id="court-number"
-                  label="Court number"
-                  variant="outlined"
-                  autoComplete="off"
-                  value={courtNumber}
-                  onChange={(event) => handleCourtNumInput(event.target.value)}
-                  size="small"
-                />
-                <small className="input-error" data-modals>
-                  {courtNumberError}
-                </small>
-                <Button type="submit" variant="contained" color="primary">
-                  Add court
-                </Button>
+                <small data-modals>{courtTypeError}</small>
               </FormControl>
+              <TextField
+                id="court-number"
+                label="Court number"
+                variant="outlined"
+                autoComplete="off"
+                value={courtNumber}
+                onChange={(event) => handleCourtNumInput(event.target.value)}
+                size="small"
+                fullWidth
+              />
+              <small className="modal-input-margins" data-modals>
+                {courtNumberError}
+              </small>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                className="modal-margin-top"
+                data-modals
+              >
+                Add court
+              </Button>
             </form>
           </div>
         </Fade>

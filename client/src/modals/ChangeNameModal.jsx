@@ -54,18 +54,23 @@ const ChangeNameModal = (props) => {
 
   const notify = () => toast.success("Name successfully changed");
 
+  const handleClose = () => {
+    setOpen(false);
+    setError("");
+  };
+
   return (
     <>
       <div onClick={() => openModal()}>
         <i className="fas fa-user-alt menu-icon" data-header />
         Change name
       </div>
-      <Modal open={open} className="mui-fixed" onClose={() => setOpen(false)}>
+      <Modal open={open} className="mui-fixed" onClose={() => handleClose()}>
         <Fade in={open}>
           <div className={classes.paper}>
             <h2 data-modals>Change name</h2>
             <form onSubmit={(event) => handleSubmit(event)}>
-              <FormControl variant="outlined" size="small">
+              <FormControl fullWidth>
                 <TextField
                   id="change-name"
                   label="New name"
@@ -75,13 +80,13 @@ const ChangeNameModal = (props) => {
                   onChange={(event) => setNewName(event.target.value)}
                   size="small"
                 />
-                <small className="input-error" data-modals>
+                <small className="modal-margin-bottom" data-modals>
                   {error}
                 </small>
-                <Button type="submit" variant="contained" color="primary">
-                  Submit
-                </Button>
               </FormControl>
+              <Button type="submit" variant="contained" color="primary" fullWidth>
+                Submit
+              </Button>
             </form>
           </div>
         </Fade>

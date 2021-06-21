@@ -12,6 +12,7 @@ import openTimeReducer from "./openTimeReducer";
 import reservationsReducer from "./reservationsReducer";
 import hoursReducer from "./hoursReducer";
 import selectedDateReducer from "./selectedDateReducer";
+import userDataReducer from "./userDataReducer";
 import userNameReducer from "./userNameReducer";
 import userReducer from "./userReducer";
 import userTypeReducer from "./userTypeReducer";

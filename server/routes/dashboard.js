@@ -54,11 +54,9 @@ router.get("/open-hours", async (req, res) => {
 // get basic user info
 router.get("/session", async (req, res) => {
   try {
-    const basicInfo = await pool.query("SELECT name FROM account WHERE id = $1", [req.session.accountId]);
+    const { accountId, accountType, club, name } = req.session;
 
-    const { accountId, accountType, club } = req.session;
-
-    return res.json({ accountId, accountType, club, ...basicInfo.rows[0] });
+    return res.json({ accountId, accountType, club, name });
   } catch (error) {
     console.error(error.message);
     return res.status(500).send("Server Error");
@@ -216,6 +214,10 @@ router.delete("/courts", async (req, res) => {
 router.put("/courts", async (req, res) => {
   try {
     const { courtId, courtNumber, courtType } = req.body;
+
+    if (!courtId) {
+      res.end();
+    }
 
     const court = await pool.query("SELECT number FROM court WHERE id != $1 AND number = $2 AND club = $3", [
       courtId,

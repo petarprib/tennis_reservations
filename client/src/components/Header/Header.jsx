@@ -44,12 +44,24 @@ const Header = () => {
   const logOut = async () => {
     setMenuOpen(null);
     const loggedOut = await logOutUtil();
-    dispatch({
-      type: "SET_AUTH",
-      payload: {
-        auth: loggedOut === true ? true : false,
-      },
-    });
+
+    if (loggedOut === true) {
+      dispatch({
+        type: "SET_AUTH",
+        payload: {
+          auth: loggedOut,
+        },
+      });
+    } else {
+      dispatch({
+        type: "SET_AUTH",
+        payload: {
+          auth: loggedOut,
+        },
+      });
+      // eslint-disable-next-line
+      window.location.href = window.location.href;
+    }
   };
 
   return (

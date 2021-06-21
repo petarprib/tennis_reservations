@@ -54,18 +54,23 @@ const ChangeEmailModal = (props) => {
 
   const notify = () => toast.success("Email successfully changed");
 
+  const handleClose = () => {
+    setOpen(false);
+    setError("");
+  };
+
   return (
     <>
       <div onClick={() => openModal()}>
         <i className="fas fa-at menu-icon" data-header />
         Change email
       </div>
-      <Modal open={open} className="mui-fixed" onClose={() => setOpen(false)}>
+      <Modal open={open} className="mui-fixed" onClose={() => handleClose()}>
         <Fade in={open}>
           <div className={classes.paper}>
             <h2 data-modals>Change email</h2>
             <form onSubmit={(event) => handleSubmit(event)}>
-              <FormControl variant="outlined" size="small">
+              <FormControl fullWidth>
                 <TextField
                   id="change-email"
                   label="New email"
@@ -75,13 +80,13 @@ const ChangeEmailModal = (props) => {
                   onChange={(event) => setNewEmail(event.target.value)}
                   size="small"
                 />
-                <small className="input-error" data-modals>
+                <small className="modal-margin-bottom" data-modals>
                   {error}
                 </small>
-                <Button type="submit" variant="contained" color="primary">
-                  Submit
-                </Button>
               </FormControl>
+              <Button type="submit" variant="contained" color="primary" fullWidth>
+                Submit
+              </Button>
             </form>
           </div>
         </Fade>

@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import deleteCourtUtil from "../utils/deleteCourtUtil";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import Fade from "@material-ui/core/Fade";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -11,6 +12,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
+    width: "90%",
+    maxWidth: "300px",
     border: "none",
     boxShadow: "none",
     outline: "none",
@@ -51,13 +54,23 @@ const DeleteCourtModal = (props) => {
     <Modal open={open} onClose={() => props.close()} BackdropComponent={Backdrop}>
       <Fade in={open}>
         <div className={classes.paper}>
-          <p>Are you sure you want to delete court {courtNumber}?</p>
-          <Button onClick={() => props.close()} variant="contained" color="">
-            Cancel
-          </Button>
-          <Button onClick={() => deleteCourt(courtId)} variant="contained" color="secondary">
-            Delete
-          </Button>
+          <p className="modal-margin-bottom" data-modals>
+            Are you sure you want to delete court {courtNumber}?
+          </p>
+          <ButtonGroup variant="contained" fullWidth>
+            {/* <Button onClick={() => handleClose()} variant="contained">
+              Cancel
+            </Button>
+            <Button type="submit" variant="contained" color="primary">
+              Save
+            </Button> */}
+            <Button onClick={() => props.close()} variant="contained">
+              Cancel
+            </Button>
+            <Button onClick={() => deleteCourt(courtId)} variant="contained" color="secondary">
+              Delete
+            </Button>
+          </ButtonGroup>
         </div>
       </Fade>
     </Modal>

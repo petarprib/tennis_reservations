@@ -69,18 +69,25 @@ const ChangePasswordModal = (props) => {
     props.handleClose();
   };
 
+  const handleClose = () => {
+    setOpen(false);
+    setNewPasswordError("");
+    setRepNewPasswordError("");
+    setCurrentPasswordError("");
+  };
+
   return (
     <>
       <div onClick={() => openModal()}>
         <i className="fas fa-key menu-icon" data-header />
         Change password
       </div>
-      <Modal open={open} className="mui-fixed" onClose={() => setOpen(false)}>
+      <Modal open={open} className="mui-fixed" onClose={() => handleClose(false)}>
         <Fade in={open}>
           <div className={classes.paper}>
             <h2 data-modals>Change password</h2>
             <form onSubmit={(event) => handleSubmit(event)}>
-              <FormControl variant="outlined" size="small">
+              <FormControl fullWidth>
                 <TextField
                   id="new-password"
                   label="New password"
@@ -91,7 +98,7 @@ const ChangePasswordModal = (props) => {
                   onChange={(event) => setNewPassword(event.target.value)}
                   size="small"
                 />
-                <small className="input-error" data-modals>
+                <small className="modal-margin-bottom" data-modals>
                   {newPasswordError}
                 </small>
                 <TextField
@@ -104,7 +111,7 @@ const ChangePasswordModal = (props) => {
                   onChange={(event) => setRepNewPassword(event.target.value)}
                   size="small"
                 />
-                <small className="input-error" data-modals>
+                <small className="modal-margin-bottom" data-modals>
                   {repNewPasswordError}
                 </small>
                 <TextField
@@ -117,13 +124,13 @@ const ChangePasswordModal = (props) => {
                   onChange={(event) => setCurrentPassword(event.target.value)}
                   size="small"
                 />
-                <small className="input-error" data-modals>
+                <small className="modal-margin-bottom" data-modals>
                   {currentPasswordError}
                 </small>
-                <Button type="submit" variant="contained" color="primary">
-                  Submit
-                </Button>
               </FormControl>
+              <Button type="submit" variant="contained" color="primary" fullWidth>
+                Submit
+              </Button>
             </form>
           </div>
         </Fade>

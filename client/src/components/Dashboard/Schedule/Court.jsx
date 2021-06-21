@@ -26,104 +26,112 @@ const Court = (props) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // console.log(openEditCourt);
+
   return (
-    <div
-      key={court.number}
-      className="court"
-      onMouseEnter={() => setShowIcons(true)}
-      onMouseLeave={() => setShowIcons(false)}
-      data-dashboard
-    >
-      <div className="court-info" data-dashboard>
-        <p className="court-number" data-dashboard>
-          {court.number}
-        </p>
-        <p className="court-type" data-dashboard>
-          {court.type}
-        </p>
-        {(() => {
-          if (userType === 2) {
-            if (windowWidth > 992 && showIcons) {
-              return (
-                <div>
+    <>
+      <div
+        key={court.number}
+        className="court"
+        onMouseEnter={() => setShowIcons(true)}
+        onMouseLeave={() => setShowIcons(false)}
+        data-dashboard
+      >
+        <div className="court-info" data-dashboard>
+          <p className="court-number" data-dashboard>
+            {court.number}
+          </p>
+          <p className="court-type" data-dashboard>
+            {court.type}
+          </p>
+          {(() => {
+            if (userType === 2) {
+              if (windowWidth > 992 && showIcons) {
+                return (
                   <div>
-                    <i className="fas fa-edit" onClick={() => setOpenEditCourt(true)} />
+                    <div>
+                      <i className="fas fa-edit" onClick={() => setOpenEditCourt(true)} />
+                    </div>
+                    <div>
+                      <i className="fas fa-trash" onClick={() => setOpenDeleteCourt(true)} />
+                    </div>
                   </div>
-                  <EditCourtModal
-                    open={openEditCourt}
-                    close={() => setOpenEditCourt(false)}
-                    courtId={court.id}
-                    courtNumber={court.number}
-                    courtType={court.type_id}
-                  />
+                );
+              } else if (windowWidth <= 992) {
+                return (
                   <div>
-                    <i className="fas fa-trash" onClick={() => setOpenDeleteCourt(true)} />
+                    <div>
+                      <i className="fas fa-edit" onClick={() => setOpenEditCourt(true)} />
+                    </div>
+                    <div>
+                      <i className="fas fa-trash" onClick={() => setOpenDeleteCourt(true)} />
+                    </div>
                   </div>
-                  <DeleteCourtModal
-                    open={openDeleteCourt}
-                    close={() => setOpenDeleteCourt(false)}
-                    courtId={court.id}
-                    courtNumber={court.number}
-                  />
-                </div>
-              );
-            } else if (windowWidth <= 992) {
-              return (
-                <div>
-                  <EditCourtModal courtId={court.id} courtNumber={court.number} courtType={court.type_id} />
-                  <DeleteCourtModal courtId={court.id} courtNumber={court.number} />
-                </div>
-              );
-            }
-          }
-        })()}
-      </div>
-
-      <div className="hours" onScroll={(event) => props.handleScroll(event)} ref={scrollRef} data-dashboard>
-        {hours.map((hour) => {
-          let playerReservation = false;
-          let color = "rgb(154, 205, 50)";
-          let nameAcronym;
-          let name;
-          let email;
-          reservations.map((reservation) => {
-            if (court.id !== reservation.court) return false;
-            let now = moment(hour, "HH:mm")
-              .date(date.date())
-              .month(date.month())
-              .year(date.year());
-            let startTime = moment(reservation.start_time, "YYYY-MM-DD HH:mm:ss");
-            let endTime = moment(reservation.end_time, "YYYY-MM-DD HH:mm:ss");
-            if (now.isSame(startTime) || now.isBetween(startTime, endTime)) {
-              if (reservation.player === user) {
-                color = "rgb(63, 81, 181)";
-              } else {
-                playerReservation = true;
-                color = "rgb(255, 70, 53)";
-                nameAcronym = reservation.name.match(/\b(\w)/g).join("");
-                name = reservation.name;
-                email = reservation.email;
+                );
               }
-              return false;
             }
-            return true;
-          });
+          })()}
+        </div>
 
-          return (
-            <Hour
-              key={hour}
-              court={court}
-              hour={hour}
-              color={color}
-              nameAcronym={nameAcronym}
-              playerReservation={playerReservation}
-              name={name}
-              email={email}
-            />
-          );
-        })}
+        <div className="hours" onScroll={(event) => props.handleScroll(event)} ref={scrollRef} data-dashboard>
+          {hours.map((hour) => {
+            let playerReservation = false;
+            let color = "rgb(154, 205, 50)";
+            let nameAcronym;
+            let name;
+            let email;
+            reservations.map((reservation) => {
+              if (court.id !== reservation.court) return false;
+              let now = moment(hour, "HH:mm")
+                .date(date.date())
+                .month(date.month())
+                .year(date.year());
+              let startTime = moment(reservation.start_time, "YYYY-MM-DD HH:mm:ss");
+              let endTime = moment(reservation.end_time, "YYYY-MM-DD HH:mm:ss");
+              if (now.isSame(startTime) || now.isBetween(startTime, endTime)) {
+                if (reservation.player === user) {
+                  color = "rgb(63, 81, 181)";
+                } else {
+                  playerReservation = true;
+                  color = "rgb(255, 70, 53)";
+                  nameAcronym = reservation.name.match(/\b(\w)/g).join("");
+                  name = reservation.name;
+                  email = reservation.email;
+                }
+                return false;
+              }
+              return true;
+            });
+
+            return (
+              <Hour
+                key={hour}
+                court={court}
+                hour={hour}
+                color={color}
+                nameAcronym={nameAcronym}
+                playerReservation={playerReservation}
+                name={name}
+                email={email}
+              />
+            );
+          })}
+        </div>
       </div>
-    </div>
+      <EditCourtModal
+        open={openEditCourt}
+        close={() => setOpenEditCourt(false)}
+        courtId={court.id}
+        courtNumber={court.number}
+        courtType={court.type_id}
+      />
+      <DeleteCourtModal
+        open={openDeleteCourt}
+        close={() => setOpenDeleteCourt(false)}
+        courtId={court.id}
+        courtNumber={court.number}
+      />
+    </>
   );
 };
 

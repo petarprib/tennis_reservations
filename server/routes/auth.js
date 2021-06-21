@@ -48,6 +48,7 @@ router.post("/register", validInfo, async (req, res) => {
     req.session.accountId = newAccount.rows[0].id;
     req.session.accountType = newAccount.rows[0].type;
     req.session.club = req.session.accountType === 2 ? req.session.accountId : club;
+    req.session.name = newAccount.rows[0].name;
 
     return res.json(true);
   } catch (error) {
@@ -64,13 +65,13 @@ router.post("/login", validInfo, async (req, res) => {
     let account = {};
 
     if (type === 2) {
-      account = await pool.query("SELECT id, password, type FROM account WHERE email = $1 AND type = $2", [
+      account = await pool.query("SELECT id, name, password, type FROM account WHERE email = $1 AND type = $2", [
         email,
         type,
       ]);
     } else if (type === 3) {
       account = await pool.query(
-        "SELECT account.id, password, type FROM account INNER JOIN player_details ON account.id = player_details.player WHERE club = $1 AND email = $2 AND type = $3",
+        "SELECT account.id, name, password, type FROM account INNER JOIN player_details ON account.id = player_details.player WHERE club = $1 AND email = $2 AND type = $3",
         [club, email, type]
       );
     }
@@ -88,6 +89,7 @@ router.post("/login", validInfo, async (req, res) => {
     req.session.accountId = account.rows[0].id;
     req.session.accountType = account.rows[0].type;
     req.session.club = req.session.accountType === 2 ? req.session.accountId : club;
+    req.session.name = account.rows[0].name;
 
     return res.json(true);
   } catch (error) {

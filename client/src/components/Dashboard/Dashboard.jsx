@@ -47,6 +47,7 @@ const Dashboard = () => {
       const res = await fetch("/api/dashboard/session");
       const parseRes = await res.json();
 
+      console.log(parseRes);
       dispatch({
         type: "SET_USER_NAME",
         payload: {

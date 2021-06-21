@@ -4,9 +4,16 @@ h2[data-modals] {
 
 small[data-modals] {
   color: #ff0000;
-  margin-bottom: 10px;
 }
 
 #delete-hour[data-modals] > p {
   margin-bottom: 5px;
+}
+
+.modal-margin-bottom[data-modals] {
+  margin-bottom: 10px;
+}
+
+.modal-margin-top[data-modals] {
+  margin-top: 10px;
 }

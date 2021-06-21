@@ -99,6 +99,7 @@ const EditCourtModal = () => {
             <FormControl
               variant="outlined"
               size="small"
+              fullWidth
               // className={classes.formControl}
             >
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -127,10 +128,10 @@ const EditCourtModal = () => {
                   }}
                 />
               </MuiPickersUtilsProvider>
-              <Button type="submit" variant="contained" color="primary">
-                Save
-              </Button>
             </FormControl>
+            <Button type="submit" variant="contained" color="primary" fullWidth>
+              Save
+            </Button>
           </form>
         </div>
       </Fade>
