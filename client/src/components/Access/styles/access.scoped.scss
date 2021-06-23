@@ -48,15 +48,11 @@
 
 .options[data-access] {
   text-align: right;
-}
-
-.options:first-of-type {
-  margin-bottom: 10px;
-}
-
-#form {
-  > small {
-    color: #ff0000;
+  > a {
+    text-decoration: none;
+    color: $grass;
+  }
+  &:first-of-type {
     margin-bottom: 10px;
   }
 }
@@ -64,95 +60,8 @@
 .input-error-div {
   margin-bottom: 10px;
   position: relative;
-  > small {
-    color: red;
-  }
-}
-
-.form-input[data-access] {
-  outline: none;
-  width: 100%;
-  font-size: 1em;
-  padding: 5px;
-  height: 40px;
-  border: solid 1px $light-grey;
-  border-radius: $small-border-radius;
-  color: $dark-grey;
-  &:focus {
-    box-shadow: 0px 0px 2px 2px $grass;
-  }
-}
-
-.country-list[data-access] {
-  z-index: 1000;
-  position: absolute;
-  top: 45px;
-  width: 100%;
-  max-height: 230px;
-  overflow: inherit;
-  overflow-x: hidden;
-  background-color: $white;
-  border: solid 1px $light-grey;
-}
-
-%country-item {
-  height: 38px;
-  display: flex;
-  align-items: center;
-  padding-left: 5px;
-  color: $dark-grey;
-}
-
-.option[data-access] {
-  @extend %country-item;
-  &:hover {
-    color: $white;
-    background-color: $grass;
-  }
 }
 
 .button[data-access] {
-  margin-bottom: 10px;
-}
-
-.no-options[data-access] {
-  @extend %country-item;
-}
-
-a {
-  text-decoration: none;
-  color: $grass;
-}
-
-#box {
-  width: 320px;
-}
-
-#tabs[data-access] {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  background-color: rgba(255, 255, 255, 0.7);
-  border-radius: $big-border-radius $big-border-radius 0 0;
-}
-
-.tab[data-access] {
-  > p {
-    color: $dark-grey;
-    font-size: 1.3em;
-    padding: 15px 0;
-    text-transform: uppercase;
-    width: 100%;
-    text-align: center;
-  }
-}
-
-.shown[data-access] {
-  border-bottom: solid 1px $grass;
-  > p {
-    color: $grass;
-  }
-}
-
-.hidden[data-access] {
-  border: none;
+  margin-bottom: 5px;
 }

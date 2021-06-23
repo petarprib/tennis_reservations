@@ -1,6 +1,6 @@
 const fetchClubListUtil = async (id) => {
   try {
-    const res = await fetch(`/api/clubs/${id}`);
+    const res = await fetch(`/api/access/clubs/${id}`);
     const data = await res.json();
     let clubs = [];
     data.forEach((club) =>

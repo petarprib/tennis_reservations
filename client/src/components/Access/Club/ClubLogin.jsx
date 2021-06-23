@@ -51,7 +51,7 @@ const ClubLogin = () => {
         <div className="options" data-access>
           <Link to="/">Access as player</Link>
         </div>
-        <form id="form" onSubmit={(event) => handleSubmit(event)} data-access>
+        <form onSubmit={(event) => handleSubmit(event)} data-access>
           <FormControl fullWidth>
             <div className="input-error-div" data-access>
               <TextField
@@ -77,10 +77,10 @@ const ClubLogin = () => {
               />
               <small>{passwordError}</small>
             </div>
-            <small>{loginError}</small>
             <Button className="button" type="submit" variant="contained" color="primary" data-access>
               Log in
             </Button>
+            <small>{loginError}</small>
           </FormControl>
         </form>
         <div className="options" data-access>

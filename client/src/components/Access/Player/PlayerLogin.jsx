@@ -71,7 +71,7 @@ const PlayerLogin = (props) => {
         <div className="options" data-access>
           <Link to="/club-login">Access as club</Link>
         </div>
-        <form id="form" onSubmit={(event) => handleSubmit(event)} data-access>
+        <form onSubmit={(event) => handleSubmit(event)} data-access>
           <FormControl fullWidth>
             <div className="input-error-div" data-access>
               <Autocomplete
@@ -125,10 +125,10 @@ const PlayerLogin = (props) => {
               />
               <small>{passwordError}</small>
             </div>
-            <small>{loginError}</small>
             <Button className="button" type="submit" variant="contained" color="primary" data-access>
               Log in
             </Button>
+            <small>{loginError}</small>
           </FormControl>
         </form>
         <div className="options" data-access>

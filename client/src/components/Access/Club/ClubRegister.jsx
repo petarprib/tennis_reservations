@@ -70,7 +70,7 @@ const ClubRegister = (props) => {
         <div className="options" data-access>
           <Link to="/">Access as player</Link>
         </div>
-        <form id="form" onSubmit={(event) => handleSubmit(event)} data-access>
+        <form onSubmit={(event) => handleSubmit(event)} data-access>
           <FormControl fullWidth>
             <div className="input-error-div" data-access>
               <Autocomplete
@@ -134,10 +134,10 @@ const ClubRegister = (props) => {
               />
               <small>{repPasswordError}</small>
             </div>
-            <small>{existsError}</small>
             <Button className="button" type="submit" variant="contained" color="primary" data-access>
               Register
             </Button>
+            <small>{existsError}</small>
           </FormControl>
         </form>
         <div className="options" data-access>

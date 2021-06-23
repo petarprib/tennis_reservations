@@ -80,7 +80,7 @@
 
 #dashboard-tools[data-dashboard] {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1920px;
   padding: 0 10px;
   margin: 0 auto 10px auto;
   display: grid;
@@ -118,7 +118,7 @@
 
 #dashboard-tools-player[data-dashboard] {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1920px;
   padding: 0 10px;
   margin: 0 auto 10px auto;
   display: grid;

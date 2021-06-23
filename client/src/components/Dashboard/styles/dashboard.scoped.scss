@@ -72,7 +72,7 @@
 
 @mixin common-dashboard-tools-styling {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1920px;
   padding: 0 10px;
   margin: 0 auto 10px auto;
   display: grid;
@@ -101,6 +101,10 @@
   @media (min-width: 993px) {
     gap: 15px;
     grid-template-columns: 1fr 2fr 1fr;
+  }
+  @media (min-width: 1281px) {
+    gap: 15px;
+    grid-template-columns: 1fr 1fr 1fr;
   }
 }
 

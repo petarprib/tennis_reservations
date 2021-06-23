@@ -1,6 +1,6 @@
 const fetchCountriesUtil = async () => {
   try {
-    const res = await fetch("/api/countries");
+    const res = await fetch("/api/access/countries");
     const parseRes = await res.json();
     let countries = [];
     parseRes.forEach((country) =>

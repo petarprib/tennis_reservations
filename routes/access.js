@@ -12,18 +12,6 @@ router.get("/countries", async (req, res) => {
   }
 });
 
-router.get("/logout", (req, res) => {
-  try {
-    req.session.destroy();
-    return res.json(req.session ? true : false);
-  } catch (error) {
-    console.error(error.message);
-    res.status(500).send("Server Error");
-  }
-});
-
-module.exports = router;
-
 // Get clubs from a country
 router.get("/clubs/:country", async (req, res) => {
   try {

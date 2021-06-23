@@ -104,7 +104,7 @@ const ChangePasswordModal = (props) => {
                 </small>
                 <TextField
                   id="rep-new-password"
-                  label="Rep new password"
+                  label="Repeat new password"
                   variant="outlined"
                   type="password"
                   autoComplete="off"
