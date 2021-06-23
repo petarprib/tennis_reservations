@@ -26,7 +26,7 @@ app.use(
       sameSite: true,
       maxAge: parseInt(process.env.SESSION_IDLE_TIMEOUT),
     },
-    store: new RedisStore({ client: redis }),
+    // store: new RedisStore({ client: redis }),
     name: process.env.SESSION_NAME,
     resave: false,
     rolling: true,
