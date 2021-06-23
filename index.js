@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
 const session = require("express-session");
-const Redis = require("ioredis");
-const redis = new Redis();
-const RedisStore = require("connect-redis")(session);
+// const Redis = require("ioredis");
+// const redis = new Redis();
+// const RedisStore = require("connect-redis")(session);
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 require("dotenv").config();
