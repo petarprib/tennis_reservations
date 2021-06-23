@@ -28,7 +28,7 @@ app.use(
     },
     // store: new RedisStore({ client: redis }),
     name: process.env.SESSION_NAME,
-    resave: false,
+    resave: process.env.NODE_ENV === "production" ? true : false,
     rolling: true,
     saveUninitialized: false,
     secret: process.env.SESSION_SECRET,
