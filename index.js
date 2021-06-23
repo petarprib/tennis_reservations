@@ -22,7 +22,7 @@ app.use(
   session({
     cookie: {
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === "production" ? true : false,
       sameSite: true,
       maxAge: parseInt(process.env.SESSION_IDLE_TIMEOUT),
     },
