@@ -1,7 +1,7 @@
 import React from "react";
 import "./styles/modals.scoped.scss";
-import fetchReservationsUtil from "../utils/fetchReservationsUtil";
-import deleteReservationUtil from "../utils/deleteReservationUtil";
+import fetchReservationsUtil from "../../utils/fetchReservationsUtil";
+import deleteReservationUtil from "../../utils/deleteReservationUtil";
 import { useSelector, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";

@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import deleteCourtUtil from "../utils/deleteCourtUtil";
+import deleteCourtUtil from "../../utils/deleteCourtUtil";
 import { makeStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import ButtonGroup from "@material-ui/core/ButtonGroup";

@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
-import "./styles/dashboard.scoped.scss";
+import "../components/Dashboard/styles/dashboard.scoped.scss";
 import { useSelector, useDispatch } from "react-redux";
-import Header from "../Header/Header.jsx";
-import fetchCourtTypesUtil from "../../utils/fetchCourtTypesUtil";
-import Schedule from "./Schedule/Schedule.jsx";
-import ConfigOpenHoursModal from "../../modals/ConfigOpenHoursModal.jsx";
-import AddCourtButton from "./Tools/AddCourtButton.jsx";
-import ScheduleFilter from "./Tools/ScheduleFilter.jsx";
-import ColorGuide from "./Tools/ColorGuide.jsx";
+import Header from "../components/Header/Header.jsx";
+import fetchCourtTypesUtil from "../utils/fetchCourtTypesUtil";
+import Schedule from "../components/Dashboard/Schedule/Schedule.jsx";
+import ConfigOpenHoursModal from "../components/Modals/ConfigOpenHoursModal";
+import AddCourtButton from "../components/Dashboard/Tools/AddCourtButton.jsx";
+import ScheduleFilter from "../components/Dashboard/Tools/ScheduleFilter.jsx";
+import ColorGuide from "../components/Dashboard/Tools/ColorGuide.jsx";
 import Fade from "@material-ui/core/Fade";
 
 const Dashboard = () => {

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "./styles/modals.scoped.scss";
 import { makeStyles } from "@material-ui/core/styles";
-import addCourtUtil from "../utils/addCourtUtil";
+import addCourtUtil from "../../utils/addCourtUtil";
 import Modal from "@material-ui/core/Modal";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";

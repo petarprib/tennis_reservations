@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import changeEmailUtil from "../utils/changeEmailUtil";
+import changeEmailUtil from "../../utils/changeEmailUtil";
 import Modal from "@material-ui/core/Modal";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";

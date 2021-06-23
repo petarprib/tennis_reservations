@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import moment from "moment";
-import EditCourtModal from "../../../modals/EditCourtModal.jsx";
-import DeleteCourtModal from "../../../modals/DeleteCourtModal.jsx";
+import EditCourtModal from "../../Modals/EditCourtModal.jsx";
+import DeleteCourtModal from "../../Modals/DeleteCourtModal.jsx";
 import Hour from "./Hour";
 
 const Court = (props) => {

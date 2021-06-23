@@ -5,9 +5,9 @@ import logOutUtil from "../../utils/logOutUtil";
 import { withStyles } from "@material-ui/core/styles";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import ChangeNameModal from "../../modals/ChangeNameModal.jsx";
-import ChangeEmailModal from "../../modals/ChangeEmailModal.jsx";
-import ChangePasswordModal from "../../modals/ChangePasswordModal.jsx";
+import ChangeNameModal from "../Modals/ChangeNameModal.jsx";
+import ChangeEmailModal from "../Modals/ChangeEmailModal.jsx";
+import ChangePasswordModal from "../Modals/ChangePasswordModal.jsx";
 
 const StyledMenu = withStyles({
   paper: {

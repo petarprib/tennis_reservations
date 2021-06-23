@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
-import AddCourtModal from "../../../modals/AddCourtModal.jsx";
+import AddCourtModal from "../../Modals/AddCourtModal.jsx";
 
 const AddCourtButton = () => {
   const [openModal, setOpenModal] = useState(false);

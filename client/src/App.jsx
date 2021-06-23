@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
 import "./App.scss";
-// import "./styles/mui_overrides.scss";
 import theme from "./styles/theme.jsx";
 import { MuiThemeProvider } from "@material-ui/core";
 import { Switch, Route, Redirect, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import Access from "./components/Access/Access.jsx";
-import Dashboard from "./components/Dashboard/Dashboard.jsx";
+import Access from "./pages/Access.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
 import LoadingScreen from "./components/LoadingScreen/LoadingScreen.jsx";
 
 const App = () => {
