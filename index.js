@@ -8,7 +8,6 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 require("dotenv").config();
 const path = require("path");
-const pool = require("../db");
 
 app.use(cors());
 app.use(express.json());
@@ -28,10 +27,10 @@ app.use(
       maxAge: parseInt(process.env.SESSION_IDLE_TIMEOUT),
     },
     // store: new RedisStore({ client: redis }),
-    store: new pgSession({
-      pool,
-      tableName: "user_sessions",
-    }),
+    // store: new pgSession({
+    //   pool,
+    //   tableName: "user_sessions",
+    // }),
     // name: process.env.SESSION_NAME,
     resave: false,
     rolling: true,
