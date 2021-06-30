@@ -35,7 +35,7 @@ app.use(
     resave: false,
     rolling: true,
     saveUninitialized: false,
-    secret: process.env.SESSION_SECRET,
+    secret: "secret",
     unset: "destroy",
   })
 );
