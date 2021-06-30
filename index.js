@@ -35,7 +35,7 @@ app.use(
     resave: false,
     rolling: true,
     saveUninitialized: false,
-    secret: "secret",
+    secret: "c5aee6e0e62b984986e66b489d659ac2c58044aed88bb33e1f012ec95d04c028",
     unset: "destroy",
   })
 );
