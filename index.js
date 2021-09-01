@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
 const session = require("express-session");
-// const Redis = require("ioredis");
-// const redis = new Redis();
-// const RedisStore = require("connect-redis")(session);
+const Redis = require("ioredis");
+const redis = new Redis();
+const RedisStore = require("connect-redis")(session);
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 require("dotenv").config();
@@ -22,16 +22,12 @@ app.use(
   session({
     cookie: {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production" ? true : false,
+      secure: false,
       sameSite: true,
       maxAge: parseInt(process.env.SESSION_IDLE_TIMEOUT),
     },
-    // store: new RedisStore({ client: redis }),
-    // store: new pgSession({
-    //   pool,
-    //   tableName: "user_sessions",
-    // }),
-    // name: process.env.SESSION_NAME,
+    store: new RedisStore({ client: redis }),
+    name: process.env.SESSION_NAME,
     resave: false,
     rolling: true,
     saveUninitialized: false,
@@ -50,6 +46,11 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client/build/index.html"));
 });
 
-const PORT = process.env.PORT || 5000;
+app.use((err, req, res, next) => {
+  console.error(err.message);
+  res.status(err.statusCode || 500).send("Server Error");
+});
+
+const PORT = process.env.APP_PORT || 5000;
 
 app.listen(PORT, console.log(`Server running on port ${PORT}`));

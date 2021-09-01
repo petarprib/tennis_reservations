@@ -9,23 +9,3 @@ The basic idea is: a center offering tennis courts for rental, instead of having
 ### More info to come soon along with live demos
 
 In the meantime you can check out the video demo in my LinkedIn post - https://www.linkedin.com/feed/update/urn:li:activity:6817774962502340609/
-
----
-
-## For development
-
-### Client
-
-```
-npm start
-```
-
-```
-sass --watch src/ --no-source-map
-```
-
-### Server
-
-```
-nodemon index
-```
