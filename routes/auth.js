@@ -119,4 +119,14 @@ router.get("/logout", (req, res) => {
   }
 });
 
+router.get("/status", (req, res) => {
+  try {
+    console.log(res.statusCode);
+    return res.json({ status: res.statusCode });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 module.exports = router;

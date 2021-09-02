@@ -14,9 +14,24 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    checkStatus();
+  }, []);
+
+  useEffect(() => {
     isAuth();
     // eslint-disable-next-line
   }, [location.pathname, location.search]);
+
+  const checkStatus = async () => {
+    try {
+      const res = await fetch("/api/auth/status");
+      const data = await res.json();
+      console.log(data.status);
+      return data.status;
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 
   const isAuth = async () => {
     try {

@@ -1,4 +1,4 @@
-const pool = require("../db");
+const client = require("../db");
 const bcrypt = require("bcrypt");
 
 module.exports = async (req, res, next) => {
@@ -11,7 +11,7 @@ module.exports = async (req, res, next) => {
   const validRepPassword = newPassword === repNewPassword;
   if (!validRepPassword) errors.push("repNewPassword");
 
-  let account = await pool.query("SELECT password FROM account WHERE id = $1", [req.session.accountId]);
+  let account = await client.query("SELECT password FROM account WHERE id = $1", [req.session.accountId]);
   const validCurrentPassword = await bcrypt.compare(currentPassword, account.rows[0].password);
   if (!validCurrentPassword) errors.push("currentPassword");
 
