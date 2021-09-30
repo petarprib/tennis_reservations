@@ -1,5 +1,5 @@
 [[redirects]]
-  from = "https://tennis-reservations.netlify.app/api"
+  from = "/api/*"
   to = "http://tennisreservations-env.eba-mtyw5iby.us-east-2.elasticbeanstalk.com/api"
   status = 200
   force = true
