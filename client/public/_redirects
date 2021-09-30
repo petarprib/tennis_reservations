@@ -1,1 +1,1 @@
-/ http://tennisreservations-env.eba-mtyw5iby.us-east-2.elasticbeanstalk.com/api    200
+/api/*  http://tennisreservations-env.eba-mtyw5iby.us-east-2.elasticbeanstalk.com/api  200
