@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express();
 const session = require("express-session");
-const Redis = require("ioredis");
-const redis = new Redis();
+const redis = require("redis");
+const redisClient = redis.createClient(process.env.REDIS_PORT, process.env.REDIS_HOST);
 const RedisStore = require("connect-redis")(session);
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -26,7 +26,7 @@ app.use(
       sameSite: true,
       maxAge: parseInt(process.env.SESSION_IDLE_TIMEOUT),
     },
-    store: new RedisStore({ client: redis }),
+    store: new RedisStore({ client: redisClient }),
     name: process.env.SESSION_NAME,
     resave: false,
     rolling: true,
@@ -48,7 +48,7 @@ app.get("*", (req, res) => {
 
 app.use((err, req, res, next) => {
   console.error(err.message);
-  res.status(err.statusCode || 500).send("Server Error");
+  res.status(err.statusCode || 500).send(err.message);
 });
 
 const PORT = process.env.APP_PORT || 5000;

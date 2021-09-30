@@ -199,9 +199,9 @@ router.delete("/courts", async (req, res) => {
   try {
     const { court } = req.body;
 
-    await pool.query("DELETE FROM court WHERE id = $1 AND club = $2", [court, req.session.club]);
-
     await pool.query("DELETE FROM reservation WHERE court = $1", [court]);
+
+    await pool.query("DELETE FROM court WHERE id = $1 AND club = $2", [court, req.session.club]);
 
     res.end();
   } catch (error) {

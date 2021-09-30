@@ -15,7 +15,7 @@ const App = () => {
 
   useEffect(() => {
     checkStatus();
-  }, []);
+  });
 
   useEffect(() => {
     isAuth();
