@@ -1,7 +1,14 @@
 [[redirects]]
-  from = "/api"
+  from = "https://tennis-reservations.netlify.app/api"
   to = "http://tennisreservations-env.eba-mtyw5iby.us-east-2.elasticbeanstalk.com/api"
   status = 301
   force = false
   query = {path = ":path"}
   conditions = {Language = ["en"], Country = ["US"], Role = ["admin"]}
+
+  [[redirects]]
+  from = "/search"
+  to = "https://api.mysearch.com"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}
