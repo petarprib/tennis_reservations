@@ -38,7 +38,8 @@ app.use(
 
 /* GET home page. */
 app.get("/", function (req, res, next) {
-  res.render("index", { title: "Hello World!!!!" });
+  // res.render("index", { title: "Hello World!!!!" });
+  res.send("Hello world");
 });
 
 app.use("/api/auth", require("./routes/auth"));
