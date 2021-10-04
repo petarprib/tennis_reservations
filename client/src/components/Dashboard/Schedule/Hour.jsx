@@ -22,7 +22,6 @@ const Hour = (props) => {
   };
 
   const reserveTime = async (time, club, court) => {
-    console.log(hour);
     if (playerReservation && userType === 2) {
       setOpen(true);
     } else {
