@@ -78,7 +78,7 @@ const Court = (props) => {
             let nameAcronym;
             let name;
             let email;
-            console.log("hour: ", hour);
+            // console.log("hour: ", hour);
             reservations.map((reservation) => {
               if (court.id !== reservation.court) return false;
               let now = moment(hour, "HH:mm")
@@ -87,13 +87,13 @@ const Court = (props) => {
                 .year(date.year());
               let startTime = moment(reservation.start_time, "YYYY-MM-DD HH:mm:ss");
               let endTime = moment(reservation.end_time, "YYYY-MM-DD HH:mm:ss");
-              console.log("now: ", now);
-              console.log("startTime: ", startTime);
-              console.log("endTime: ", endTime);
+              // console.log("now: ", now);
+              // console.log("startTime: ", startTime);
+              // console.log("endTime: ", endTime);
               if (now.isSame(startTime) || now.isBetween(startTime, endTime)) {
-                console.log("RESERVED now: ", now);
-                console.log("RESERVED startTime: ", startTime);
-                console.log("RESERVED endTime: ", endTime);
+                // console.log("RESERVED now: ", now);
+                // console.log("RESERVED startTime: ", startTime);
+                // console.log("RESERVED endTime: ", endTime);
                 if (reservation.player === user) {
                   color = "rgb(63, 81, 181)";
                 } else {
